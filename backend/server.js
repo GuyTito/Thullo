@@ -24,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'public'))); //access static files l
 
 //routes
 app.use('/', require('./routes/rootRoute'));
+app.use('/register', require('./routes/registerRoute'))
 
 
 //error routes
