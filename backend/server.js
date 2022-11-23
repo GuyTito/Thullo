@@ -22,9 +22,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'))); //access static files like css etc
 
 
-//routes
+//public routes
 app.use('/', require('./routes/rootRoute'));
 app.use('/register', require('./routes/registerRoute'))
+
+//private routes
+app.use('/users', require('./routes/usersRoutes'))
+app.use('/boards', require('./routes/boardsRoutes'))
+
 
 
 //error routes
