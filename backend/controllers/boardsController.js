@@ -1,7 +1,22 @@
 const Board = require('../models/Board')
-const User = require('../models/User')
+// const User = require('../models/User')
 const asyncHandler = require('express-async-handler')
 
+
+// @desc Get all boards 
+// @route GET /boards
+// @access Private
+const getAllBoards = asyncHandler(async (req, res) => {
+  // Get all boards from MongoDB
+  const boards = await Board.find().lean()
+
+  // If no boards 
+  if (!boards?.length) {
+    return res.status(400).json({ message: 'No boards found' })
+  }
+
+  res.json(boards)
+})
 
 // @desc Create new board
 // @route POST /boards
@@ -33,4 +48,4 @@ const createNewBoard = asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { createNewBoard }
+module.exports = { createNewBoard, getAllBoards }

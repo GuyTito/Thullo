@@ -7,7 +7,7 @@ const boardsController = require('../controllers/boardsController')
 // router.use(verifyJWT)
 
 router.route('/')
-  // .get(boardsController.getAllBoards)
+  .get(boardsController.getAllBoards)
   .post(boardsController.createNewBoard)
   // .patch(boardsController.updateBoard)
   // .delete(boardsController.deleteBoard)
