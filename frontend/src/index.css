@@ -8,3 +8,10 @@
 body {
   font-family: 'Poppins', sans-serif;
 }
+
+.btn {
+  background-color: var(--mainColor);
+  border-radius: 8px;
+  padding: 8px 20px;
+  color: white;
+}
