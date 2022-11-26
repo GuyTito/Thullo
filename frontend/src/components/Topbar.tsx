@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Avatar from './Avatar';
 
 
 export default function Topbar() {
@@ -21,9 +22,7 @@ export default function Topbar() {
         </div>
 
         <button className='profile'>
-          <div>
-            {/* <img src="" alt="" /> */}
-          </div>
+          <Avatar />
           <span>Kofi Sika</span>
           <span>&#9662;</span>
         </button>
@@ -36,6 +35,7 @@ const Header = styled.header`
   display: flex;
   padding: 15px 24px;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05);
+  background-color: var(--white);
 
   .logo{
     display: flex;
@@ -77,6 +77,10 @@ const Header = styled.header`
     input{
       padding-left: 13px;
       outline: none;
+
+      &::placeholder{
+        color: var(--gray);
+      }
     }
   }
 
@@ -85,14 +89,6 @@ const Header = styled.header`
     display: flex;
     align-items: center;
     gap: 12px;
-
-    div{
-      height: 34px;
-      width: 34px;
-      border-radius: 8px;
-      overflow: hidden;
-      background-color: gray;
-    }
 
     span{
       font-weight: 700px;
