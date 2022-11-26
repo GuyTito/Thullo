@@ -3,10 +3,14 @@
 
 :root {
   --mainColor: rgba(47, 128, 237, 1);
+  --bgColor: rgba(248, 249, 253, 1);
+  --gray: #BDBDBD;
+  --white: #FFFF;
 }
 
 body {
   font-family: 'Poppins', sans-serif;
+  background-color: var(--bgColor);
 }
 
 .btn {
