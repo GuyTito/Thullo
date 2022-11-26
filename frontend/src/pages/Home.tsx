@@ -59,7 +59,7 @@ const Main = styled.main`
 
     .card{
       width:243px;
-      background: white;
+      background: var(--white);
       box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
       border-radius: 12px;
       padding: 12px;
