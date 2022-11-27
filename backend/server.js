@@ -24,9 +24,7 @@ app.use(express.static(path.join(__dirname, 'public'))); //access static files l
 
 //public routes
 app.use('/', require('./routes/rootRoute'));
-app.use('/register', require('./routes/registerRoute'))
-
-//private routes
+app.use('/auth', require('./routes/authRoutes'))
 app.use('/users', require('./routes/usersRoutes'))
 app.use('/boards', require('./routes/boardsRoutes'))
 
