@@ -1,8 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "./store";
 
 
-const initialState = {
-  auth: {}
+interface authState {
+  accessToken: string
+}
+
+const initialState: authState = {
+  accessToken: ''
 }
 
 const authSlice = createSlice({
@@ -10,5 +15,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
 })
+
+export const getAuth = (state: RootState) => state.auth;
 
 export default authSlice.reducer;
