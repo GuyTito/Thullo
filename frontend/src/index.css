@@ -19,3 +19,7 @@ body {
   padding: 8px 20px;
   color: white;
 }
+
+input::placeholder {
+  color: var(--gray);
+}
