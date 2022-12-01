@@ -60,7 +60,7 @@ const register = asyncHandler(async (req, res) => {
   // Create secure cookie with refresh token 
   res.cookie('jwt', refreshToken, {
     httpOnly: true, //accessible only by web server 
-    // secure: true, //https . omit "secure: true" when using Postman
+    secure: true, //https . omit "secure: true" when using Postman
     sameSite: 'None', //cross-site cookie 
     maxAge: 24 * 60 * 60 * 1000 //cookie expiry: set to match rT
   })
@@ -111,7 +111,7 @@ const login = asyncHandler(async (req, res) => {
   // Create secure cookie with refresh token 
   res.cookie('jwt', refreshToken, {
     httpOnly: true, //accessible only by web server 
-    // secure: true, //https . omit "secure: true" when using Postman
+    secure: true, //https . omit "secure: true" when using Postman
     sameSite: 'None', //cross-site cookie 
     maxAge: 24 * 60 * 60 * 1000 //cookie expiry: set to match rT
   })
