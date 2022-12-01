@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Avatar from './Avatar';
+import Logo from './Logo';
 
 
 export default function Topbar() {
@@ -8,11 +9,8 @@ export default function Topbar() {
   return (
     <>
       <Header>
-        <div className='logo'>
-          <div className='design'>
-            <div></div>
-            <div></div>
-          </div>
+        <div className='brand'>
+          <Logo />
           <span>Thullo</span>
         </div>
 
@@ -37,27 +35,11 @@ const Header = styled.header`
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05);
   background-color: var(--white);
 
-  .logo{
+  .brand{
     display: flex;
     gap: 10px;
     align-items: center;
 
-    .design{
-      display: flex;
-      gap: 5px;
-      height: 30px;
-
-      div{
-        width: 14px;
-        background-color: var(--mainColor);
-        border-radius: 3px;
-
-        &:nth-child(2){
-          height: 17px;
-        }
-      }
-    }
-      
     span{
       font-size: 18px;
       font-weight: 600;
@@ -78,9 +60,9 @@ const Header = styled.header`
       padding-left: 13px;
       outline: none;
 
-      &::placeholder{
+      /* &::placeholder{
         color: var(--gray);
-      }
+      } */
     }
   }
 
