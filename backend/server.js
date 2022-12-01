@@ -7,6 +7,9 @@ const mongoose = require('mongoose');
 const connectDB = require('./config/dbConn');
 const { logger, logEvents } = require('./middleware/logger');
 const errorHandler = require('./middleware/errorHandler');
+const { corsOptions } = require('./config/corsOptions');
+const cors = require('cors');
+
 
 
 const PORT = process.env.PORT || 3000;
@@ -17,6 +20,7 @@ connectDB();
 
 //middleware
 app.use(logger); //log every request
+app.use(cors(corsOptions));
 app.use(express.json()); //process all json coming thru
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'))); //access static files like css etc
