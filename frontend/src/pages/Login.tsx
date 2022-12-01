@@ -2,25 +2,74 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import Logo from "../components/Logo";
+import { FormEvent } from "react";
+import axios from "../api/axios";
+import { useAppDispatch } from "../store/hooks";
+import { setCredentials } from "../store/authSlice";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Login() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate()
   
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+
+    const formValues = e.target as any as Record<
+      "email" | "password",
+      {
+        value: string;
+      }
+    >;
+    const email = formValues.email.value;
+    const password = formValues.password.value;
+
+    try {
+      const response = await axios.post('/auth/login',
+        JSON.stringify({ email, password }),
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+        }
+      );
+      const accessToken = response?.data?.accessToken;
+      dispatch(setCredentials({ accessToken }));
+      navigate('/');
+    } catch (err) {
+        console.log('error', err);
+      // if (!err?.response) {
+      //   console.log(err);
+      //   setErrMsg('No Server Response');
+      //   console.log('No Server Response');
+      // } else if (err.response?.status === 400) {
+      //   setErrMsg('Missing Username or Password');
+      //   console.log('Missing Username or Password');
+      // } else if (err.response?.status === 401) {
+      //   console.log(err);
+      //   setErrMsg('Unauthorized');
+      //   console.log('Unauthorized');
+      // } else {
+      //   setErrMsg('Login Failed');
+      //   console.log('Login Failed');
+      // }
+    }
+  }
   
   return (
     <Div>
       <div className="logo"><Logo /></div>
 
-      <form>
+      <form onSubmit={(e)=> handleSubmit(e)}>
         <h1>Login</h1>
 
         <label>
           <FaEnvelope />
-          <input type="email" autoComplete="false" placeholder="Email" />
+          <input type="email" name="email" autoComplete="off" placeholder="Email" />
         </label>
         <label>
           <FaLock />
-          <input type="password" placeholder="Password" />
+          <input type="password" name="password" placeholder="Password" />
         </label>
         <div>
           <button type="submit" className="btn">Login</button>
