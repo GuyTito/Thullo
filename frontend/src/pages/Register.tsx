@@ -48,7 +48,7 @@ export default function Register() {
         }
       );
       const accessToken = response?.data?.accessToken;
-      dispatch(setCredentials({ accessToken }));
+      dispatch(setCredentials(accessToken));
       navigate('/boards');
     } catch (err: AxiosError | any) {
       console.log('error', err)

@@ -40,7 +40,7 @@ export default function Login() {
         }
       );
       const accessToken = response?.data?.accessToken;
-      dispatch(setCredentials({ accessToken }));
+      dispatch(setCredentials(accessToken));
       navigate(from, { replace: true });
     } catch (err: AxiosError | any) {
       console.log('error', err)
