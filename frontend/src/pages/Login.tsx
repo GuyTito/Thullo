@@ -2,16 +2,19 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import Logo from "../components/Logo";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import axios from "../api/axios";
 import { useAppDispatch } from "../store/hooks";
 import { setCredentials } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 
 export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate()
+
+  const [errMsg, setErrMsg] = useState('');
   
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -36,23 +39,16 @@ export default function Login() {
       const accessToken = response?.data?.accessToken;
       dispatch(setCredentials({ accessToken }));
       navigate('/');
-    } catch (err) {
-        console.log('error', err);
-      // if (!err?.response) {
-      //   console.log(err);
-      //   setErrMsg('No Server Response');
-      //   console.log('No Server Response');
-      // } else if (err.response?.status === 400) {
-      //   setErrMsg('Missing Username or Password');
-      //   console.log('Missing Username or Password');
-      // } else if (err.response?.status === 401) {
-      //   console.log(err);
-      //   setErrMsg('Unauthorized');
-      //   console.log('Unauthorized');
-      // } else {
-      //   setErrMsg('Login Failed');
-      //   console.log('Login Failed');
-      // }
+    } catch (err: AxiosError | any) {
+      if (!err?.response) {
+        setErrMsg('No Server Response');
+      } else if (err.response?.status === 400) {
+        setErrMsg('Missing Username or Password');
+      } else if (err.response?.status === 401) {
+        setErrMsg('Unauthorized');
+      } else {
+        setErrMsg('Login Failed');
+      }
     }
   }
   
@@ -62,6 +58,8 @@ export default function Login() {
 
       <form onSubmit={(e)=> handleSubmit(e)}>
         <h1>Login</h1>
+
+        {errMsg && <div className="error">{errMsg}</div>}
 
         <label>
           <FaEnvelope />
