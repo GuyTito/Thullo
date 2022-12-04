@@ -24,3 +24,8 @@ body {
 input::placeholder {
   color: var(--gray);
 }
+
+.error {
+  color: var(--error);
+  font-weight: 600;
+}
