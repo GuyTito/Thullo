@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import axios from "../api/axios";
 import { RootState } from "./store";
 
 
@@ -9,6 +10,14 @@ interface authState {
 const initialState: authState = {
   accessToken: ''
 }
+
+export const getNewAccessToken = createAsyncThunk('auth/getNewAccessToken', async ()=>{
+  const response = await axios.get('/auth/refresh', {
+    withCredentials: true
+  });
+  const accessToken = response?.data?.accessToken;
+  return accessToken
+})
 
 const authSlice = createSlice({
   name: "auth",
@@ -21,6 +30,12 @@ const authSlice = createSlice({
     logOut: (state) => {
       state.accessToken = ''
     },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(getNewAccessToken.fulfilled, (state, action: PayloadAction<string>) => {
+        state.accessToken = action.payload
+      })
   }
 })
 
