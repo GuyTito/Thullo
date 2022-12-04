@@ -6,6 +6,7 @@
   --bgColor: rgba(248, 249, 253, 1);
   --gray: #BDBDBD;
   --white: #FFFF;
+  --error: red;
 }
 
 body {
