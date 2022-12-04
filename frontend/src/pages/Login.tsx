@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import Logo from "../components/Logo";
 import { FormEvent, useState } from "react";
@@ -11,10 +11,13 @@ import { AxiosError } from "axios";
 
 
 export default function Login() {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate()
-
   const [errMsg, setErrMsg] = useState('');
+  
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/boards";
+
   
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -38,8 +41,9 @@ export default function Login() {
       );
       const accessToken = response?.data?.accessToken;
       dispatch(setCredentials({ accessToken }));
-      navigate('/');
+      navigate(from, { replace: true });
     } catch (err: AxiosError | any) {
+      console.log('error', err)
       if (!err?.response) {
         setErrMsg('No Server Response');
       } else if (err.response?.status === 400) {
@@ -54,7 +58,9 @@ export default function Login() {
   
   return (
     <Div>
-      <div className="logo"><Logo /></div>
+      <div className="logo">
+        <Link to='/'><Logo /></Link>
+      </div>
 
       <form onSubmit={(e)=> handleSubmit(e)}>
         <h1>Login</h1>
