@@ -1,6 +1,9 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Avatar from './Avatar';
 import Logo from './Logo';
+import { FaUser } from "react-icons/fa";
+import { BiLogOut } from "react-icons/bi";
 
 
 export default function Topbar() {
@@ -19,11 +22,21 @@ export default function Topbar() {
           <button className='btn'>Search</button>
         </div>
 
-        <button className='profile'>
-          <Avatar />
-          <span>Kofi Sika</span>
-          <span>&#9662;</span>
-        </button>
+        <div className='dropdown'>
+          <button className='profile'>
+            <Avatar />
+            <span>Kofi Sika</span>
+            <span>&#9662;</span>
+          </button>
+
+          <div className='content'>
+            <ul>
+              <li><FaUser /> <Link to='/users/id'>My Profile</Link></li>
+              <hr />
+              <li><BiLogOut /> Logout</li>
+            </ul>
+          </div>
+        </div>
       </Header>
     </>
   )
@@ -34,6 +47,7 @@ const Header = styled.header`
   padding: 15px 24px;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05);
   background-color: var(--white);
+  align-items: center;
 
   .brand{
     display: flex;
@@ -66,15 +80,40 @@ const Header = styled.header`
     }
   }
 
-  .profile{
-    /* margin-left: auto; */
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  .dropdown{
+    position: relative;
+    
+    .profile{
+      display: flex;
+      align-items: center;
+      gap: 12px;
 
-    span{
-      font-weight: 700px;
+      span{
+        font-weight: 700;
+      }
+    }
+
+    .content{
+      display: block;
+      left: 0;
+      padding: 15px 12px;
+      position: absolute;
+      top: 100%;
+      z-index: 9999;
+      background: var(--white);
+      border: 1px solid #E0E0E0;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+
+    }
+
+    &:hover{
+      div{
+        display: block;
+      }
     }
   }
+
+  
 
 `
