@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
+import PersistLogin from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
 import Boards from "./pages/Boards";
 import LandingPage from "./pages/LandingPage";
@@ -19,9 +20,11 @@ export default function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
 
-          <Route element={<RequireAuth />}>
-            <Route path="boards">
-              <Route index element={<Boards />} />
+          <Route element={<PersistLogin />}>
+            <Route element={<RequireAuth />}>
+              <Route path="boards">
+                <Route index element={<Boards />} />
+              </Route>
             </Route>
           </Route>
         </Route>
