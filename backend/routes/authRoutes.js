@@ -12,8 +12,8 @@ router.route('/login')
 router.route('/refresh')
   .get(authController.refresh)
 
-router.route('/signout')
-  .post(authController.signout)
+router.route('/logout')
+  .get(authController.logout)
 
 
 
