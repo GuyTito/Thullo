@@ -4,7 +4,7 @@ import PersistLogin from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
 import Boards from "./pages/Boards";
 import ErrorPage from "./pages/ErrorPage";
-import LandingPage from "./pages/LandingPage";
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
@@ -17,7 +17,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" >
-            <Route index element={<LandingPage />} />
+            <Route index element={<Home />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
 

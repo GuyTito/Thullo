@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 
-export default function LandingPage() {
+export default function Home() {
   
   
   return (
@@ -17,6 +17,6 @@ export default function LandingPage() {
 const Div = styled.div`
   h1{
     font-weight: 700;
-    font-size: 70px;
+    font-size: 50px;
   }
 `
