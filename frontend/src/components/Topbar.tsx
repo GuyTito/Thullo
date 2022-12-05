@@ -4,11 +4,13 @@ import Avatar from './Avatar';
 import Logo from './Logo';
 import { FaUser } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
+import { useAppDispatch } from '../store/hooks';
+import { logout } from '../store/authSlice';
 
 
 export default function Topbar() {
-  
-  
+  const dispatch = useAppDispatch();
+
   return (
     <>
       <Header>
@@ -30,11 +32,11 @@ export default function Topbar() {
           </button>
 
           <div className='content'>
-            <ul>
-              <li><FaUser /> <Link to='/users/id'>My Profile</Link></li>
+            <div>
+              <Link to='/users/id' className='my-profile'><FaUser /> My Profile</Link>
               <hr />
-              <li><BiLogOut /> Logout</li>
-            </ul>
+              <Link onClick={()=>dispatch(logout())} to='/login' className='logout'><BiLogOut /> Logout</Link>
+            </div>
           </div>
         </div>
       </Header>
@@ -94,17 +96,43 @@ const Header = styled.header`
     }
 
     .content{
-      display: block;
-      left: 0;
-      padding: 15px 12px;
-      position: absolute;
-      top: 100%;
-      z-index: 9999;
-      background: var(--white);
-      border: 1px solid #E0E0E0;
-      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
-      border-radius: 12px;
+      padding-top: 10px;
 
+      div{
+        display: none;
+        right: 0;
+        padding: 15px 12px;
+        position: absolute;
+        top: 100%;
+        z-index: 9999;
+        background: var(--white);
+        border: 1px solid #E0E0E0;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+        border-radius: 12px;
+        width: 110%;
+
+        a{
+          display: flex;
+          align-items: center;
+          gap: 12px;
+
+          &.my-profile {
+            background-color: #F2F2F2;
+            padding: 10px 13px;
+            border-radius: 8px;
+          }
+
+          &.logout{
+            padding: 0 13px;
+            color: var(--error);
+          }
+        }
+
+        hr{
+          margin: 16px 0;
+          border-top: 1px solid var(--gray);
+        }
+      }
     }
 
     &:hover{
