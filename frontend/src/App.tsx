@@ -16,14 +16,14 @@ export default function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout />} >
+          <Route path="/" >
             <Route index element={<LandingPage />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
 
             <Route element={<PersistLogin />}>
               <Route element={<RequireAuth />}>
-                <Route path="boards">
+                <Route path="boards" element={<Layout />}>
                   <Route index element={<Boards />} />
                 </Route>
               </Route>
