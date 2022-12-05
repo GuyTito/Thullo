@@ -158,19 +158,19 @@ const refresh = asyncHandler(async (req, res) => {
 })
 
 
-// @desc signout User
-// @route POSt /auth/signout
+// @desc logout User
+// @route POSt /auth/logout
 // @access Public
-const signout = asyncHandler(async (req, res) => {
+const logout = asyncHandler(async (req, res) => {
   const cookies = req.cookies
   if (!cookies?.jwt) return res.sendStatus(204) //No content
   res.clearCookie('jwt', {
     httpOnly: true,
     sameSite: 'None',
-    // secure: true,  // omit "secure: true" when using Postman
+    secure: true,  // omit "secure: true" when using Postman
   })
   res.json({ message: 'Cookie cleared' })
 })
 
 
-module.exports = { register, login, refresh, signout }
+module.exports = { register, login, refresh, logout }
