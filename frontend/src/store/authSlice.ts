@@ -19,6 +19,14 @@ export const getNewAccessToken = createAsyncThunk('auth/getNewAccessToken', asyn
   return accessToken
 })
 
+export const logout = createAsyncThunk('auth/logout', async()=>{
+  const response = await axios.get('/auth/logout', {
+    withCredentials: true
+  });
+  const message = response?.data?.message;
+  return message;
+})
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -26,19 +34,20 @@ const authSlice = createSlice({
     setCredentials: (state, action: PayloadAction<string>) => {
       state.accessToken = action.payload
     },
-    logOut: (state) => {
-      state.accessToken = ''
-    },
   },
   extraReducers(builder) {
     builder
       .addCase(getNewAccessToken.fulfilled, (state, action: PayloadAction<string>) => {
         state.accessToken = action.payload
       })
+      .addCase(logout.fulfilled, (state, action: PayloadAction<string>) => {
+        state.accessToken = ''
+        console.log('logout')
+      })
   }
 })
 
-export const { setCredentials, logOut } = authSlice.actions
+export const { setCredentials, } = authSlice.actions
 
 export const getAuth = (state: RootState) => state.auth;
 
