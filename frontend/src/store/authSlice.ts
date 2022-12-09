@@ -19,12 +19,11 @@ export const getNewAccessToken = createAsyncThunk('auth/getNewAccessToken', asyn
   return accessToken
 })
 
-export const logout = createAsyncThunk('auth/logout', async()=>{
-  const response = await axios.get('/auth/logout', {
+export const logout = createAsyncThunk('auth/logout', async(_, thunkAPI)=>{
+  await axios.get('/auth/logout', {
     withCredentials: true
   });
-  const message = response?.data?.message;
-  return message;
+  thunkAPI.dispatch(setCredentials(''))
 })
 
 const authSlice = createSlice({
@@ -33,16 +32,12 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (state, action: PayloadAction<string>) => {
       state.accessToken = action.payload
-    },
+    }
   },
   extraReducers(builder) {
     builder
       .addCase(getNewAccessToken.fulfilled, (state, action: PayloadAction<string>) => {
         state.accessToken = action.payload
-      })
-      .addCase(logout.fulfilled, (state, action: PayloadAction<string>) => {
-        state.accessToken = ''
-        console.log('logout')
       })
   }
 })
