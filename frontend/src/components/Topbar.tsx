@@ -14,10 +14,10 @@ export default function Topbar() {
   return (
     <>
       <Header>
-        <div className='brand'>
+        <Link to='/' className='brand'>
           <Logo />
           <span>Thullo</span>
-        </div>
+        </Link>
 
         <div className='search'>
           <input type="text" placeholder='keyword...' />
