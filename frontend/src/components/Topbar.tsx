@@ -6,10 +6,12 @@ import { FaUser } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
 import { useAppDispatch } from '../store/hooks';
 import { logout } from '../store/authSlice';
+import useCurrentUser from '../hooks/useCurrentUser';
 
 
 export default function Topbar() {
   const dispatch = useAppDispatch();
+  const {fullname} = useCurrentUser();
 
   return (
     <>
@@ -27,13 +29,13 @@ export default function Topbar() {
         <div className='dropdown'>
           <button className='profile'>
             <Avatar />
-            <span>Kofi Sika</span>
+            <span>{fullname}</span>
             <span>&#9662;</span>
           </button>
 
           <div className='content'>
             <div>
-              <Link to='/users/id' className='my-profile'><FaUser /> My Profile</Link>
+              <Link to='/current-user' className='my-profile'><FaUser /> My Profile</Link>
               <hr />
               <Link onClick={()=>dispatch(logout())} to='/login' className='logout'><BiLogOut /> Logout</Link>
             </div>
@@ -97,19 +99,18 @@ const Header = styled.header`
 
     .content{
       padding-top: 10px;
+      display: none;
+      position: absolute;
+      right: 0;
+      width: 160px;
+      z-index: 9999;
 
       div{
-        display: none;
-        right: 0;
         padding: 15px 12px;
-        position: absolute;
-        top: 100%;
-        z-index: 9999;
         background: var(--white);
         border: 1px solid #E0E0E0;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
         border-radius: 12px;
-        width: 110%;
 
         a{
           display: flex;
