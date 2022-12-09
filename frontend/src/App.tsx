@@ -7,6 +7,7 @@ import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import UserProfile from "./pages/UserProfile";
 
 
 export default function App() {
@@ -23,6 +24,8 @@ export default function App() {
 
             <Route element={<PersistLogin />}>
               <Route element={<RequireAuth />}>
+                <Route path="current-user" element={<UserProfile />} />
+                
                 <Route path="boards" element={<Layout />}>
                   <Route index element={<Boards />} />
                 </Route>
