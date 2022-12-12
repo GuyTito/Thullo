@@ -103,7 +103,7 @@ export default function Register() {
         <div className="error">{matchErr}</div>
 
         <div>
-          <button type="submit" className="btn">Register</button>
+          <button type="submit" className="btn btn-main">Register</button>
         </div>
 
         <p>Already have an account? <Link to='/login'>Login</Link></p>

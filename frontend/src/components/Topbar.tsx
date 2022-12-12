@@ -23,7 +23,7 @@ export default function Topbar() {
 
         <div className='search'>
           <input type="text" placeholder='keyword...' />
-          <button className='btn'>Search</button>
+          <button className='btn btn-main'>Search</button>
         </div>
 
         <div className='dropdown'>
