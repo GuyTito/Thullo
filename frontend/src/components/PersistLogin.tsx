@@ -5,7 +5,7 @@ import { getAuth, getNewAccessToken } from "../store/authSlice";
 
 export default function PersistLogin() {
   const [isLoading, setIsLoading] = useState(true)
-  const auth = useAppSelector(getAuth);
+  const { accessToken, persist} = useAppSelector(getAuth);
   const dispatch = useAppDispatch();
 
 
@@ -15,12 +15,17 @@ export default function PersistLogin() {
       setIsLoading(false)
     }
 
-    !auth.accessToken ? callGetNewAccessToken() : setIsLoading(false)
+    !accessToken ? callGetNewAccessToken() : setIsLoading(false)
   }, [])
   
   return (
     <>
-      { isLoading ? <div>Loading...</div> : <Outlet /> }
+      {!persist 
+        ? <Outlet /> 
+        : isLoading 
+            ? <div>Loading...</div> 
+            : <Outlet />
+      }
     </>
   )
 }
