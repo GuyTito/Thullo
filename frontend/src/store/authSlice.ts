@@ -5,10 +5,12 @@ import { RootState } from "./store";
 
 interface authState {
   accessToken: string
+  persist: boolean
 }
 
 const initialState: authState = {
-  accessToken: ''
+  accessToken: '',
+  persist: JSON.parse(localStorage.getItem('persist') as string) || false
 }
 
 export const getNewAccessToken = createAsyncThunk('auth/getNewAccessToken', async ()=>{
@@ -32,7 +34,10 @@ const authSlice = createSlice({
   reducers: {
     setCredentials: (state, action: PayloadAction<string>) => {
       state.accessToken = action.payload
-    }
+    },
+    setPersist: (state, action: PayloadAction<boolean>) => {
+      state.persist = action.payload
+    },
   },
   extraReducers(builder) {
     builder
@@ -42,7 +47,7 @@ const authSlice = createSlice({
   }
 })
 
-export const { setCredentials, } = authSlice.actions
+export const { setCredentials, setPersist } = authSlice.actions
 
 export const getAuth = (state: RootState) => state.auth;
 
