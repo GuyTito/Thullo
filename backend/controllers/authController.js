@@ -1,7 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcrypt');
 const User = require('../models/User')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { useTokens } = require('../hooks/useTokens');
 
 
 
@@ -31,39 +32,15 @@ const register = asyncHandler(async (req, res) => {
 
   // Create and store new user 
   const user = await User.create(userObject)
-
-  // if (user) { //created
-  //   res.status(201).json({ message: `New user ${fullname} created` })
-  // } 
+  
   if (!user) {
     res.status(400).json({ message: 'Invalid user data received' })
   }
 
-  // create secret with this in Node repl: require('crypto').randomBytes(64).toString('hex')
-  const accessToken = jwt.sign(
-    {
-      "UserInfo": {
-        "fullname": user.fullname,
-        "email": user.email,
-      }
-    },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '15m' }
-  )
-
-  const refreshToken = jwt.sign(
-    { "email": user.email },
-    process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: '1d' }
-  )
+  const { accessToken, refreshToken } = useTokens(user);
 
   // Create secure cookie with refresh token 
-  res.cookie('jwt', refreshToken, {
-    httpOnly: true, //accessible only by web server 
-    secure: true, //https . omit "secure: true" when using Postman
-    sameSite: 'None', //cross-site cookie 
-    maxAge: 24 * 60 * 60 * 1000 //cookie expiry: set to match rT
-  })
+  res.cookie('jwt', refreshToken, cookieOptions)
 
   // Send accessToken containing fullname and email 
   res.json({ accessToken })
@@ -90,31 +67,10 @@ const login = asyncHandler(async (req, res) => {
 
   if (!match) return res.status(401).json({ message: 'Unauthorized' })
 
-  // create secret with this in Node repl: require('crypto').randomBytes(64).toString('hex')
-  const accessToken = jwt.sign(
-    {
-      "UserInfo": {
-        "fullname": foundUser.fullname,
-        "email": foundUser.email,
-      }
-    },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '15m' }
-  )
-
-  const refreshToken = jwt.sign(
-    { "email": foundUser.email },
-    process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: '1d' }
-  )
+  const { accessToken, refreshToken, cookieOptions } = useTokens(foundUser);
 
   // Create secure cookie with refresh token 
-  res.cookie('jwt', refreshToken, {
-    httpOnly: true, //accessible only by web server 
-    secure: true, //https . omit "secure: true" when using Postman
-    sameSite: 'None', //cross-site cookie 
-    maxAge: 24 * 60 * 60 * 1000 //cookie expiry: set to match rT
-  })
+  res.cookie('jwt', refreshToken, cookieOptions)
 
   // Send accessToken containing fullname and email 
   res.json({ accessToken })
@@ -141,16 +97,7 @@ const refresh = asyncHandler(async (req, res) => {
 
       if (!foundUser) return res.status(401).json({ message: 'Unauthorized' })
 
-      const accessToken = jwt.sign(
-        {
-          "UserInfo": {
-            "fullname": foundUser.fullname,
-            "email": foundUser.email
-          }
-        },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '15m' }
-      )
+      const { accessToken } = useTokens(foundUser);
 
       res.json({ accessToken })
     })
