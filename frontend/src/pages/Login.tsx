@@ -82,12 +82,12 @@ export default function Login() {
         </label>
         
         <div>
-          <button type="submit" className="btn">Login</button>
+          <button type="submit" className="btn btn-main">Login</button>
         </div>
 
-        <label className="remember">
+        <label className="trust">
           <input type="checkbox" onChange={() => dispatch(setPersist(!persist))} checked={persist} />
-          Remember me
+          Trust this device
         </label>
 
         <p>Don't have an account? <Link to='/register'>Register</Link></p>
@@ -143,7 +143,7 @@ const Div = styled.div`
       }
     }
 
-    .remember{
+    .trust{
       display: flex;
       align-items: center;
       gap: 13px;
