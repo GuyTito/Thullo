@@ -1,15 +1,17 @@
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
+import Modal from "../components/Modal";
+import { useState } from 'react';
 
 export default function Home() {
-  
+  const [showModal, setShowModal] = useState(false);
   
   return (
     <>
       <Main>
         <div className="all-boards">
           <h1>All Boards</h1>
-          <button className="btn">+ Add</button>
+          <button onClick={()=>setShowModal(true)} className="btn btn-main">+ Add</button>
         </div>
 
         <div className="boards">
@@ -29,6 +31,26 @@ export default function Home() {
           ))}
         </div>
       </Main>
+
+      {/* modal */}
+      {showModal && <Modal setShowModal={setShowModal}>
+        <ModalContent>
+          <div className="cover">
+            {/* <img src="" alt="" /> */}
+          </div>
+          <div className="form-control">
+            <input type="text" placeholder="Add board title" />
+          </div>
+          <div>
+            <button className="btn btn-gray">Cover</button>
+            <button className="btn btn-gray">Private</button>
+          </div>
+          <div>
+            <button>Cancel</button>
+            <button className="btn btn-main">+ Create</button>
+          </div>
+        </ModalContent>
+      </Modal>}
     </>
   )
 }
@@ -97,4 +119,20 @@ const Main = styled.main`
 
   }
   
+`
+
+const ModalContent = styled.div`
+  padding: 24px;
+  background-color: var(--white);
+
+  div:not(:last-child){
+    margin-bottom: 20px;
+  }
+
+  .cover{
+    height: 78px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--gray);
+  }
 `
