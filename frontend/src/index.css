@@ -15,10 +15,18 @@ body {
 }
 
 .btn {
-  background-color: var(--mainColor);
   border-radius: 8px;
   padding: 8px 20px;
+}
+
+.btn-main{
+  background-color: var(--mainColor);
   color: white;
+}
+
+.btn-gray{
+  color: #828282;
+  background: #F2F2F2;
 }
 
 input::placeholder {
