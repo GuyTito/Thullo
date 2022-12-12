@@ -2,15 +2,16 @@ import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import Logo from "../components/Logo";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import axios from "../api/axios";
-import { useAppDispatch } from "../store/hooks";
-import { setCredentials } from "../store/authSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { getAuth, setCredentials, setPersist } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 
 
 export default function Login() {
+  const { persist } = useAppSelector(getAuth);
   const [errMsg, setErrMsg] = useState('');
   
   const dispatch = useAppDispatch();
@@ -55,6 +56,10 @@ export default function Login() {
       }
     }
   }
+
+  useEffect(() => {
+    localStorage.setItem("persist", String(persist));
+  }, [persist])
   
   return (
     <Div>
@@ -67,17 +72,23 @@ export default function Login() {
 
         {errMsg && <div className="error">{errMsg}</div>}
 
-        <label>
+        <label className="form-control">
           <FaEnvelope />
           <input type="email" name="email" autoComplete="off" placeholder="Email" />
         </label>
-        <label>
+        <label className="form-control">
           <FaLock />
           <input type="password" name="password" placeholder="Password" />
         </label>
+        
         <div>
           <button type="submit" className="btn">Login</button>
         </div>
+
+        <label className="remember">
+          <input type="checkbox" onChange={() => dispatch(setPersist(!persist))} checked={persist} />
+          Remember me
+        </label>
 
         <p>Don't have an account? <Link to='/register'>Register</Link></p>
       </form>
@@ -113,7 +124,7 @@ const Div = styled.div`
       margin: 20px 0;
     }
 
-    label{
+    .form-control{
       border-radius: 8px;
       width: 356px;
       display: flex;
@@ -130,6 +141,13 @@ const Div = styled.div`
         background-color: transparent;
         outline: none;
       }
+    }
+
+    .remember{
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      font-size: 14px;
     }
 
     button{
