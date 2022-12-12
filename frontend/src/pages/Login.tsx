@@ -62,12 +62,12 @@ export default function Login() {
   }, [persist])
   
   return (
-    <Div>
+    <Div className="center-div">
       <div className="logo">
         <Link to='/'><Logo /></Link>
       </div>
 
-      <form onSubmit={(e)=> handleSubmit(e)}>
+      <form onSubmit={(e) => handleSubmit(e)} className="auth-form">
         <h1>Login</h1>
 
         {errMsg && <div className="error">{errMsg}</div>}
@@ -98,72 +98,5 @@ export default function Login() {
 
 
 const Div = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  flex-direction: column;
 
-  .logo{
-    margin-bottom: 20px;
-  }
-
-  form{
-    padding: 0 58px;
-    border-radius: 24px;
-    border: 1px solid var(--gray);
-    width: 473px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-
-    h1{
-      font-size: 18px;
-      font-weight: 600;
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    .form-control{
-      border-radius: 8px;
-      width: 356px;
-      display: flex;
-      padding: 12px;
-      align-items: center;
-      gap: 13px;
-      border: 1px solid var(--gray);
-      
-      svg{
-        color: var(--gray);
-      }
-
-      input{
-        background-color: transparent;
-        outline: none;
-      }
-    }
-
-    .trust{
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      font-size: 14px;
-    }
-
-    button{
-      width: 100%;
-    }
-
-    p {
-      font-size: 14px;
-      line-height: 19px;
-      margin-bottom: 43px;
-      text-align: center;
-      color: var(--gray);
-
-      a{
-        color: var(--mainColor);
-      }
-    }
-  }
 `

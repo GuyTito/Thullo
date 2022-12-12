@@ -67,36 +67,36 @@ export default function Register() {
   }
 
   return (
-    <Div>
-      <div className="logo">
+    <Div className="center-div">
+      <div className="logo mt-150">
         <Link to='/'><Logo /></Link>
       </div>
 
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form onSubmit={(e) => handleSubmit(e)} className="auth-form">
         <h1>Register</h1>
 
         {errMsg && <div className="error">{errMsg}</div>}
 
-        <label>
+        <label className="form-control">
           <FaUser />
           <input type="text" name="firstname" autoComplete="off" required minLength={2} placeholder="First Name" />
         </label>
-        <label>
+        <label className="form-control">
           <FaUser />
           <input type="text" name="lastname" autoComplete="off" required minLength={2} placeholder="Last Name" />
         </label>
-        <label>
+        <label className="form-control">
           <FaEnvelope />
           <input type="email" name="email" autoComplete="off" required placeholder="Email" />
         </label>
-        <label className="confirm">
+        <label className="form-control confirm">
           <FaLock />
           <input type={showpwd ? 'text' : 'password'} name="password" required placeholder="Password" />
           <span onClick={()=> setShowpwd(!showpwd)}>
             {showpwd ? <TbEye /> : <TbEyeOff />}
           </span>
         </label>
-        <label>
+        <label className="form-control">
           <FaLock />
           <input type={showpwd ? 'text' : 'password'} name="confirm" required placeholder="Confirm Password" />
         </label>
@@ -114,78 +114,7 @@ export default function Register() {
 
 
 const Div = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  flex-direction: column;
-
-  .logo{
-    margin-bottom: 20px;
-  }
-
-  form{
-    padding: 0 58px;
-    border-radius: 24px;
-    border: 1px solid var(--gray);
-    width: 473px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-
-    h1{
-      font-size: 18px;
-      font-weight: 600;
-      text-align: center;
-      margin: 20px 0;
-    }
-
-    label{
-      border-radius: 8px;
-      width: 356px;
-      display: flex;
-      padding: 12px;
-      align-items: center;
-      gap: 13px;
-      border: 1px solid var(--gray);
-      
-      svg{
-        color: var(--gray);
-      }
-
-      input{
-        background-color: transparent;
-        outline: none;
-      }
-
-      &.confirm{
-        input{
-          width: 100%;
-        }
-
-        span{
-          cursor: pointer;
-          svg{
-            color: black;
-          }
-        }
-      }
-    }
-
-    button{
-      width: 100%;
-    }
-
-    p {
-      font-size: 14px;
-      line-height: 19px;
-      margin-bottom: 43px;
-      text-align: center;
-      color: var(--gray);
-
-      a{
-        color: var(--mainColor);
-      }
-    }
+  .mt-150{
+    margin-top: 150px;
   }
 `
