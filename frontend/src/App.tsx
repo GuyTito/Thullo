@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
+import BoardLayout from "./components/BoardLayout";
 import PersistLogin from "./components/PersistLogin";
 import RequireAuth from "./components/RequireAuth";
 import Boards from "./pages/Boards";
@@ -17,7 +18,7 @@ export default function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" >
+          <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
@@ -26,7 +27,7 @@ export default function App() {
               <Route element={<RequireAuth />}>
                 <Route path="current-user" element={<UserProfile />} />
                 
-                <Route path="boards" element={<Layout />}>
+                <Route path="boards" element={<BoardLayout />}>
                   <Route index element={<Boards />} />
                 </Route>
               </Route>
