@@ -2,9 +2,22 @@ import styled from "styled-components";
 import Avatar from "../components/Avatar";
 import Modal from "../components/Modal";
 import { useState } from 'react';
+import { FaImage, FaLock } from "react-icons/fa";
+import { MdOutlineClose } from 'react-icons/md';
+import { FormEvent } from 'react';
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
+  const [boardTItle, setBoardTItle] = useState('');
+
+  function submitBoard(e: FormEvent<HTMLFormElement>){
+    e.preventDefault()
+    if (boardTItle) {
+      alert(boardTItle)
+      setBoardTItle('')
+      setShowModal(false)
+    }
+  }
   
   return (
     <>
@@ -33,24 +46,27 @@ export default function Home() {
       </Main>
 
       {/* modal */}
-      {showModal && <Modal setShowModal={setShowModal}>
-        <ModalContent>
-          <div className="cover">
-            {/* <img src="" alt="" /> */}
-          </div>
-          <div className="form-control">
-            <input type="text" placeholder="Add board title" />
-          </div>
-          <div>
-            <button className="btn btn-gray">Cover</button>
-            <button className="btn btn-gray">Private</button>
-          </div>
-          <div>
-            <button>Cancel</button>
-            <button className="btn btn-main">+ Create</button>
-          </div>
-        </ModalContent>
-      </Modal>}
+      {showModal && 
+        <Modal setShowModal={setShowModal}>
+          <ModalContent onSubmit={(e)=>submitBoard(e)}>
+            <button onClick={() => setShowModal(false)} className="btn btn-main close"><MdOutlineClose /></button>
+            <div className="cover">
+              {/* <img src="" alt="" /> */}
+            </div>
+            <div className="form-control input-title">
+              <input onChange={(e) => setBoardTItle(e.target.value)} value={boardTItle} type="text" placeholder="Add board title" />
+            </div>
+            <div>
+              <button className="btn btn-gray"><FaImage /> Cover</button>
+              <button className="btn btn-gray"><FaLock /> Private</button>
+            </div>
+            <div>
+              <button onClick={() => setShowModal(false)}>Cancel</button>
+              <button className="btn btn-main">+ &nbsp; Create</button>
+            </div>
+          </ModalContent>
+        </Modal>
+      }
     </>
   )
 }
@@ -121,18 +137,60 @@ const Main = styled.main`
   
 `
 
-const ModalContent = styled.div`
+const ModalContent = styled.form`
   padding: 24px;
   background-color: var(--white);
+  position: relative;
 
   div:not(:last-child){
     margin-bottom: 20px;
   }
 
+  .close{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
   .cover{
-    height: 78px;
+    height: 85px;
+    width: 300px;
     border-radius: 8px;
     overflow: hidden;
     background-color: var(--gray);
   }
+
+  .input-title{
+    width: 100%;
+
+    input{
+      width: 100%;
+    }
+  }
+
+  div:nth-of-type(3){
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    button{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+  div:last-of-type{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 17px;
+
+    button:first-child{
+      color: #828282;
+    }
+  }
+
+
 `
