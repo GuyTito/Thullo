@@ -14,13 +14,12 @@ const boardSchema = new Schema(
       type: String,
       required: true
     },
-    description: {
-      type: String,
-      required: true
-    },
-    visibility: {
+    privacy: {
       type: Boolean,
-      default: true
+      default: false
+    },
+    coverImgUrl: {
+      type: String,
     },
   },
   {
