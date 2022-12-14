@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import Logo from "../components/Logo";
 import { FormEvent, useState } from "react";
-import axios from "../api/axios";
+import { axiosPrivate } from "../api/axios";
 import { useAppDispatch } from "../store/hooks";
 import { setCredentials } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
@@ -40,13 +40,8 @@ export default function Register() {
         return false
       } else setMatchErr('')
 
-      const response = await axios.post('/auth/register',
-        JSON.stringify({ fullname: `${firstname} ${lastname}`, email, password }),
-        {
-          headers: { 'Content-Type': 'application/json' },
-          withCredentials: true
-        }
-      );
+      const response = await axiosPrivate.post('/auth/register',
+        JSON.stringify({ fullname: `${firstname} ${lastname}`, email, password }));
       const accessToken = response?.data?.accessToken;
       dispatch(setCredentials(accessToken));
       navigate('/boards');

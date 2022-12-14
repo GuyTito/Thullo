@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import Logo from "../components/Logo";
 import { FormEvent, useEffect, useState } from "react";
-import axios from "../api/axios";
+import { axiosPrivate } from "../api/axios";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getAuth, setCredentials, setPersist } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
@@ -33,13 +33,8 @@ export default function Login() {
     const password = formValues.password.value;
 
     try {
-      const response = await axios.post('/auth/login',
-        JSON.stringify({ email, password }),
-        {
-          headers: { 'Content-Type': 'application/json' },
-          withCredentials: true
-        }
-      );
+      const response = await axiosPrivate.post('/auth/login',
+        JSON.stringify({ email, password }));
       const accessToken = response?.data?.accessToken;
       dispatch(setCredentials(accessToken));
       navigate(from, { replace: true });
