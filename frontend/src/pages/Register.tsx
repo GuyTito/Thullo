@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import Logo from "../components/Logo";
 import { FormEvent, useState } from "react";
-import { axiosPrivate } from "../api/axios";
+import axios from "../api/axios";
 import { useAppDispatch } from "../store/hooks";
 import { setCredentials } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
@@ -40,7 +40,7 @@ export default function Register() {
         return false
       } else setMatchErr('')
 
-      const response = await axiosPrivate.post('/auth/register',
+      const response = await axios.post('/auth/register',
         JSON.stringify({ fullname: `${firstname} ${lastname}`, email, password }));
       const accessToken = response?.data?.accessToken;
       dispatch(setCredentials(accessToken));
@@ -74,7 +74,7 @@ export default function Register() {
 
         <label className="form-control">
           <FaUser />
-          <input type="text" name="firstname" autoComplete="off" required minLength={2} placeholder="First Name" />
+          <input type="text" name="firstname" autoComplete="off" required minLength={2} placeholder="First Name" autoFocus />
         </label>
         <label className="form-control">
           <FaUser />
