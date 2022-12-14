@@ -5,19 +5,32 @@ import { useState } from 'react';
 import { FaImage, FaLock } from "react-icons/fa";
 import { MdOutlineClose } from 'react-icons/md';
 import { FormEvent } from 'react';
+import { TbEye } from "react-icons/tb";
+
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
+  const [privacy, setPrivacy] = useState(false);
   const [boardTItle, setBoardTItle] = useState('');
+  const [cover, setCover] = useState<File | undefined>(undefined);
 
   function submitBoard(e: FormEvent<HTMLFormElement>){
     e.preventDefault()
     if (boardTItle) {
-      alert(boardTItle)
-      setBoardTItle('')
-      setShowModal(false)
+
+
+      clearData()
     }
   }
+
+  function clearData(){
+    setBoardTItle('')
+    setPrivacy(false)
+    setCover(undefined)
+
+    setShowModal(false)
+  }
+
   
   return (
     <>
@@ -49,20 +62,29 @@ export default function Home() {
       {showModal && 
         <Modal setShowModal={setShowModal}>
           <ModalContent onSubmit={(e)=>submitBoard(e)}>
-            <button onClick={() => setShowModal(false)} className="btn btn-main close"><MdOutlineClose /></button>
+            <button type="button" onClick={() => setShowModal(false)} className="btn btn-main close"><MdOutlineClose /></button>
             <div className="cover">
-              {/* <img src="" alt="" /> */}
+              {cover && <img src={URL.createObjectURL(cover)} alt="board cover image" />}
             </div>
             <div className="form-control input-title">
               <input onChange={(e) => setBoardTItle(e.target.value)} value={boardTItle} type="text" placeholder="Add board title" />
             </div>
             <div>
-              <button className="btn btn-gray"><FaImage /> Cover</button>
-              <button className="btn btn-gray"><FaLock /> Private</button>
+              <label className={`btn ${cover ? 'selected' : 'btn-gray'}`}>
+                <FaImage /> 
+                Cover
+                <input type="file" accept="image/*" onChange={e => setCover(e.target.files?.[0])} />
+              </label>
+              <label className={`btn ${privacy ? 'selected' : 'btn-gray'}`}>
+                {privacy ? <><FaLock /> Private</> : <><TbEye /> Public</>}
+                <input type="checkbox" checked={privacy}
+                  onChange={e => setPrivacy(e.target.checked)}
+                />
+              </label>
             </div>
             <div>
-              <button onClick={() => setShowModal(false)}>Cancel</button>
-              <button className="btn btn-main">+ &nbsp; Create</button>
+              <button type="button" onClick={() => clearData()}>Cancel</button>
+              <button type="submit" className="btn btn-main">+ &nbsp; Create</button>
             </div>
           </ModalContent>
         </Modal>
@@ -160,6 +182,11 @@ const ModalContent = styled.form`
     border-radius: 8px;
     overflow: hidden;
     background-color: var(--gray);
+
+    img{
+      object-fit: cover;
+      object-position: center;
+    }
   }
 
   .input-title{
@@ -175,10 +202,19 @@ const ModalContent = styled.form`
     align-items: center;
     justify-content: space-between;
 
-    button{
+    .btn{
       display: flex;
       align-items: center;
       gap: 10px;
+
+      input{
+        display: none;
+      }
+
+      &.selected{
+        color: var(--mainColor);
+        border: 1px solid var(--mainColor);
+      }
     }
   }
   div:last-of-type{
