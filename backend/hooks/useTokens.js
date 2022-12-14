@@ -6,6 +6,7 @@ function useTokens(user){
   const accessToken = jwt.sign(
     {
       "UserInfo": {
+        "userId": user._id,
         "fullname": user.fullname,
         "email": user.email,
       }
