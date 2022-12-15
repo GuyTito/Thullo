@@ -37,7 +37,7 @@ const register = asyncHandler(async (req, res) => {
     res.status(400).json({ message: 'Invalid user data received' })
   }
 
-  const { accessToken, refreshToken } = useTokens(user);
+  const { accessToken, refreshToken, cookieOptions } = useTokens(user);
 
   // Create secure cookie with refresh token 
   res.cookie('jwt', refreshToken, cookieOptions)
@@ -72,7 +72,7 @@ const login = asyncHandler(async (req, res) => {
   // Create secure cookie with refresh token 
   res.cookie('jwt', refreshToken, cookieOptions)
 
-  // Send accessToken containing fullname and email 
+  // Send accessToken containing userId, fullname, email 
   res.json({ accessToken })
 })
 
@@ -82,20 +82,22 @@ const login = asyncHandler(async (req, res) => {
 // @access Public
 const refresh = asyncHandler(async (req, res) => {
   const cookies = req.cookies
-
-  if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
+  console.log('req.co', cookies)
+  if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized. Missing refresh token.' })
 
   const refreshToken = cookies.jwt
+  console.log('rT', refreshToken)
 
   jwt.verify(
     refreshToken,
     process.env.REFRESH_TOKEN_SECRET,
     asyncHandler(async (err, decoded) => {
-      if (err) return res.status(403).json({ message: 'Forbidden' })
+      if (err) return res.status(403).json({ message: 'Forbidden. Login session expired.' })
 
       const foundUser = await User.findOne({ email: decoded.email }).exec()
+      console.log('email', decoded.email)
 
-      if (!foundUser) return res.status(401).json({ message: 'Unauthorized' })
+      if (!foundUser) return res.status(401).json({ message: 'Unauthorized. User not found.' })
 
       const { accessToken } = useTokens(foundUser);
 
