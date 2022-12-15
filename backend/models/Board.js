@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const boardSchema = new Schema(
   {
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'User'
