@@ -1,11 +1,10 @@
 import { useEffect } from "react";
-import { axiosPrivate } from "../api/axios";
+import axios, { axiosPrivate } from "../api/axios";
 import { getAuth, getNewAccessToken } from "../store/authSlice";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useAppSelector } from "../store/hooks";
 
 export default function interceptedAxiosPrivate() {
   const { accessToken } = useAppSelector(getAuth);
-  const dispatch = useAppDispatch();
 
 
   useEffect(() => {
@@ -25,8 +24,11 @@ export default function interceptedAxiosPrivate() {
         const prevRequest = error?.config; // get the previous request, the one above
         if (error?.response?.status === 403 && !prevRequest?.sent) { // check if request failed due to expired access token and check it sent is false(it has not been sent) to prevent endless loop of 403
           prevRequest.sent = true;
-          await dispatch(getNewAccessToken())
-          prevRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+          const response = await axios.get('/auth/refresh', {
+            withCredentials: true,
+          })
+          const newAccessToken = response?.data?.accessToken;
+          prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
           return axiosPrivate(prevRequest); // make the request again
         }
         return Promise.reject(error);
