@@ -24,7 +24,7 @@ app.use(cors(corsOptions));
 app.use(express.json()); //process all json coming thru
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'))); //access static files like css etc
-
+app.use("/uploads", express.static("uploads"));
 
 //public routes
 app.use('/', require('./routes/rootRoute'));
