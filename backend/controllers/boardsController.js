@@ -32,30 +32,36 @@ const createNewBoard = asyncHandler(async (req, res) => {
   }
 
   // Check for duplicate title
-  // const duplicate = await Board.findOne({ title }).collation({ locale: 'en', strength: 2 }).lean().exec()
+  const duplicate = await Board.findOne({ title }).collation({ locale: 'en', strength: 2 }).lean().exec()
 
-  // if (duplicate) {
-  //   return res.status(409).json({ message: 'Duplicate board title' })
-  // }
+  if (duplicate) {
+    return res.status(409).json({ message: 'Duplicate board title' })
+  }
 
   // process image
   let imgPath = ''
+  let imgName = ''
   if (req.files) {
     const userFile = req.files.userFile
-    imgName = `${title}_${Date.now()}_boardCover${path.extname(userFile.name).toLowerCase()}`
+    imgName = `${title.replaceAll(' ', '_')}_${Date.now()}_boardCover${path.extname(userFile.name).toLowerCase()}`
     imgPath = path.join(__dirname, '..', 'uploads', 'boardCovers', imgName)
     userFile.mv(imgPath)
   }
-  return res.json({ title, boardCover: imgPath })
 
-  // Create and store the new user 
-  // const board = await Board.create({ userId, title, privacy, coverImgUrl })
+  // Create and store the new board 
+  const board = await Board.create({
+    userId, title, privacy, 
+    coverImgUrl: imgName && `/uploads/boardCovers/${imgName}`
+  })
 
-  // if (board) { // Created 
-  //   return res.status(201).json({ message: 'New board created' })
-  // } else {
-  //   return res.status(400).json({ message: 'Invalid board data received' })
-  // }
+  board.coverImgUrl = board.coverImgUrl && `${process.env.APP_URL}${board.coverImgUrl}`
+  
+
+  if (board) { // Created 
+    return res.status(201).json(board)
+  } else {
+    return res.status(400).json({ message: 'Invalid board data received' })
+  }
 
 })
 
