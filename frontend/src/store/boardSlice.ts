@@ -1,9 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "./store"
 
-
-// const axiosPrivate = interceptedAxiosPrivate()
 
 interface BoardType{
   user: string
