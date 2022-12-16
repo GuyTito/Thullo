@@ -21,6 +21,8 @@ export default function NewBoardForm(props: NewBoardFormProps) {
   const [privacy, setPrivacy] = useState(false);
   const [title, setTitle] = useState('');
   const [coverImg, setCoverImg] = useState<File | undefined>(undefined);
+  const [errMsg, setErrMsg] = useState('')
+
   const { userId } = useCurrentUser();
   const dispatch = useAppDispatch();
   const axiosPrivate = interceptedAxiosPrivate()
@@ -29,7 +31,7 @@ export default function NewBoardForm(props: NewBoardFormProps) {
   async function submitBoard(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     try {
-
+      setErrMsg('')
       const formValues = {
         userId, title, privacy,
         userFile: coverImg || null
@@ -41,13 +43,20 @@ export default function NewBoardForm(props: NewBoardFormProps) {
       const response = await axiosPrivate.post('/boards', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
-      const board = response?.data
-      console.log('created board', board)
-      dispatch(addNewBoard(board));
-
-      clearData()
+      if (response){
+        const data = response?.data
+        console.log('created board', response)
+        dispatch(addNewBoard(data));
+        
+        clearData()
+      }
     } catch (error: AxiosError | any) {
       console.log('board error', error.message, error.response.data.message)
+      if (!error?.response) {
+        setErrMsg('No Server Response');
+      } else {
+        setErrMsg(error.response.data.message);
+      }
     }
 
   }
@@ -63,10 +72,14 @@ export default function NewBoardForm(props: NewBoardFormProps) {
   
   return (
     <Form onSubmit={(e) => submitBoard(e)}>
+      {errMsg && <p className="error">{errMsg}</p>}
+
       <button type="button" onClick={() => clearData()} className="btn btn-main close"><MdOutlineClose /></button>
+
       <div className="cover">
         {coverImg && <img src={URL.createObjectURL(coverImg)} alt="board cover image" />}
       </div>
+
       <div className="form-control input-title">
         <input onChange={(e) => setTitle(e.target.value)} value={title} type="text" required placeholder="Add board title" />
       </div>
@@ -117,6 +130,8 @@ const Form = styled.form`
     background-color: var(--gray);
 
     img{
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       object-position: center;
     }
@@ -150,6 +165,7 @@ const Form = styled.form`
       }
     }
   }
+
   div:last-of-type{
     display: flex;
     align-items: center;
