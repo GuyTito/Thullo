@@ -10,6 +10,9 @@ interface BoardType{
   title: string
   privacy: boolean
   coverImgUrl: string
+  createdAt: string
+  updatedAt: string
+  _id: string
 }
 
 interface boardState {
@@ -20,24 +23,18 @@ const initialState: boardState = {
   boards: [],
 }
 
-// export const createNewBoard = createAsyncThunk('board/create', async (newBoard: BoardType) => {
-//   const response = await axiosPrivate.post('/boards', newBoard);
-//   return response?.data
-  
-// })
-
 const boardSlice = createSlice({
   name: "board",
   initialState,
-  reducers: {},
-  extraReducers(builder) {
-    builder
-      // .addCase(createNewBoard.fulfilled, (state, action: PayloadAction<BoardType>) => {
-      //   state.boards.push(action.payload)
-      // })
-  }
+  reducers: {
+    addNewBoard: (state, action: PayloadAction<BoardType>) => {
+      state.boards.push(action.payload)
+    },
+  },
 })
 
 export const selectBoard = (state: RootState) => state.board
+
+export const { addNewBoard } = boardSlice.actions
 
 export default boardSlice.reducer;
