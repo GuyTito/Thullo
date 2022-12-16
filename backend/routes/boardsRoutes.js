@@ -1,14 +1,21 @@
 const express = require('express')
+const fileUpload = require("express-fileupload");
 const router = express.Router()
 const boardsController = require('../controllers/boardsController')
 const verifyJWT = require("../middleware/verifyJWT");
+const fileExtLimiter = require('./../middleware/fileExtLimiter');
+const fileSizeLimiter = require('./../middleware/fileSizeLimiter')
 
 
 router.use(verifyJWT)
 
 router.route('/')
   .get(boardsController.getAllBoards)
-  .post(boardsController.createNewBoard)
+  .post(fileUpload({ createParentPath: true }),
+    fileExtLimiter(['.png', '.jpg', '.jpeg']),
+    fileSizeLimiter(1), // 3MB
+    boardsController.createNewBoard
+  )
   // .patch(boardsController.updateBoard)
   // .delete(boardsController.deleteBoard)
 
