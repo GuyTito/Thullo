@@ -13,7 +13,7 @@ router.route('/')
   .get(boardsController.getAllBoards)
   .post(fileUpload({ createParentPath: true }),
     fileExtLimiter(['.png', '.jpg', '.jpeg']),
-    fileSizeLimiter(1), // 3MB
+    fileSizeLimiter(1), // 1MB
     boardsController.createNewBoard
   )
   // .patch(boardsController.updateBoard)
