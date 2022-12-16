@@ -7,12 +7,10 @@ import { MdOutlineClose } from 'react-icons/md';
 import { FormEvent } from 'react';
 import { TbEye } from "react-icons/tb";
 import useCurrentUser from "../hooks/useCurrentUser";
-// import { createNewBoard } from "../store/boardSlice";
 import { useAppDispatch } from "../store/hooks";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
-import axios from "../api/axios";
 import { AxiosError } from "axios";
-import { useRef } from 'react';
+import { addNewBoard } from "../store/boardSlice";
 
 
 
@@ -38,14 +36,12 @@ export default function Home() {
       for (const [key, value] of Object.entries(formValues)) {
         formData.append(key, value)
       }
-      console.log('formData', formData)
       const response = await axiosPrivate.post('/boards', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+        headers: { 'Content-Type': 'multipart/form-data' }
       })
-      console.log('created board', response?.data)
-      // await dispatch(addToBoard({ user: userId, title, privacy, coverImg }));
+      const board = response?.data
+      console.log('created board', board)
+      dispatch(addNewBoard(board));
       
       clearData()
     } catch (error: AxiosError | any) {
