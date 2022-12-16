@@ -6,27 +6,58 @@ import { FaImage, FaLock } from "react-icons/fa";
 import { MdOutlineClose } from 'react-icons/md';
 import { FormEvent } from 'react';
 import { TbEye } from "react-icons/tb";
+import useCurrentUser from "../hooks/useCurrentUser";
+// import { createNewBoard } from "../store/boardSlice";
+import { useAppDispatch } from "../store/hooks";
+import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
+import axios from "../api/axios";
+import { AxiosError } from "axios";
+import { useRef } from 'react';
+
 
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [privacy, setPrivacy] = useState(false);
-  const [boardTItle, setBoardTItle] = useState('');
-  const [cover, setCover] = useState<File | undefined>(undefined);
+  const [title, setTitle] = useState('');
+  const [coverImg, setCoverImg] = useState<File | undefined>(undefined);
+  const { userId } = useCurrentUser();
+  const dispatch = useAppDispatch();
+  const axiosPrivate = interceptedAxiosPrivate()
 
-  function submitBoard(e: FormEvent<HTMLFormElement>){
+
+  async function submitBoard(e: FormEvent<HTMLFormElement>){
     e.preventDefault()
-    if (boardTItle) {
-
-
+    try {
+      
+      const formValues = {
+        userId, title, privacy,
+        userFile: coverImg || null
+      }
+      const formData = new FormData()
+      for (const [key, value] of Object.entries(formValues)) {
+        formData.append(key, value)
+      }
+      console.log('formData', formData)
+      const response = await axiosPrivate.post('/boards', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      console.log('created board', response?.data)
+      // await dispatch(addToBoard({ user: userId, title, privacy, coverImg }));
+      
       clearData()
+    } catch (error: AxiosError | any) {
+      console.log('board error', error.message, error.response.data.message)
     }
+
   }
 
   function clearData(){
-    setBoardTItle('')
+    setTitle('')
     setPrivacy(false)
-    setCover(undefined)
+    setCoverImg(undefined)
 
     setShowModal(false)
   }
@@ -62,18 +93,18 @@ export default function Home() {
       {showModal && 
         <Modal setShowModal={setShowModal}>
           <ModalContent onSubmit={(e)=>submitBoard(e)}>
-            <button type="button" onClick={() => setShowModal(false)} className="btn btn-main close"><MdOutlineClose /></button>
+            <button type="button" onClick={() => clearData()} className="btn btn-main close"><MdOutlineClose /></button>
             <div className="cover">
-              {cover && <img src={URL.createObjectURL(cover)} alt="board cover image" />}
+              {coverImg && <img src={URL.createObjectURL(coverImg)} alt="board cover image" />}
             </div>
             <div className="form-control input-title">
-              <input onChange={(e) => setBoardTItle(e.target.value)} value={boardTItle} type="text" placeholder="Add board title" />
+              <input onChange={(e) => setTitle(e.target.value)} value={title} type="text" required placeholder="Add board title" />
             </div>
             <div>
-              <label className={`btn ${cover ? 'selected' : 'btn-gray'}`}>
+              <label className={`btn ${coverImg ? 'selected' : 'btn-gray'}`}>
                 <FaImage /> 
                 Cover
-                <input type="file" accept="image/*" onChange={e => setCover(e.target.files?.[0])} />
+                <input type="file" accept="image/*" onChange={e => setCoverImg(e.target.files?.[0])} />
               </label>
               <label className={`btn ${privacy ? 'selected' : 'btn-gray'}`}>
                 {privacy ? <><FaLock /> Private</> : <><TbEye /> Public</>}
