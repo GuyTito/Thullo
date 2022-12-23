@@ -1,14 +1,43 @@
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
 import Modal from "../components/Modal";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NewBoardForm from "../components/NewBoardForm";
+import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
+import { AxiosError } from "axios";
+import { useAppDispatch } from "../store/hooks";
+import { loadBoards } from "../store/boardSlice";
 
 
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
+  const axiosPrivate = interceptedAxiosPrivate()
+  const [errMsg, setErrMsg] = useState('')
+  const dispatch = useAppDispatch();
 
+
+
+  useEffect(()=>{
+    async function fetchBoards(){
+      try {
+        const response = await axiosPrivate.get('/boards')
+        if (response) {
+          const boards = response?.data
+          console.log('boards', boards)
+          dispatch(loadBoards(boards))
+        }
+      } catch (error: AxiosError | any) {
+        console.log('board error', error.message, error.response.data.message)
+        if (!error?.response) {
+          setErrMsg('No Server Response');
+        } else {
+          setErrMsg(error.response.data.message);
+        }
+      }
+    }
+    fetchBoards()
+  }, [])
   
   return (
     <>
