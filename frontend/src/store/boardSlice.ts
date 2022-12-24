@@ -33,7 +33,7 @@ const boardSlice = createSlice({
   },
 })
 
-export const selectBoard = (state: RootState) => state.board
+export const getBoards = (state: RootState) => state.board.boards
 
 export const { addNewBoard, loadBoards } = boardSlice.actions
 
