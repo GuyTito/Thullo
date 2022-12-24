@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import UserProfile from "./pages/UserProfile";
+import BoardItem from "./pages/BoardItem";
 
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
                 
                 <Route path="boards" element={<BoardLayout />}>
                   <Route index element={<Boards />} />
+                  <Route path=":id" element={<BoardItem />} />
                 </Route>
               </Route>
             </Route>
