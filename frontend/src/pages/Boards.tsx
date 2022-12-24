@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react';
 import NewBoardForm from "../components/NewBoardForm";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { AxiosError } from "axios";
-import { useAppDispatch } from "../store/hooks";
-import { loadBoards } from "../store/boardSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { getBoards, loadBoards } from "../store/boardSlice";
 
 
 
@@ -15,6 +15,7 @@ export default function Home() {
   const axiosPrivate = interceptedAxiosPrivate()
   const [errMsg, setErrMsg] = useState('')
   const dispatch = useAppDispatch();
+  const boards = useAppSelector(getBoards)
 
 
 
@@ -48,12 +49,14 @@ export default function Home() {
         </div>
 
         <div className="boards">
-          {[1,2,3,4].map(i => (
-            <div key={i} className="card">
-              <div className="cover">
-                {/* <img src="" alt="" /> */}
-              </div>
-              <span>Devchallenges Board</span>
+          {boards.map(board => (
+            <div key={board._id} className="card">
+              {board.coverImgUrl && 
+                <div className="cover">
+                  <img src={board.coverImgUrl} alt="board cover" />
+                </div>
+              }
+              <span>{board.title}</span>
               <div className="avatars">
                 {[1,2,3].map(i => (
                   <Avatar key={i} />
