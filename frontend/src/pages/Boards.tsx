@@ -123,7 +123,7 @@ const Main = styled.main`
         height: 130px;
         border-radius: 12px;
         overflow: hidden;
-        background-color: var(--gray);
+        background-color: var(--white);
         border-radius: 12px;
         margin-bottom: 12px;
       }
