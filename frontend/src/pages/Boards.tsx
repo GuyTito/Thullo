@@ -7,6 +7,7 @@ import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { AxiosError } from "axios";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getBoards, loadBoards } from "../store/boardSlice";
+import { lg, sm } from "../hooks/devices";
 
 
 
@@ -100,7 +101,15 @@ const Main = styled.main`
     margin-top: 40px;
     display: grid;
     gap: 36px;
-    grid-template-columns: repeat(4, minmax(0, 1fr)); 
+    justify-content: center;
+    
+    @media ${sm} {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    
+    @media ${lg} {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
 
     .card{
       width:243px;
