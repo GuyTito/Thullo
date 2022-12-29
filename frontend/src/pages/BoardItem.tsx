@@ -2,12 +2,26 @@ import { FaLock } from "react-icons/fa";
 import { MdComment } from "react-icons/md";
 import { TbDots } from "react-icons/tb";
 import { TfiClip } from "react-icons/tfi";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
+import { useEffect } from 'react';
+import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 
 
 export default function BoardItem() {
-  
+  const {id} = useParams()
+  const axiosPrivate = interceptedAxiosPrivate()
+  console.log('location', id)
+
+  useEffect(()=>{
+    async function getBoard(id: string){
+      const response = await axiosPrivate.get(`boards/${id}`)
+      console.log('response', response.data)
+    }
+    if (id) getBoard(id)
+  }, [])
+
   
   return (
     <Div>
