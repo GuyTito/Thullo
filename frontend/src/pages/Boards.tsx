@@ -8,6 +8,7 @@ import { AxiosError } from "axios";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getBoards, loadBoards } from "../store/boardSlice";
 import { lg, sm } from "../hooks/devices";
+import { Link } from "react-router-dom";
 
 
 
@@ -51,10 +52,10 @@ export default function Home() {
 
         <div className="boards">
           {boards.map(board => (
-            <div key={board._id} className="card">
+            <Link to={board._id} key={board._id} className="card">
               {board.coverImgUrl && 
                 <div className="cover">
-                  <img src={board.coverImgUrl} alt="board cover" />
+                  <img src={board.coverImgUrl} alt={board.title} />
                 </div>
               }
               <span>{board.title}</span>
@@ -64,7 +65,7 @@ export default function Home() {
                 ))}
                 <span>+5 others</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </Main>
