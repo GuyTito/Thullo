@@ -52,6 +52,8 @@ const Header = styled.header`
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05);
   background-color: var(--white);
   align-items: center;
+  position: relative;
+  z-index: 10;
 
   .brand{
     display: flex;
