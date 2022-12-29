@@ -66,4 +66,17 @@ const createNewBoard = asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { createNewBoard, getAllBoards }
+// @desc get a board with id
+// @route get /boards/:id
+// @access Private
+const getBoard = asyncHandler(async (req, res) => {
+  const id = req.params.id
+  const foundBoard = await Board.findById(id).exec()
+  if (!foundBoard) {
+    return res.status(401).json({ message: 'Board with id ${id} not found.' })
+  }
+  res.json({ foundBoard })
+})
+
+
+module.exports = { createNewBoard, getAllBoards, getBoard }
