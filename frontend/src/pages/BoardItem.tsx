@@ -20,34 +20,41 @@ export default function BoardItem() {
         <button className="btn-pad btn-gray">... Show Menu</button>
       </div>
       <div className="lists">
-        <div className="list">
-          <div className="list-title">
-            <span>Backlog 🤔</span>
-            <button>...</button>
-          </div>
-          <div className="card">
-            <div className="cover">
-              {/* <img src="" alt="" /> */}
+        {[1,2,3].map(list => (
+          <div className="list">
+            <div className="list-title">
+              <span>Backlog 🤔</span>
+              <button>...</button>
             </div>
-            <div className="card-title">✋🏿 Move anything 'ready' here</div>
-            <div className="labels">
-              <label className="label">Technical</label>
-            </div>
-            <div className="bottom">
-              <div className="left">
-                {[1, 2,].map(i => (
-                  <Avatar key={i} />
-                ))}
-                <button className="btn-main btn-square">+</button>
+            {[1,2].map(card => (
+              <div className="card">
+                <div className="cover">
+                  {/* <img src="" alt="" /> */}
+                </div>
+                <div className="card-title">✋🏿 Move anything 'ready' here</div>
+                <div className="labels">
+                  <label className="label">Technical</label>
+                </div>
+                <div className="bottom">
+                  <div className="left">
+                    {[1, 2,].map(i => (
+                      <Avatar key={i} />
+                    ))}
+                    <button className="btn-main btn-square">+</button>
+                  </div>
+                  <div className="right">
+                    <span>2</span>
+                    <span>1</span>
+                  </div>
+                </div>
               </div>
-              <div className="right">
-                <span>2</span>
-                <span>1</span>
-              </div>
+            ))}
+            <div className="add-another">
+              <button><span>Add card</span> <span>+</span></button>
             </div>
           </div>
-        </div>
-        <div className="add-list">
+        ))}
+        <div className="add-another">
           <button><span>Add list</span> <span>+</span></button>
         </div>
       </div>
@@ -140,7 +147,7 @@ const Div = styled.div`
       }
       
     }
-    .add-list{
+    .add-another{
       width: 240px;
       button{
         padding: 8px 13px;
