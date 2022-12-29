@@ -15,7 +15,7 @@ body {
   background-color: var(--bgColor);
 }
 
-.btn {
+.btn-pad{
   border-radius: 8px;
   padding: 8px 12px;
 }
@@ -28,6 +28,15 @@ body {
 .btn-gray{
   color: #828282;
   background: #F2F2F2;
+}
+
+.btn-square{
+  border-radius: 8px;
+  display: block;
+  height: 28px;
+  width: 28px;
+  display: grid;
+  place-content: center;
 }
 
 input::placeholder {
