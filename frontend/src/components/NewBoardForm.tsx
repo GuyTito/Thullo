@@ -74,7 +74,7 @@ export default function NewBoardForm(props: NewBoardFormProps) {
     <Form onSubmit={(e) => submitBoard(e)}>
       {errMsg && <p className="error">{errMsg}</p>}
 
-      <button type="button" onClick={() => clearData()} className="btn btn-main close"><MdOutlineClose /></button>
+      <button type="button" onClick={() => clearData()} className="btn-square btn-main close"><MdOutlineClose /></button>
 
       <div className="cover">
         {coverImg && <img src={URL.createObjectURL(coverImg)} alt="board cover image" />}
@@ -84,12 +84,12 @@ export default function NewBoardForm(props: NewBoardFormProps) {
         <input onChange={(e) => setTitle(e.target.value)} value={title} type="text" required placeholder="Add board title" />
       </div>
       <div>
-        <label className={`btn ${coverImg ? 'selected' : 'btn-gray'}`}>
+        <label className={`btn-pad ${coverImg ? 'selected' : 'btn-gray'}`}>
           <FaImage />
           Cover
           <input type="file" accept="image/*" onChange={e => setCoverImg(e.target.files?.[0])} />
         </label>
-        <label className={`btn ${privacy ? 'selected' : 'btn-gray'}`}>
+        <label className={`btn-pad ${privacy ? 'selected' : 'btn-gray'}`}>
           {privacy ? <><FaLock /> Private</> : <><TbEye /> Public</>}
           <input type="checkbox" checked={privacy}
             onChange={e => setPrivacy(e.target.checked)}
@@ -98,7 +98,7 @@ export default function NewBoardForm(props: NewBoardFormProps) {
       </div>
       <div>
         <button type="button" onClick={() => clearData()}>Cancel</button>
-        <button type="submit" className="btn btn-main">+ &nbsp; Create</button>
+        <button type="submit" className="btn-pad btn-main">+ &nbsp; Create</button>
       </div>
     </Form>
   )
@@ -118,8 +118,6 @@ const Form = styled.form`
     position: absolute;
     right: 10px;
     top: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
   }
 
   .cover{
@@ -150,7 +148,7 @@ const Form = styled.form`
     align-items: center;
     justify-content: space-between;
 
-    .btn{
+    .btn-pad{
       display: flex;
       align-items: center;
       gap: 10px;
