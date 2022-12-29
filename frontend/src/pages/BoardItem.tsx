@@ -1,3 +1,7 @@
+import { FaLock } from "react-icons/fa";
+import { MdComment } from "react-icons/md";
+import { TbDots } from "react-icons/tb";
+import { TfiClip } from "react-icons/tfi";
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
 
@@ -9,22 +13,22 @@ export default function BoardItem() {
     <Div>
       <div className="topbar">
         <div className="left">
-          <button className="btn-pad btn-gray">Private</button>
+          <button className="btn-pad btn-gray"><FaLock /> Private</button>
           <div className="avatars">
             {[1, 2, 3].map(i => (
               <Avatar key={i} />
             ))}
-            <span>+5 others</span>
+            <button className="btn-main btn-square">+</button>
           </div>
         </div>
-        <button className="btn-pad btn-gray">... Show Menu</button>
+        <button className="btn-pad btn-gray"><TbDots /> Show Menu</button>
       </div>
       <div className="lists">
         {[1,2,3].map(list => (
           <div className="list">
             <div className="list-title">
               <span>Backlog 🤔</span>
-              <button>...</button>
+              <TbDots />
             </div>
             {[1,2].map(card => (
               <div className="card">
@@ -43,8 +47,8 @@ export default function BoardItem() {
                     <button className="btn-main btn-square">+</button>
                   </div>
                   <div className="right">
-                    <span>2</span>
-                    <span>1</span>
+                    <span><MdComment />1</span>
+                    <span><TfiClip /> 2</span>
                   </div>
                 </div>
               </div>
@@ -70,6 +74,11 @@ const Div = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    button{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
     .left{
       display: flex;
       justify-content: space-between;
@@ -142,6 +151,11 @@ const Div = styled.div`
             display: flex;
             gap: 12px;
             color: var(--gray);
+            span{
+              display: flex;
+              gap: 3px;
+              align-items: center;
+            }
           }
         }
       }
