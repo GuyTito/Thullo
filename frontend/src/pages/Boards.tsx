@@ -47,7 +47,7 @@ export default function Home() {
       <Main>
         <div className="all-boards">
           <h1>All Boards</h1>
-          <button onClick={()=>setShowModal(true)} className="btn btn-main">+ Add</button>
+          <button onClick={()=>setShowModal(true)} className="btn-main btn-pad">+ Add</button>
         </div>
 
         <div className="boards">
