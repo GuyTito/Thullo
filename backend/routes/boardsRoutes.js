@@ -18,5 +18,6 @@ router.route('/')
   )
   // .patch(boardsController.updateBoard)
   // .delete(boardsController.deleteBoard)
-
+router.route('/:id')
+  .get(boardsController.getBoard)
 module.exports = router
