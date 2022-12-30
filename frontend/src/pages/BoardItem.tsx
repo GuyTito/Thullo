@@ -67,14 +67,14 @@ export default function BoardItem() {
         <button className="btn-pad btn-gray"><TbDots /> Show Menu</button>
       </div>
       <div className="lists">
-        {[1,2,3].map(list => (
-          <div className="list">
+        {[1,2,].map(i => (
+          <div key={i} className="list">
             <div className="list-title">
               <span>Backlog 🤔</span>
               <TbDots />
             </div>
-            {[1,2].map(card => (
-              <div className="card">
+            {[1,2].map(i => (
+              <div key={i} className="card">
                 <div className="cover">
                   {/* <img src="" alt="" /> */}
                 </div>
