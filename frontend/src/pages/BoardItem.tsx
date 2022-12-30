@@ -1,6 +1,6 @@
 import { FaLock } from "react-icons/fa";
 import { MdComment } from "react-icons/md";
-import { TbDots } from "react-icons/tb";
+import { TbDots, TbEye } from "react-icons/tb";
 import { TfiClip } from "react-icons/tfi";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -8,36 +8,43 @@ import Avatar from "../components/Avatar";
 import { useEffect } from 'react';
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { AxiosError } from "axios";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { getCurrentBoard, setCurrentBoard } from "../store/boardSlice";
 
 
 export default function BoardItem() {
   const {id} = useParams()
   const axiosPrivate = interceptedAxiosPrivate()
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const currentBoard = useAppSelector(getCurrentBoard)
+
+  async function getBoard(id: string) {
+    try {
+      const response = await axiosPrivate.get(`boards/${id}`)
+
+      // handle specific error not handled by axios
+      if (!response.data?.foundBoard) {
+        navigate('*')
+        throw new Error(`Board with id ${id} not found.`)
+      } else {
+        console.log('found board', response.data)
+        const foundBoard = response.data
+        dispatch(setCurrentBoard(foundBoard))
+      }
+    } catch (error: AxiosError | any) {
+      if (!error?.response) { // if error is not sent thru axios
+        console.log(error.message)
+      } else {
+        navigate('*')
+        console.log(error.response.data.message)
+      }
+    }
+  }
 
   useEffect(()=>{
-    async function getBoard(id: string){
-      try {
-        const response = await axiosPrivate.get(`boards/${id}`)
-
-        // handle specific error not handled by axios
-        if (!response.data?.foundBoard){
-          navigate('*')
-          throw new Error(`Board with id ${id} not found.`)
-        } else {
-          console.log('found board', response.data)
-        }
-      } catch (error: AxiosError | any) {
-        if (!error?.response) { // if error is not sent thru axios
-          console.log(error.message)
-        } else {
-          navigate('*')
-          console.log(error.response.data.message)
-        }
-      }
-      
-    }
     if (id) getBoard(id)
+
   }, [])
 
   
@@ -45,7 +52,9 @@ export default function BoardItem() {
     <Div>
       <div className="topbar">
         <div className="left">
-          <button className="btn-pad btn-gray"><FaLock /> Private</button>
+          <button className="btn-pad btn-gray">
+            {currentBoard?.privacy ? <><FaLock /> Private</> : <><TbEye /> Public</>}
+          </button>
           <div className="avatars">
             {[1, 2, 3].map(i => (
               <Avatar key={i} />
