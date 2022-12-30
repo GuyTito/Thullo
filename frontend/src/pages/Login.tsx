@@ -77,7 +77,7 @@ export default function Login() {
         </label>
         
         <div>
-          <button type="submit" className="btn btn-main">Login</button>
+          <button type="submit" className="btn-pad btn-main">Login</button>
         </div>
 
         <label className="trust">
