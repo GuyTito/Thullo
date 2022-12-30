@@ -10,7 +10,8 @@ import { logout } from '../store/authSlice';
 import useCurrentUser from '../hooks/useCurrentUser';
 import { getCurrentBoard } from '../store/boardSlice';
 import Dropdown from './Dropdown';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import ClickAwayListener from 'react-click-away-listener';
 
 
 export default function Topbar() {
@@ -18,6 +19,8 @@ export default function Topbar() {
   const {fullname} = useCurrentUser();
   const currentBoard = useAppSelector(getCurrentBoard)
   const [open, setOpen] = useState(false);
+  const ref = useRef(null)
+
 
 
 
@@ -44,29 +47,24 @@ export default function Topbar() {
           <button className='btn-main btn-pad'>Search</button>
         </div>
 
-        {/* <div className='dropdown'>
-          
-
-          <div className='content'>
-            
-          </div>
-        </div> */}
-        <Dropdown
-          button = {
-            <button onClick={() => setOpen(!open)} className='profile'>
-              <Avatar />
-              <span>{fullname}</span>
-              <span>&#9662;</span>
-            </button>
-          }
-          content={open &&
-            <div className='dropdown-content'>
-              <Link to='/current-user' className='my-profile'><FaUser /> My Profile</Link>
-              <hr />
-              <Link onClick={() => dispatch(logout())} to='/login' className='logout'><BiLogOut /> Logout</Link>
-            </div>
-          }
-        />
+        <ClickAwayListener onClickAway={() => setOpen(false)}>
+          <Dropdown ref={ref}
+            button = {
+              <button onClick={() => setOpen(!open)} className='profile'>
+                <Avatar />
+                <span>{fullname}</span>
+                <span>&#9662;</span>
+              </button>
+            }
+            content={open &&
+              <div className='dropdown-content'>
+                <Link to='/current-user' className='my-profile'><FaUser /> My Profile</Link>
+                <hr />
+                <Link onClick={() => dispatch(logout())} to='/login' className='logout'><BiLogOut /> Logout</Link>
+              </div>
+            }
+          />
+        </ClickAwayListener>
       </Header>
     </>
   )
