@@ -1,17 +1,21 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Avatar from './Avatar';
 import Logo from './Logo';
 import { FaUser } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
-import { useAppDispatch } from '../store/hooks';
+import { CgMenuGridR } from "react-icons/cg";
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { logout } from '../store/authSlice';
 import useCurrentUser from '../hooks/useCurrentUser';
+import { getCurrentBoard } from '../store/boardSlice';
 
 
 export default function Topbar() {
   const dispatch = useAppDispatch();
   const {fullname} = useCurrentUser();
+  const currentBoard = useAppSelector(getCurrentBoard)
+
 
   return (
     <>
@@ -20,6 +24,16 @@ export default function Topbar() {
           <Logo />
           <span>Thullo</span>
         </Link>
+
+        {currentBoard && 
+          <div className='board-title'>
+            <h1>{currentBoard.title}</h1>
+            <span>|</span>
+            <Link to='/boards' className='btn-pad btn-gray'>
+              <CgMenuGridR />All Boards
+            </Link>
+          </div>
+        }
 
         <div className='search'>
           <input type="text" placeholder='keyword...' />
@@ -64,6 +78,26 @@ const Header = styled.header`
       font-size: 18px;
       font-weight: 600;
       line-height: 27px;
+    }
+  }
+
+  .board-title{
+    margin-left: 95px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    h1{
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 27px;
+    }
+    span{
+      color: var(--gray);
+    }
+    a{
+      display: flex;
+      gap: 12px;
+      align-items: center;
     }
   }
 
