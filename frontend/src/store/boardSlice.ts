@@ -32,7 +32,7 @@ const boardSlice = createSlice({
     loadBoards: (state, action: PayloadAction<BoardType[]>) => {
       state.boards = action.payload
     },
-    setCurrentBoard: (state, action: PayloadAction<BoardType>) => {
+    setCurrentBoard: (state, action: PayloadAction<BoardType | null>) => {
       state.currentBoard = action.payload
     }
   },
