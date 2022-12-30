@@ -2,14 +2,17 @@ import { FaLock } from "react-icons/fa";
 import { MdComment } from "react-icons/md";
 import { TbDots, TbEye } from "react-icons/tb";
 import { TfiClip } from "react-icons/tfi";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { AxiosError } from "axios";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getCurrentBoard, setCurrentBoard } from "../store/boardSlice";
+import Dropdown from "../components/Dropdown";
+import ClickAwayListener from 'react-click-away-listener';
+
 
 
 export default function BoardItem() {
@@ -18,6 +21,9 @@ export default function BoardItem() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const currentBoard = useAppSelector(getCurrentBoard)
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null)
+
 
   async function getBoard(id: string) {
     try {
@@ -54,9 +60,20 @@ export default function BoardItem() {
     <Div>
       <div className="topbar">
         <div className="left">
-          <button className="btn-pad btn-gray">
-            {currentBoard?.privacy ? <><FaLock /> Private</> : <><TbEye /> Public</>}
-          </button>
+          <ClickAwayListener onClickAway={()=>setOpen(false)}>
+            <Dropdown ref={ref}
+              button = {
+                <button onClick={() => setOpen(!open)} className="btn-pad btn-gray">
+                  {currentBoard?.privacy ? <><FaLock /> Private</> : <><TbEye /> Public</>}
+                </button>
+              }
+              content = {open &&
+                <div>
+                  visibility
+                </div>
+              }
+            />
+          </ClickAwayListener>
           <div className="avatars">
             {[1, 2, 3].map(i => (
               <Avatar key={i} />
