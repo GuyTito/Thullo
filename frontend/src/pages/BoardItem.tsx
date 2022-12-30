@@ -2,22 +2,40 @@ import { FaLock } from "react-icons/fa";
 import { MdComment } from "react-icons/md";
 import { TbDots } from "react-icons/tb";
 import { TfiClip } from "react-icons/tfi";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
 import { useEffect } from 'react';
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
+import { AxiosError } from "axios";
 
 
 export default function BoardItem() {
   const {id} = useParams()
   const axiosPrivate = interceptedAxiosPrivate()
-  console.log('location', id)
+  const navigate = useNavigate()
 
   useEffect(()=>{
     async function getBoard(id: string){
-      const response = await axiosPrivate.get(`boards/${id}`)
-      console.log('response', response.data)
+      try {
+        const response = await axiosPrivate.get(`boards/${id}`)
+
+        // handle specific error not handled by axios
+        if (!response.data?.foundBoard){
+          navigate('*')
+          throw new Error(`Board with id ${id} not found.`)
+        } else {
+          console.log('found board', response.data)
+        }
+      } catch (error: AxiosError | any) {
+        if (!error?.response) { // if error is not sent thru axios
+          console.log(error.message)
+        } else {
+          navigate('*')
+          console.log(error.response.data.message)
+        }
+      }
+      
     }
     if (id) getBoard(id)
   }, [])
