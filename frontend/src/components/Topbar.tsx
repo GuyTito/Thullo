@@ -9,12 +9,16 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { logout } from '../store/authSlice';
 import useCurrentUser from '../hooks/useCurrentUser';
 import { getCurrentBoard } from '../store/boardSlice';
+import Dropdown from './Dropdown';
+import { useState } from 'react';
 
 
 export default function Topbar() {
   const dispatch = useAppDispatch();
   const {fullname} = useCurrentUser();
   const currentBoard = useAppSelector(getCurrentBoard)
+  const [open, setOpen] = useState(false);
+
 
 
   return (
@@ -40,21 +44,29 @@ export default function Topbar() {
           <button className='btn-main btn-pad'>Search</button>
         </div>
 
-        <div className='dropdown'>
-          <button className='profile'>
-            <Avatar />
-            <span>{fullname}</span>
-            <span>&#9662;</span>
-          </button>
+        {/* <div className='dropdown'>
+          
 
           <div className='content'>
-            <div>
+            
+          </div>
+        </div> */}
+        <Dropdown
+          button = {
+            <button onClick={() => setOpen(!open)} className='profile'>
+              <Avatar />
+              <span>{fullname}</span>
+              <span>&#9662;</span>
+            </button>
+          }
+          content={open &&
+            <div className='dropdown-content'>
               <Link to='/current-user' className='my-profile'><FaUser /> My Profile</Link>
               <hr />
-              <Link onClick={()=>dispatch(logout())} to='/login' className='logout'><BiLogOut /> Logout</Link>
+              <Link onClick={() => dispatch(logout())} to='/login' className='logout'><BiLogOut /> Logout</Link>
             </div>
-          </div>
-        </div>
+          }
+        />
       </Header>
     </>
   )
@@ -119,66 +131,40 @@ const Header = styled.header`
       } */
     }
   }
-
-  .dropdown{
-    position: relative;
     
-    .profile{
+  .profile{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    span{
+      font-weight: 700;
+    }
+  }
+  .dropdown-outer{
+    right: 0;
+  }
+  .dropdown-content{
+    a{
       display: flex;
       align-items: center;
       gap: 12px;
 
-      span{
-        font-weight: 700;
+      &.my-profile {
+        background-color: #F2F2F2;
+        padding: 10px 13px;
+        border-radius: 8px;
+      }
+
+      &.logout{
+        padding: 0 13px;
+        color: var(--error);
       }
     }
 
-    .content{
-      padding-top: 10px;
-      display: none;
-      position: absolute;
-      right: 0;
-      width: 160px;
-      z-index: 9999;
-
-      div{
-        padding: 15px 12px;
-        background: var(--white);
-        border: 1px solid #E0E0E0;
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
-        border-radius: 12px;
-
-        a{
-          display: flex;
-          align-items: center;
-          gap: 12px;
-
-          &.my-profile {
-            background-color: #F2F2F2;
-            padding: 10px 13px;
-            border-radius: 8px;
-          }
-
-          &.logout{
-            padding: 0 13px;
-            color: var(--error);
-          }
-        }
-
-        hr{
-          margin: 16px 0;
-          border-top: 1px solid var(--gray);
-        }
-      }
-    }
-
-    &:hover{
-      div{
-        display: block;
-      }
+    hr{
+      margin: 16px 0;
+      border-top: 1px solid var(--gray);
     }
   }
-
-  
-
 `
