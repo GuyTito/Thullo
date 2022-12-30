@@ -29,8 +29,7 @@ export default function BoardItem() {
         throw new Error(`Board with id ${id} not found.`)
       } else {
         console.log('found board', response.data)
-        const foundBoard = response.data
-        dispatch(setCurrentBoard(foundBoard))
+        dispatch(setCurrentBoard(response.data?.foundBoard))
       }
     } catch (error: AxiosError | any) {
       if (!error?.response) { // if error is not sent thru axios
@@ -45,6 +44,9 @@ export default function BoardItem() {
   useEffect(()=>{
     if (id) getBoard(id)
 
+    return ()=>{
+      dispatch(setCurrentBoard(null))
+    }
   }, [])
 
   
