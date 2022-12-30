@@ -73,9 +73,9 @@ const getBoard = asyncHandler(async (req, res) => {
   const id = req.params.id
   const foundBoard = await Board.findById(id).exec()
   if (!foundBoard) {
-    return res.status(401).json({ message: 'Board with id ${id} not found.' })
+    return res.status(401).json({ message: `Board with id ${id} not found.` })
   }
-  res.json({ foundBoard })
+  res.status(200).json({ foundBoard })
 })
 
 
