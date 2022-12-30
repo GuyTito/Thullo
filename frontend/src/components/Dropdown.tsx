@@ -14,7 +14,7 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>((props, ref) =
   return (
     <Div ref={ref}>
       {button}
-      <div className="content">
+      <div className="dropdown-outer">
         {content}
       </div>
     </Div>
@@ -24,14 +24,8 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>((props, ref) =
 
 const Div = styled.div`
   position: relative;
-  /* &:hover{
-    div{
-      display: block;
-    }
-  } */
-  .content{
+  .dropdown-outer{
     padding-top: 10px;
-    /* display: none; */
     position: absolute;
     width: 160px;
     z-index: 9999;
