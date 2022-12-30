@@ -14,10 +14,12 @@ interface BoardType{
 
 interface boardState {
   boards: BoardType[]
+  currentBoard: BoardType | null
 }
 
 const initialState: boardState = {
   boards: [],
+  currentBoard: null
 }
 
 const boardSlice = createSlice({
@@ -30,11 +32,15 @@ const boardSlice = createSlice({
     loadBoards: (state, action: PayloadAction<BoardType[]>) => {
       state.boards = action.payload
     },
+    setCurrentBoard: (state, action: PayloadAction<BoardType>) => {
+      state.currentBoard = action.payload
+    }
   },
 })
 
 export const getBoards = (state: RootState) => state.board.boards
+export const getCurrentBoard = (state: RootState) => state.board.currentBoard
 
-export const { addNewBoard, loadBoards } = boardSlice.actions
+export const { addNewBoard, loadBoards, setCurrentBoard } = boardSlice.actions
 
 export default boardSlice.reducer;
