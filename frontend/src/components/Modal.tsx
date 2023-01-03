@@ -1,17 +1,16 @@
 import styled from "styled-components";
-import { ReactNode, Dispatch } from 'react';
+import { ReactNode } from 'react';
 
 interface ModalProps{
   children: ReactNode
-  setShowModal: Dispatch<React.SetStateAction<boolean>>
 }
 
 
 export default function Modal(props: ModalProps) {
-  const { children, setShowModal } = props
+  const { children } = props
   
   return (
-    <Div onClick={() => setShowModal(false)}>
+    <Div >
       <div onClick={(e)=>e.stopPropagation()} className="content">
         {children}
       </div>
