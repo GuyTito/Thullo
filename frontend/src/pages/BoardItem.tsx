@@ -1,6 +1,6 @@
 import { FaLock } from "react-icons/fa";
 import { MdComment } from "react-icons/md";
-import { TbDots, TbEye } from "react-icons/tb";
+import { TbDots } from "react-icons/tb";
 import { TfiClip } from "react-icons/tfi";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -49,7 +49,29 @@ export default function BoardItem() {
     }
   }
 
-  
+  async function handlePrivacy(privacy: boolean){
+    setOpen(false)
+
+    const boardUpdate = { privacy }
+    try {
+      const response = await axiosPrivate.patch('/boards', { id, boardUpdate}, {
+        headers: { 'Content-Type': 'application/json' }
+      })
+      if (!response.data?.updatedBoard) {
+        throw new Error(`Board with id ${id} not found.`)
+      } else {
+        console.log('updated board', response.data)
+        dispatch(setCurrentBoard(response.data?.updatedBoard))
+      }
+    } catch (error: AxiosError | any) {
+      if (!error?.response) { // if error is not sent thru axios
+        console.log(error.message)
+      } else {
+        console.log(error.response.data.message)
+      }
+    }
+    
+  }
 
   useEffect(()=>{
     if (id) getBoard(id)
@@ -67,7 +89,7 @@ export default function BoardItem() {
           <ClickAwayListener onClickAway={()=>setOpen(false)}>
             <Dropdown open={open} ref={ref}
               button = {
-                <button className="btn-pad btn-gray">
+                <button onClick={() => setOpen(!open)} className={`btn-pad ${currentBoard?.privacy ? 'btn-selected' : 'btn-gray'}`}>
                   {currentBoard?.privacy ? <><FaLock /> Private</> : <><BiWorld /> Public</>}
                 </button>
               }
@@ -77,11 +99,11 @@ export default function BoardItem() {
                     <h4>Visibility</h4>
                     <span>Choose who can see to this board.</span>
                   </div>
-                  <div className="menu-item selected">
+                  <div onClick={() => handlePrivacy(false)} className={`menu-item ${!currentBoard?.privacy && 'selected'}`}>
                     <h5><BiWorld /> Public</h5>
                     <span>Anyone on the internet can see this</span>
                   </div>
-                  <div className="menu-item">
+                  <div onClick={() => handlePrivacy(true)} className={`menu-item ${currentBoard?.privacy && 'selected'}`}>
                     <h5><FaLock /> Private</h5>
                     <span>Only board members can see this</span>
                   </div>
