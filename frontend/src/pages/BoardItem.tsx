@@ -61,15 +61,26 @@ export default function BoardItem() {
       <div className="topbar">
         <div className="left">
           <ClickAwayListener onClickAway={()=>setOpen(false)}>
-            <Dropdown ref={ref}
+            <Dropdown open={open} ref={ref}
               button = {
                 <button onClick={() => setOpen(!open)} className="btn-pad btn-gray">
                   {currentBoard?.privacy ? <><FaLock /> Private</> : <><TbEye /> Public</>}
                 </button>
               }
-              content = {open &&
-                <div>
-                  visibility
+              content = {
+                <div className="dropdown-menu">
+                  <div>
+                    <h4>Visibility</h4>
+                    <p>Choose who can see to this board.</p>
+                  </div>
+                  <button>
+                    <div>Public</div>
+                    <p>Anyone on the internet can see this</p>
+                  </button>
+                  <button>
+                    <div>Private</div>
+                    <p>Only board members can see this</p>
+                  </button>
                 </div>
               }
             />
@@ -148,6 +159,8 @@ const Div = styled.div`
         display: flex;
         gap: 12px;
         align-items: center;
+      }
+      .dropdown-menu{
       }
     }
   }
