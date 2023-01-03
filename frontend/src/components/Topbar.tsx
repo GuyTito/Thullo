@@ -48,7 +48,7 @@ export default function Topbar() {
         </div>
 
         <ClickAwayListener onClickAway={() => setOpen(false)}>
-          <Dropdown ref={ref}
+          <Dropdown open={open} ref={ref}
             button = {
               <button onClick={() => setOpen(!open)} className='profile'>
                 <Avatar />
@@ -56,8 +56,8 @@ export default function Topbar() {
                 <span>&#9662;</span>
               </button>
             }
-            content={open &&
-              <div className='dropdown-content'>
+            content={
+              <div className='dropdown-menu'>
                 <Link to='/current-user' className='my-profile'><FaUser /> My Profile</Link>
                 <hr />
                 <Link onClick={() => dispatch(logout())} to='/login' className='logout'><BiLogOut /> Logout</Link>
@@ -139,10 +139,10 @@ const Header = styled.header`
       font-weight: 700;
     }
   }
-  .dropdown-outer{
+  .dropdown-content{
     right: 0;
   }
-  .dropdown-content{
+  .dropdown-menu{
     a{
       display: flex;
       align-items: center;
