@@ -67,7 +67,7 @@ const createNewBoard = asyncHandler(async (req, res) => {
 
 
 // @desc get a board with id
-// @route get /boards/:id
+// @route GET /boards/:id
 // @access Private
 const getBoard = asyncHandler(async (req, res) => {
   const id = req.params.id
@@ -79,4 +79,24 @@ const getBoard = asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { createNewBoard, getAllBoards, getBoard }
+// @desc update a board
+// @route PATCH /boards
+// @access Private
+const updateBoard = asyncHandler(async (req, res) => {
+  const {id, boardUpdate} = req.body
+
+  // Confirm data
+  if (!id || !boardUpdate) {
+    return res.status(400).json({ message: 'Provide id and data to update board' })
+  }
+
+  const updatedBoard = await Board.findOneAndUpdate(
+    { _id: id },
+    {...boardUpdate},
+    { new: true }
+  );
+
+  res.status(200).json({ updatedBoard })
+})
+
+module.exports = { createNewBoard, getAllBoards, getBoard, updateBoard }
