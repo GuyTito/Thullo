@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getBoards, loadBoards } from "../store/boardSlice";
 import { lg, sm } from "../hooks/devices";
 import { Link } from "react-router-dom";
+import ClickAwayListener from "react-click-away-listener";
 
 
 
@@ -72,8 +73,10 @@ export default function Home() {
 
       {/* modal */}
       {showModal && 
-        <Modal setShowModal={setShowModal}>
-          <NewBoardForm setShowModal={setShowModal} />
+        <Modal>
+          <ClickAwayListener onClickAway={() => setShowModal(false)}>
+            <NewBoardForm setShowModal={setShowModal} />
+          </ClickAwayListener>
         </Modal>
       }
     </>
