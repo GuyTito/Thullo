@@ -3,12 +3,12 @@ import { useState, Dispatch } from 'react';
 import { FaImage, FaLock } from "react-icons/fa";
 import { MdOutlineClose } from 'react-icons/md';
 import { FormEvent } from 'react';
-import { TbEye } from "react-icons/tb";
 import useCurrentUser from "../hooks/useCurrentUser";
 import { useAppDispatch } from "../store/hooks";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { AxiosError } from "axios";
 import { addNewBoard } from "../store/boardSlice";
+import { BiWorld } from "react-icons/bi";
 
 
 interface NewBoardFormProps {
@@ -84,13 +84,13 @@ export default function NewBoardForm(props: NewBoardFormProps) {
         <input onChange={(e) => setTitle(e.target.value)} value={title} type="text" required placeholder="Add board title" />
       </div>
       <div>
-        <label className={`btn-pad ${coverImg ? 'selected' : 'btn-gray'}`}>
+        <label className={`btn-pad ${coverImg ? 'btn-selected' : 'btn-gray'}`}>
           <FaImage />
           Cover
           <input type="file" accept="image/*" onChange={e => setCoverImg(e.target.files?.[0])} />
         </label>
-        <label className={`btn-pad ${privacy ? 'selected' : 'btn-gray'}`}>
-          {privacy ? <><FaLock /> Private</> : <><TbEye /> Public</>}
+        <label className={`btn-pad ${privacy ? 'btn-selected' : 'btn-gray'}`}>
+          {privacy ? <><FaLock /> Private</> : <><BiWorld /> Public</>}
           <input type="checkbox" checked={privacy}
             onChange={e => setPrivacy(e.target.checked)}
           />
@@ -155,11 +155,6 @@ const Form = styled.form`
 
       input{
         display: none;
-      }
-
-      &.selected{
-        color: var(--mainColor);
-        border: 1px solid var(--mainColor);
       }
     }
   }
