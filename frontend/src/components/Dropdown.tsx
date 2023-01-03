@@ -5,18 +5,22 @@ import styled from "styled-components";
 interface DropdownProps {
   button: ReactNode
   content: ReactNode
+  open: boolean
 }
 
 export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>((props, ref) => {
-  const { button, content } = props
+  const { button, content, open } = props
 
   
   return (
     <Div ref={ref}>
       {button}
-      <div className="dropdown-outer">
-        {content}
-      </div>
+      
+      {open &&
+        <div className="dropdown-content">
+          {content}
+        </div>
+      }
     </Div>
   )
 })
@@ -24,19 +28,16 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>((props, ref) =
 
 const Div = styled.div`
   position: relative;
-  .dropdown-outer{
-    padding-top: 10px;
+  .dropdown-content{
     position: absolute;
-    width: 160px;
+    width: max-content;
     z-index: 9999;
-
-    div{
-      padding: 15px 12px;
-      background: var(--white);
-      border: 1px solid #E0E0E0;
-      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
-      border-radius: 12px;
-    }
+    padding: 15px 12px;
+    margin-top: 10px;
+    background: var(--white);
+    border: 1px solid #E0E0E0;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
   }
 `
 
