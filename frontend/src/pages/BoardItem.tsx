@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getCurrentBoard, setCurrentBoard } from "../store/boardSlice";
 import Dropdown from "../components/Dropdown";
 import ClickAwayListener from 'react-click-away-listener';
+import { BiWorld } from "react-icons/bi";
 
 
 
@@ -23,6 +24,7 @@ export default function BoardItem() {
   const currentBoard = useAppSelector(getCurrentBoard)
   const [open, setOpen] = useState(false);
   const ref = useRef(null)
+
 
 
   async function getBoard(id: string) {
@@ -47,6 +49,8 @@ export default function BoardItem() {
     }
   }
 
+  
+
   useEffect(()=>{
     if (id) getBoard(id)
 
@@ -63,24 +67,24 @@ export default function BoardItem() {
           <ClickAwayListener onClickAway={()=>setOpen(false)}>
             <Dropdown open={open} ref={ref}
               button = {
-                <button onClick={() => setOpen(!open)} className="btn-pad btn-gray">
-                  {currentBoard?.privacy ? <><FaLock /> Private</> : <><TbEye /> Public</>}
+                <button className="btn-pad btn-gray">
+                  {currentBoard?.privacy ? <><FaLock /> Private</> : <><BiWorld /> Public</>}
                 </button>
               }
               content = {
                 <div className="dropdown-menu">
-                  <div>
+                  <div className="menu-head">
                     <h4>Visibility</h4>
-                    <p>Choose who can see to this board.</p>
+                    <span>Choose who can see to this board.</span>
                   </div>
-                  <button>
-                    <div>Public</div>
-                    <p>Anyone on the internet can see this</p>
-                  </button>
-                  <button>
-                    <div>Private</div>
-                    <p>Only board members can see this</p>
-                  </button>
+                  <div className="menu-item selected">
+                    <h5><BiWorld /> Public</h5>
+                    <span>Anyone on the internet can see this</span>
+                  </div>
+                  <div className="menu-item">
+                    <h5><FaLock /> Private</h5>
+                    <span>Only board members can see this</span>
+                  </div>
                 </div>
               }
             />
@@ -161,6 +165,39 @@ const Div = styled.div`
         align-items: center;
       }
       .dropdown-menu{
+        div:not(:last-of-type){
+          margin-bottom: 15px;
+        }
+        .menu-head{
+          h4{
+            font-weight: 600;
+          }
+          span{
+            font-size: 12px;
+            color: var(--gray);
+          }
+        }
+        .menu-item{
+          border-radius: 8px;
+          padding: 10px;
+          cursor: pointer;
+          h5{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+          }
+          span{
+            font-size: 10px;
+            color: var(--gray);
+          }
+          &:hover{
+
+          }
+        }
+        .selected{
+          background-color: var(--lightGray);
+        }
       }
     }
   }
