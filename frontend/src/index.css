@@ -40,6 +40,11 @@ body {
   place-content: center;
 }
 
+.btn-selected {
+  color: var(--mainColor);
+  border: 1px solid var(--mainColor);
+}
+
 input::placeholder {
   color: var(--gray);
 }
