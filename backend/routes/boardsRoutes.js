@@ -16,7 +16,7 @@ router.route('/')
     fileSizeLimiter(1), // 1MB
     boardsController.createNewBoard
   )
-  // .patch(boardsController.updateBoard)
+  .patch(boardsController.updateBoard)
   // .delete(boardsController.deleteBoard)
 router.route('/:id')
   .get(boardsController.getBoard)
