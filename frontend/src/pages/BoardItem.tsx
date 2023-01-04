@@ -27,6 +27,7 @@ export default function BoardItem() {
   const currentBoard = useAppSelector(getCurrentBoard)
   const [open, setOpen] = useState(false);
   const [showBoardMenu, setShowBoardMenu] = useState(false);
+  const [editDesc, setEditDesc] = useState(false);
   const ref = useRef(null)
   const boardMenuRef = useRef(null)
 
@@ -149,11 +150,24 @@ export default function BoardItem() {
                   </div>
                   <div className="desc">
                     <span><IoDocumentText /> Description</span>
-                    <button><MdEdit /> Edit</button>
+                    {!editDesc && <button onClick={()=>setEditDesc(true)}><MdEdit /> Edit</button>}
                   </div>
-                  <div className="description">
-                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos ullam eius quidem. Doloremque tempora minus porro labore! </p>
-                  </div>
+                  {editDesc ? 
+                    <>
+                      <textarea className="description">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa rem sed neque totam magni. Placeat ex culpa fuga neque voluptates.
+                      </textarea> 
+                      <p className="resize">* You can resize the height of the text box on its bottom right corner.</p>
+                      <div className="submit">
+                        <button className="btn-pad btn-main">Save</button>
+                        <button onClick={() => setEditDesc(false)}>Cancel</button>
+                      </div>
+                    </>
+                    :
+                    <div className="description">
+                      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos ullam eius quidem. Doloremque tempora minus porro labore! </p>
+                    </div>
+                  }
                   <div className="team"><MdGroups /> Team</div>
                   <div className="members">
                     <div>
@@ -351,10 +365,27 @@ const Div = styled.div`
         .description{
           width: 300px;
           font-size: 14px;
-          margin-bottom: 24px;
           max-height: 400px;
           overflow-y: overlay;
           padding-right: 10px;
+        }
+        textarea{
+          border: 1px solid var(--gray);
+          height: 200px;
+          padding: 10px;
+          border-radius: 8px;
+          outline-color: var(--mainColor);
+        }
+        .resize{
+          font-size: 10px;
+          color: var(--gray);
+          /* margin-bottom: 15px; */
+          width: 300px;
+        }
+        .submit{
+          display: flex;
+          gap: 12px;
+          font-size: 12px;
         }
         .team{
           display: flex;
@@ -362,6 +393,7 @@ const Div = styled.div`
           gap: 5px;
           font-size: 12px;
           color: var(--gray);
+          margin-top: 24px;
           margin-bottom: 10px;
         }
         .members{
