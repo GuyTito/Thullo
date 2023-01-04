@@ -1,5 +1,5 @@
 import { FaLock, FaUserCircle } from "react-icons/fa";
-import { MdComment, MdEdit, MdGroups, MdOutlineClose } from "react-icons/md";
+import { MdComment, MdEdit, MdGroups } from "react-icons/md";
 import { TbDots } from "react-icons/tb";
 import { TfiClip } from "react-icons/tfi";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,6 +14,7 @@ import Dropdown from "../components/Dropdown";
 import ClickAwayListener from 'react-click-away-listener';
 import { BiWorld } from "react-icons/bi";
 import { IoDocumentText } from "react-icons/io5";
+import { GrClose } from "react-icons/gr";
 
 
 
@@ -130,38 +131,42 @@ export default function BoardItem() {
               }
               content = {
                 <div className="board-menu">
-                  <div>
+                  <div className="header">
                     <h3>Menu</h3>
-                    <MdOutlineClose />
+                    <button><GrClose /></button>
                   </div>
                   <hr />
-                  <div>
-                    <span><FaUserCircle /> Made by</span>
-                  </div>
-                  <div>
+                  <span className="made-by"><FaUserCircle /> Made by</span>
+                  <div className="creator">
                     <Avatar /> 
                     <div>
                       <span>Daniel Akrofi</span>
                       <span>on {currentBoard?.createdAt}</span>
                     </div>
                   </div>
-                  <div>
+                  <div className="desc">
                     <span><IoDocumentText /> Description</span>
                     <button><MdEdit /> Edit</button>
                   </div>
-                  <div>currentBoard?.description</div>
-                  <div><MdGroups /> Team</div>
-                  <div>
+                  <div className="description">
+                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos ullam eius quidem. Doloremque tempora minus porro labore! </p>
+                  </div>
+                  <div className="team"><MdGroups /> Team</div>
+                  <div className="members">
                     <div>
-                      <Avatar />
-                      <span>Daniel Akrofi</span>
-                      <span>Admin</span>
+                      <div className="name-avatar">
+                        <Avatar />
+                        <span>Daniel Akrofi</span>
+                      </div>
+                      <span className="admin">Admin</span>
                     </div>
                     {[1, 2].map(i => (
                       <div>
-                        <Avatar />
-                        <span>Bianca Soulsa</span>
-                        <button>Remove</button>
+                        <div className="name-avatar">
+                          <Avatar />
+                          <span>Bianca Soulsa</span>
+                        </div>
+                        <button className="btn-error">Remove</button>
                       </div>
                     ))}
                   </div>
@@ -278,8 +283,110 @@ const Div = styled.div`
         right: 0;
         top: 0;
         margin-top: 0;
+        padding-left: 20px;
+        padding-right: 20px;
       }
       .board-menu{
+        .header{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          h3{
+            font-weight: 600;
+          }
+        }
+        hr{
+          margin: 10px 0;
+          color: var(--gray);
+        }
+        .made-by{
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          color: var(--gray);
+          font-size: 12px;
+          margin-bottom: 13px;
+        }
+        .creator{
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          div{
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            span:first-of-type{
+              font-weight: 600;
+            }
+            span:last-of-type{
+              color: var(--gray);
+              font-size: 12px;
+            }
+          }
+        }
+        .desc{
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          font-size: 12px;
+          color: var(--gray);
+          margin-bottom: 10px;
+          span{
+            display: flex;
+            align-items: center;
+            gap: 5px;
+          }
+          button{
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid var(--gray);
+            border-radius: 8px;
+            padding: 2px 8px;
+          }
+        }
+        .description{
+          width: 300px;
+          font-size: 14px;
+          margin-bottom: 24px;
+          max-height: 400px;
+          overflow-y: overlay;
+          padding-right: 10px;
+        }
+        .team{
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          font-size: 12px;
+          color: var(--gray);
+          margin-bottom: 10px;
+        }
+        .members{
+          div{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .name-avatar{
+              gap: 12px;       span{
+                font-weight: 600;
+              }
+            }
+            .admin{
+              color: var(--gray);
+              font-size: 12px;
+            }
+            button{
+              font-size: 12px;
+              color: var(--error);
+              padding: 2px 8px;
+              border-radius: 8px;
+              border: 1px solid var(--error);
+            }
+          }
+          div:not(:last-of-type){
+            margin-bottom: 10px;
+          }
+        }
       }
     }
   }
