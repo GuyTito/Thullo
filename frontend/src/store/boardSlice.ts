@@ -10,6 +10,7 @@ interface BoardType{
   createdAt: string
   updatedAt: string
   _id: string
+  description: string
 }
 
 interface boardState {

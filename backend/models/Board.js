@@ -22,6 +22,10 @@ const boardSchema = new Schema(
     coverImgUrl: {
       type: String,
     },
+    description: {
+      type: String,
+      default: ''
+    },
   },
   {
     timestamps: true
