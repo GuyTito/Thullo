@@ -15,6 +15,7 @@ import ClickAwayListener from 'react-click-away-listener';
 import { BiWorld } from "react-icons/bi";
 import { IoDocumentText } from "react-icons/io5";
 import { GrClose } from "react-icons/gr";
+import formatDate from "../hooks/formatDate";
 
 
 
@@ -77,6 +78,8 @@ export default function BoardItem() {
     
   }
 
+  
+
   useEffect(()=>{
     if (id) getBoard(id)
 
@@ -133,7 +136,7 @@ export default function BoardItem() {
                 <div className="board-menu">
                   <div className="header">
                     <h3>Menu</h3>
-                    <button><GrClose /></button>
+                    <button onClick={() => setShowBoardMenu(false)}><GrClose /></button>
                   </div>
                   <hr />
                   <span className="made-by"><FaUserCircle /> Made by</span>
@@ -141,7 +144,7 @@ export default function BoardItem() {
                     <Avatar /> 
                     <div>
                       <span>Daniel Akrofi</span>
-                      <span>on {currentBoard?.createdAt}</span>
+                      {currentBoard?.createdAt && <span>on {formatDate(currentBoard?.createdAt)}</span>}
                     </div>
                   </div>
                   <div className="desc">
