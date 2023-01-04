@@ -122,52 +122,54 @@ export default function BoardItem() {
           </div>
         </div>
         
-        <ClickAwayListener onClickAway={()=>setOpen(false)}>
-          <Dropdown open={showBoardMenu} ref={boardMenuRef}
-            button = {
-              <button onClick={() => setShowBoardMenu(!showBoardMenu)} className="btn-pad btn-gray"><TbDots /> Show Menu</button>
-            }
-            content = {
-              <div className="board-menu">
-                <div>
-                  <h3>Menu</h3>
-                  <MdOutlineClose />
-                </div>
-                <hr />
-                <div>
-                  <span><FaUserCircle /> Made by</span>
-                </div>
-                <div>
-                  <Avatar /> 
+        <div className="right">
+          <ClickAwayListener onClickAway={() => setShowBoardMenu(false)}>
+            <Dropdown open={showBoardMenu} ref={boardMenuRef}
+              button = {
+                <button onClick={() => setShowBoardMenu(!showBoardMenu)} className="btn-pad btn-gray"><TbDots /> Show Menu</button>
+              }
+              content = {
+                <div className="board-menu">
                   <div>
-                    <span>Daniel Akrofi</span>
-                    <span>on {currentBoard?.createdAt}</span>
+                    <h3>Menu</h3>
+                    <MdOutlineClose />
                   </div>
-                </div>
-                <div>
-                  <span><IoDocumentText /> Description</span>
-                  <button><MdEdit /> Edit</button>
-                </div>
-                <div>currentBoard?.description</div>
-                <div><MdGroups /> Team</div>
-                <div>
+                  <hr />
                   <div>
-                    <Avatar />
-                    <span>Daniel Akrofi</span>
-                    <span>Admin</span>
+                    <span><FaUserCircle /> Made by</span>
                   </div>
-                  {[1, 2].map(i => (
+                  <div>
+                    <Avatar /> 
+                    <div>
+                      <span>Daniel Akrofi</span>
+                      <span>on {currentBoard?.createdAt}</span>
+                    </div>
+                  </div>
+                  <div>
+                    <span><IoDocumentText /> Description</span>
+                    <button><MdEdit /> Edit</button>
+                  </div>
+                  <div>currentBoard?.description</div>
+                  <div><MdGroups /> Team</div>
+                  <div>
                     <div>
                       <Avatar />
-                      <span>Bianca Soulsa</span>
-                      <button>Remove</button>
+                      <span>Daniel Akrofi</span>
+                      <span>Admin</span>
                     </div>
-                  ))}
+                    {[1, 2].map(i => (
+                      <div>
+                        <Avatar />
+                        <span>Bianca Soulsa</span>
+                        <button>Remove</button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            }
-          />
-        </ClickAwayListener>
+              }
+            />
+          </ClickAwayListener>
+        </div>
       </div>
       <div className="lists">
         {[1,2,].map(i => (
@@ -269,6 +271,15 @@ const Div = styled.div`
         .selected{
           background-color: var(--lightGray);
         }
+      }
+    }
+    .right{
+      .dropdown-content{
+        right: 0;
+        top: 0;
+        margin-top: 0;
+      }
+      .board-menu{
       }
     }
   }
