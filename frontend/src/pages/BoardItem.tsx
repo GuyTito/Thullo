@@ -19,6 +19,12 @@ import formatDate from "../hooks/formatDate";
 
 
 
+interface BoardUpdateType {
+  privacy?: boolean
+  title?: string
+  description?: string
+}
+
 export default function BoardItem() {
   const {id} = useParams()
   const axiosPrivate = interceptedAxiosPrivate()
@@ -28,9 +34,9 @@ export default function BoardItem() {
   const [open, setOpen] = useState(false);
   const [showBoardMenu, setShowBoardMenu] = useState(false);
   const [editDesc, setEditDesc] = useState(false);
+  const [description, setDescription] = useState('');
   const ref = useRef(null)
   const boardMenuRef = useRef(null)
-
 
 
   async function getBoard(id: string) {
@@ -55,12 +61,9 @@ export default function BoardItem() {
     }
   }
 
-  async function handlePrivacy(privacy: boolean){
-    setOpen(false)
-
-    const boardUpdate = { privacy }
+  async function updateBoard(id: string, boardUpdate: BoardUpdateType){
     try {
-      const response = await axiosPrivate.patch('/boards', { id, boardUpdate}, {
+      const response = await axiosPrivate.patch('/boards', { id, boardUpdate }, {
         headers: { 'Content-Type': 'application/json' }
       })
       if (!response.data?.updatedBoard) {
@@ -76,7 +79,20 @@ export default function BoardItem() {
         console.log(error.response.data.message)
       }
     }
-    
+  }
+
+  async function handlePrivacy(privacy: boolean) {
+    setOpen(false)
+
+    const boardUpdate = { privacy }
+    if (id) updateBoard(id, boardUpdate)
+  }
+
+  async function handleDescription(){
+    const boardUpdate = { description }
+    if (id) updateBoard(id, boardUpdate)
+
+    setEditDesc(false)
   }
 
   
@@ -154,18 +170,17 @@ export default function BoardItem() {
                   </div>
                   {editDesc ? 
                     <>
-                      <textarea className="description">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa rem sed neque totam magni. Placeat ex culpa fuga neque voluptates.
+                      <textarea onChange={(e) => setDescription(e.target.value)} className="description" defaultValue={currentBoard?.description} >
                       </textarea> 
                       <p className="resize">* You can resize the height of the text box on its bottom right corner.</p>
                       <div className="submit">
-                        <button className="btn-pad btn-main">Save</button>
+                        <button onClick={() => handleDescription()} className="btn-pad btn-main">Save</button>
                         <button onClick={() => setEditDesc(false)}>Cancel</button>
                       </div>
                     </>
                     :
                     <div className="description">
-                      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos ullam eius quidem. Doloremque tempora minus porro labore! </p>
+                      {currentBoard?.description}
                     </div>
                   }
                   <div className="team"><MdGroups /> Team</div>
@@ -379,7 +394,6 @@ const Div = styled.div`
         .resize{
           font-size: 10px;
           color: var(--gray);
-          /* margin-bottom: 15px; */
           width: 300px;
         }
         .submit{
