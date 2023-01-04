@@ -1,5 +1,5 @@
-import { FaLock } from "react-icons/fa";
-import { MdComment } from "react-icons/md";
+import { FaLock, FaUserCircle } from "react-icons/fa";
+import { MdComment, MdEdit, MdGroups, MdOutlineClose } from "react-icons/md";
 import { TbDots } from "react-icons/tb";
 import { TfiClip } from "react-icons/tfi";
 import { useNavigate, useParams } from "react-router-dom";
@@ -13,6 +13,7 @@ import { getCurrentBoard, setCurrentBoard } from "../store/boardSlice";
 import Dropdown from "../components/Dropdown";
 import ClickAwayListener from 'react-click-away-listener';
 import { BiWorld } from "react-icons/bi";
+import { IoDocumentText } from "react-icons/io5";
 
 
 
@@ -23,7 +24,9 @@ export default function BoardItem() {
   const dispatch = useAppDispatch()
   const currentBoard = useAppSelector(getCurrentBoard)
   const [open, setOpen] = useState(false);
+  const [showBoardMenu, setShowBoardMenu] = useState(false);
   const ref = useRef(null)
+  const boardMenuRef = useRef(null)
 
 
 
@@ -118,7 +121,53 @@ export default function BoardItem() {
             <button className="btn-main btn-square">+</button>
           </div>
         </div>
-        <button className="btn-pad btn-gray"><TbDots /> Show Menu</button>
+        
+        <ClickAwayListener onClickAway={()=>setOpen(false)}>
+          <Dropdown open={showBoardMenu} ref={boardMenuRef}
+            button = {
+              <button onClick={() => setShowBoardMenu(!showBoardMenu)} className="btn-pad btn-gray"><TbDots /> Show Menu</button>
+            }
+            content = {
+              <div className="board-menu">
+                <div>
+                  <h3>Menu</h3>
+                  <MdOutlineClose />
+                </div>
+                <hr />
+                <div>
+                  <span><FaUserCircle /> Made by</span>
+                </div>
+                <div>
+                  <Avatar /> 
+                  <div>
+                    <span>Daniel Akrofi</span>
+                    <span>on {currentBoard?.createdAt}</span>
+                  </div>
+                </div>
+                <div>
+                  <span><IoDocumentText /> Description</span>
+                  <button><MdEdit /> Edit</button>
+                </div>
+                <div>currentBoard?.description</div>
+                <div><MdGroups /> Team</div>
+                <div>
+                  <div>
+                    <Avatar />
+                    <span>Daniel Akrofi</span>
+                    <span>Admin</span>
+                  </div>
+                  {[1, 2].map(i => (
+                    <div>
+                      <Avatar />
+                      <span>Bianca Soulsa</span>
+                      <button>Remove</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            }
+          />
+        </ClickAwayListener>
       </div>
       <div className="lists">
         {[1,2,].map(i => (
