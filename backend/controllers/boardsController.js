@@ -83,15 +83,15 @@ const getBoard = asyncHandler(async (req, res) => {
 // @route PATCH /boards
 // @access Private
 const updateBoard = asyncHandler(async (req, res) => {
-  const {id, boardUpdate} = req.body
+  const {_id, boardUpdate} = req.body
 
   // Confirm data
-  if (!id || !boardUpdate) {
+  if (!_id || !boardUpdate) {
     return res.status(400).json({ message: 'Provide id and data to update board' })
   }
 
   const updatedBoard = await Board.findOneAndUpdate(
-    { _id: id },
+    { _id },
     {...boardUpdate},
     { new: true }
   );
