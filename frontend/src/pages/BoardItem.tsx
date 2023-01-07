@@ -15,6 +15,7 @@ import ClickAwayListener from 'react-click-away-listener';
 import { BiWorld } from "react-icons/bi";
 import VisibilityMenu from "../components/VisibilityMenu";
 import BoardMenu from "../components/BoardMenu";
+import InviteUser from "../components/InviteUser";
 
 
 export default function BoardItem() {
@@ -25,8 +26,10 @@ export default function BoardItem() {
   const currentBoard = useAppSelector(getCurrentBoard)
   const [open, setOpen] = useState(false);
   const [showBoardMenu, setShowBoardMenu] = useState(false);
+  const [showInviteUser, setShowInviteUser] = useState(false);
   const ref = useRef(null)
   const boardMenuRef = useRef(null)
+  const inviteUserRef = useRef(null)
 
 
   async function getBoard(id: string) {
@@ -80,7 +83,16 @@ export default function BoardItem() {
             {[1, 2, 3].map(i => (
               <Avatar key={i} />
             ))}
-            <button className="btn-main btn-square">+</button>
+            <ClickAwayListener onClickAway={() => setShowInviteUser(false)}>
+              <Dropdown open={showInviteUser} ref={inviteUserRef} 
+                button = {
+                  <button onClick={() => setShowInviteUser(!showInviteUser)} className="btn-main btn-square">+</button>
+                }
+                content = {
+                  <InviteUser />
+                }
+              />
+            </ClickAwayListener>
           </div>
         </div>
         
