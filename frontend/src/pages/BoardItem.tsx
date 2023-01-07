@@ -16,14 +16,9 @@ import { BiWorld } from "react-icons/bi";
 import { IoDocumentText } from "react-icons/io5";
 import { GrClose } from "react-icons/gr";
 import formatDate from "../hooks/formatDate";
+import VisibilityMenu from "../components/VisibilityMenu";
+import useUpdateBoard from "../hooks/useUpdateBoard";
 
-
-
-interface BoardUpdateType {
-  privacy?: boolean
-  title?: string
-  description?: string
-}
 
 export default function BoardItem() {
   const {id} = useParams()
@@ -61,36 +56,10 @@ export default function BoardItem() {
     }
   }
 
-  async function updateBoard(id: string, boardUpdate: BoardUpdateType){
-    try {
-      const response = await axiosPrivate.patch('/boards', { id, boardUpdate }, {
-        headers: { 'Content-Type': 'application/json' }
-      })
-      if (!response.data?.updatedBoard) {
-        throw new Error(`Board with id ${id} not found.`)
-      } else {
-        console.log('updated board', response.data)
-        dispatch(setCurrentBoard(response.data?.updatedBoard))
-      }
-    } catch (error: AxiosError | any) {
-      if (!error?.response) { // if error is not sent thru axios
-        console.log(error.message)
-      } else {
-        console.log(error.response.data.message)
-      }
-    }
-  }
-
-  async function handlePrivacy(privacy: boolean) {
-    setOpen(false)
-
-    const boardUpdate = { privacy }
-    if (id) updateBoard(id, boardUpdate)
-  }
 
   async function handleDescription(){
     const boardUpdate = { description }
-    if (id) updateBoard(id, boardUpdate)
+    // if (id) useUpdateBoard(id, boardUpdate)
 
     setEditDesc(false)
   }
@@ -117,22 +86,7 @@ export default function BoardItem() {
                   {currentBoard?.privacy ? <><FaLock /> Private</> : <><BiWorld /> Public</>}
                 </button>
               }
-              content = {
-                <div className="dropdown-menu">
-                  <div className="menu-head">
-                    <h4>Visibility</h4>
-                    <span>Choose who can see to this board.</span>
-                  </div>
-                  <div onClick={() => handlePrivacy(false)} className={`menu-item ${!currentBoard?.privacy && 'selected'}`}>
-                    <h5><BiWorld /> Public</h5>
-                    <span>Anyone on the internet can see this</span>
-                  </div>
-                  <div onClick={() => handlePrivacy(true)} className={`menu-item ${currentBoard?.privacy && 'selected'}`}>
-                    <h5><FaLock /> Private</h5>
-                    <span>Only board members can see this</span>
-                  </div>
-                </div>
-              }
+              content={<VisibilityMenu setOpen={setOpen} />}
             />
           </ClickAwayListener>
           <div className="avatars">
@@ -274,41 +228,7 @@ const Div = styled.div`
         gap: 12px;
         align-items: center;
       }
-      .dropdown-menu{
-        div:not(:last-of-type){
-          margin-bottom: 15px;
-        }
-        .menu-head{
-          h4{
-            font-weight: 600;
-          }
-          span{
-            font-size: 12px;
-            color: var(--gray);
-          }
-        }
-        .menu-item{
-          border-radius: 8px;
-          padding: 10px;
-          cursor: pointer;
-          h5{
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-          }
-          span{
-            font-size: 10px;
-            color: var(--gray);
-          }
-          &:hover{
-
-          }
-        }
-        .selected{
-          background-color: var(--lightGray);
-        }
-      }
+      
     }
     .right{
       .dropdown-content{
