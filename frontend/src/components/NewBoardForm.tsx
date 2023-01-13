@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useState, Dispatch } from 'react';
 import { FaImage, FaLock } from "react-icons/fa";
 import { MdOutlineClose } from 'react-icons/md';
-import { FormEvent } from 'react';
+import { FormEvent, forwardRef } from 'react';
 import useCurrentUser from "../hooks/useCurrentUser";
 import { useAppDispatch } from "../store/hooks";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
@@ -15,7 +15,7 @@ interface NewBoardFormProps {
   setShowModal: Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function NewBoardForm(props: NewBoardFormProps) {
+export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((props, ref) => {
   const { setShowModal } = props
 
   const [privacy, setPrivacy] = useState(false);
@@ -71,7 +71,7 @@ export default function NewBoardForm(props: NewBoardFormProps) {
   
   
   return (
-    <Form onSubmit={(e) => submitBoard(e)}>
+    <Form onSubmit={(e) => submitBoard(e)} ref={ref}>
       {errMsg && <p className="error">{errMsg}</p>}
 
       <button type="button" onClick={() => clearData()} className="btn-square btn-main close"><MdOutlineClose /></button>
@@ -102,7 +102,7 @@ export default function NewBoardForm(props: NewBoardFormProps) {
       </div>
     </Form>
   )
-}
+})
 
 
 const Form = styled.form`
@@ -172,3 +172,5 @@ const Form = styled.form`
 
 
 `
+
+export default NewBoardForm
