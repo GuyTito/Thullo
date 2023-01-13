@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
 import Modal from "../components/Modal";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import NewBoardForm from "../components/NewBoardForm";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { AxiosError } from "axios";
@@ -19,6 +19,8 @@ export default function Home() {
   const [errMsg, setErrMsg] = useState('')
   const dispatch = useAppDispatch();
   const boards = useAppSelector(getBoards)
+  const boardFormRef = useRef(null)
+
 
 
 
@@ -75,7 +77,7 @@ export default function Home() {
       {showModal && 
         <Modal>
           <ClickAwayListener onClickAway={() => setShowModal(false)}>
-            <NewBoardForm setShowModal={setShowModal} />
+            <NewBoardForm setShowModal={setShowModal} ref={boardFormRef} />
           </ClickAwayListener>
         </Modal>
       }
