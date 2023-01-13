@@ -1,6 +1,7 @@
 const path = require('path');
 
 const Board = require('../models/Board')
+const List = require('../models/List')
 // const User = require('../models/User')
 const asyncHandler = require('express-async-handler')
 
@@ -55,7 +56,6 @@ const createNewBoard = asyncHandler(async (req, res) => {
   })
 
   board.coverImgUrl = board.coverImgUrl && `${process.env.APP_URL}${board.coverImgUrl}`
-  
 
   if (board) { // Created 
     return res.status(201).json(board)
@@ -99,4 +99,34 @@ const updateBoard = asyncHandler(async (req, res) => {
   res.status(200).json({ updatedBoard })
 })
 
-module.exports = { createNewBoard, getAllBoards, getBoard, updateBoard }
+
+// @desc create a list
+// @route PATCH /boards/lists
+// @access Private
+const createList = asyncHandler(async (req, res) => {
+  const { boardId, title } = req.body
+
+  // Confirm data
+  if (!boardId || !title) {
+    return res.status(400).json({ message: 'A board ID and title are required' })
+  }
+
+  // Check for duplicate title
+  const duplicate = await List.findOne({ title }).collation({ locale: 'en', strength: 2 }).lean().exec()
+
+  if (duplicate) {
+    return res.status(409).json({ message: 'Duplicate list title' })
+  }
+
+  // Create and store the new board 
+  const list = await List.create({ boardId, title})
+
+  if (list) { // Created 
+    return res.status(201).json(list)
+  } else {
+    return res.status(400).json({ message: 'Invalid list data received' })
+  }
+})
+
+
+module.exports = { createNewBoard, getAllBoards, getBoard, updateBoard, createList }
