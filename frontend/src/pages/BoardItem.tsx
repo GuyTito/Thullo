@@ -17,6 +17,7 @@ import VisibilityMenu from "../components/VisibilityMenu";
 import BoardMenu from "../components/BoardMenu";
 import InviteUser from "../components/InviteUser";
 import Modal from "../components/Modal";
+import { addNewList } from "../store/listSlice";
 
 
 export default function BoardItem() {
@@ -29,7 +30,7 @@ export default function BoardItem() {
   const [showBoardMenu, setShowBoardMenu] = useState(false);
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
-  const [listName, setListName] = useState('');
+  const [listTitle, setListTitle] = useState('');
   const ref = useRef(null)
   const boardMenuRef = useRef(null)
   const inviteUserRef = useRef(null)
@@ -57,6 +58,8 @@ export default function BoardItem() {
     }
   }
 
+  
+    
   useEffect(()=>{
     if (id) getBoard(id)
 
@@ -67,15 +70,31 @@ export default function BoardItem() {
 
   async function addList(e: FormEvent<HTMLFormElement>){
     e.preventDefault()
-    // const response = await axiosPrivate.patch('/boards', { _id, boardUpdate }, {
-    //   headers: { 'Content-Type': 'application/json' }
-    // })
-    console.log('add list', listName)
-    cancelList()
+    try {
+      const response = await axiosPrivate.post(
+        '/boards/lists', 
+        { boardId: id, title: listTitle }, 
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      if (response) {
+        const data = response?.data
+        console.log('created list', response)
+        dispatch(addNewList(data));
+
+        cancelList()
+      }
+    } catch (error: AxiosError | any) {
+      if (!error?.response) { // if error is not sent thru axios
+        console.log(error.message)
+      } else {
+        console.log(error.response.data.message)
+      }
+    }
+       
   }
 
   function cancelList(){
-    setListName('')
+    setListTitle('')
     setShowListModal(false)
   }
 
@@ -170,11 +189,11 @@ export default function BoardItem() {
           <ClickAwayListener onClickAway={() => setShowListModal(false)}>
             <ListModal onSubmit={(e) => addList(e)}>
               <div className="form-control">
-                <input onChange={(e)=>setListName(e.target.value)} value={listName} type="text"  />
+                <input onChange={(e)=>setListTitle(e.target.value)} value={listTitle} type="text"  />
               </div>
               <div className="bottom">
+                <button onClick={cancelList} type="button">Cancel</button>
                 <button type="submit" className="btn-pad btn-main">Add list</button>
-                <button onClick={cancelList} type="button" className="">Cancel</button>
               </div>
             </ListModal>
           </ClickAwayListener>
