@@ -98,6 +98,7 @@ const Div = styled.div`
     input{
       background-color: transparent;
       outline: none;
+      width: 100%;
     }
   }
 `
