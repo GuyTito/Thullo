@@ -18,6 +18,10 @@ router.route('/')
   )
   .patch(boardsController.updateBoard)
   // .delete(boardsController.deleteBoard)
+
 router.route('/:id')
   .get(boardsController.getBoard)
+
+router.route('/lists')
+  .post(boardsController.createList)
 module.exports = router
