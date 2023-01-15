@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "./store"
 
 
-interface ListType {
+export interface ListType {
   _id: string
   boardId: string
   title: string
