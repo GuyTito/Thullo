@@ -17,7 +17,7 @@ import VisibilityMenu from "../components/VisibilityMenu";
 import BoardMenu from "../components/BoardMenu";
 import InviteUser from "../components/InviteUser";
 import Modal from "../components/Modal";
-import { addNewList, loadLists } from "../store/listSlice";
+import { addNewList, getCurrentLists, loadLists } from "../store/listSlice";
 
 
 export default function BoardItem() {
@@ -34,6 +34,7 @@ export default function BoardItem() {
   const ref = useRef(null)
   const boardMenuRef = useRef(null)
   const inviteUserRef = useRef(null)
+  const currentLists = useAppSelector(getCurrentLists)
 
 
   async function getBoard(id: string) {
@@ -158,11 +159,12 @@ export default function BoardItem() {
             </ClickAwayListener>
           </div>
         </div>
+
         <div className="lists">
-          {[1,2,].map(i => (
-            <div key={i} className="list">
+          {currentLists.map(list => (
+            <div key={list._id} className="list">
               <div className="list-title">
-                <span>Backlog 🤔</span>
+                <span>{list.title}</span>
                 <TbDots />
               </div>
               {[1,2].map(i => (
