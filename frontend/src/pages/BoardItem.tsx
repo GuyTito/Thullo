@@ -17,7 +17,7 @@ import VisibilityMenu from "../components/VisibilityMenu";
 import BoardMenu from "../components/BoardMenu";
 import InviteUser from "../components/InviteUser";
 import Modal from "../components/Modal";
-import { addNewList } from "../store/listSlice";
+import { addNewList, loadLists } from "../store/listSlice";
 
 
 export default function BoardItem() {
@@ -47,6 +47,7 @@ export default function BoardItem() {
       } else {
         console.log('found board', response.data)
         dispatch(setCurrentBoard(response.data?.foundBoard))
+        fetchLists(id)
       }
     } catch (error: AxiosError | any) {
       if (!error?.response) { // if error is not sent thru axios
@@ -58,7 +59,22 @@ export default function BoardItem() {
     }
   }
 
-  
+  async function fetchLists(boardId: string) {
+    try {
+      const response = await axiosPrivate.get(`/boards/lists/${boardId}`)
+      if (response) {
+        const lists = response?.data
+        console.log('lists', lists)
+        dispatch(loadLists(lists))
+      }
+    } catch (error: AxiosError | any) {
+      if (!error?.response) { // if error is not sent thru axios
+        console.log(error.message)
+      } else {
+        console.log(error.response.data.message)
+      }
+    }
+  }
     
   useEffect(()=>{
     if (id) getBoard(id)
