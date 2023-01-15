@@ -18,6 +18,7 @@ import BoardMenu from "../components/BoardMenu";
 import InviteUser from "../components/InviteUser";
 import Modal from "../components/Modal";
 import { addNewList, getCurrentLists, loadLists } from "../store/listSlice";
+import NewListForm from "../components/NewListForm";
 
 
 export default function BoardItem() {
@@ -30,10 +31,10 @@ export default function BoardItem() {
   const [showBoardMenu, setShowBoardMenu] = useState(false);
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
-  const [listTitle, setListTitle] = useState('');
   const ref = useRef(null)
   const boardMenuRef = useRef(null)
   const inviteUserRef = useRef(null)
+  const listFormRef = useRef(null)
   const currentLists = useAppSelector(getCurrentLists)
 
 
@@ -85,35 +86,7 @@ export default function BoardItem() {
     }
   }, [])
 
-  async function addList(e: FormEvent<HTMLFormElement>){
-    e.preventDefault()
-    try {
-      const response = await axiosPrivate.post(
-        '/boards/lists', 
-        { boardId: id, title: listTitle }, 
-        { headers: { 'Content-Type': 'application/json' } }
-      )
-      if (response) {
-        const data = response?.data
-        console.log('created list', response)
-        dispatch(addNewList(data));
 
-        cancelList()
-      }
-    } catch (error: AxiosError | any) {
-      if (!error?.response) { // if error is not sent thru axios
-        console.log(error.message)
-      } else {
-        console.log(error.response.data.message)
-      }
-    }
-       
-  }
-
-  function cancelList(){
-    setListTitle('')
-    setShowListModal(false)
-  }
 
   
   return (
@@ -205,15 +178,7 @@ export default function BoardItem() {
       {showListModal &&
         <Modal>
           <ClickAwayListener onClickAway={() => setShowListModal(false)}>
-            <ListModal onSubmit={(e) => addList(e)}>
-              <div className="form-control">
-                <input onChange={(e)=>setListTitle(e.target.value)} value={listTitle} type="text"  />
-              </div>
-              <div className="bottom">
-                <button onClick={cancelList} type="button">Cancel</button>
-                <button type="submit" className="btn-pad btn-main">Add list</button>
-              </div>
-            </ListModal>
+            <NewListForm setShowListModal={setShowListModal} ref={listFormRef} />
           </ClickAwayListener>
         </Modal>
       }
@@ -340,17 +305,5 @@ const Div = styled.div`
         width: 100%;
       }
     }
-  }
-`
-
-const ListModal = styled.form`
-  padding: 24px;
-  background-color: var(--white);
-  position: relative;
-  .bottom{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
   }
 `
