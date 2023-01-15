@@ -1,7 +1,5 @@
 import { FaLock, } from "react-icons/fa";
-import { MdComment, } from "react-icons/md";
 import { TbDots } from "react-icons/tb";
-import { TfiClip } from "react-icons/tfi";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
@@ -19,7 +17,7 @@ import InviteUser from "../components/InviteUser";
 import Modal from "../components/Modal";
 import { getCurrentLists, loadLists } from "../store/listSlice";
 import NewListForm from "../components/NewListForm";
-import Card from "../components/Card";
+import List from "../components/List";
 
 
 export default function BoardItem() {
@@ -136,18 +134,7 @@ export default function BoardItem() {
 
         <div className="lists">
           {currentLists.map(list => (
-            <div key={list._id} className="list">
-              <div className="list-title">
-                <span>{list.title}</span>
-                <TbDots />
-              </div>
-              {[1].map(i => (
-                <Card key={i} />
-              ))}
-              <div className="add-another">
-                <button><span>Add card</span> <span>+</span></button>
-              </div>
-            </div>
+            <List key={list._id} list={list} />
           ))}
           <div className="add-another">
             <button onClick={() => setShowListModal(true)}><span>Add list</span> <span>+</span></button>
@@ -209,22 +196,7 @@ const Div = styled.div`
     padding: 24px;
     display: flex;
     gap: 32px;
-    .list{
-      width: 240px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      .list-title{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        span{
-          font-size: 14px;
-        }
-      }
-      
-      
-    }
+    
     .add-another{
       width: 240px;
       button{
