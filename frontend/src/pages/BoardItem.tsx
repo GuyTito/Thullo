@@ -27,11 +27,11 @@ export default function BoardItem() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const currentBoard = useAppSelector(getCurrentBoard)
-  const [open, setOpen] = useState(false);
+  const [showVisiblityMenu, setShowVisiblityMenu] = useState(false);
   const [showBoardMenu, setShowBoardMenu] = useState(false);
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
-  const ref = useRef(null)
+  const visibilityRef = useRef(null)
   const boardMenuRef = useRef(null)
   const inviteUserRef = useRef(null)
   const listFormRef = useRef(null)
@@ -94,14 +94,14 @@ export default function BoardItem() {
       <Div>
         <div className="topbar">
           <div className="left">
-            <ClickAwayListener onClickAway={()=>setOpen(false)}>
-              <Dropdown open={open} ref={ref}
+            <ClickAwayListener onClickAway={()=>setShowVisiblityMenu(false)}>
+              <Dropdown open={showVisiblityMenu} ref={visibilityRef}
                 button = {
-                  <button onClick={() => setOpen(!open)} className={`btn-pad ${currentBoard?.privacy ? 'btn-selected' : 'btn-gray'}`}>
+                  <button onClick={() => setShowVisiblityMenu(!showVisiblityMenu)} className={`btn-pad ${currentBoard?.privacy ? 'btn-selected' : 'btn-gray'}`}>
                     {currentBoard?.privacy ? <><FaLock /> Private</> : <><BiWorld /> Public</>}
                   </button>
                 }
-                content={<VisibilityMenu setOpen={setOpen} />}
+                content={<VisibilityMenu setOpen={setShowVisiblityMenu} />}
               />
             </ClickAwayListener>
             <div className="avatars">
