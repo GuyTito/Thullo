@@ -24,4 +24,6 @@ router.route('/:id')
 
 router.route('/lists')
   .post(boardsController.createList)
+router.route('/lists/:boardId')
+  .get(boardsController.getLists)
 module.exports = router
