@@ -5,7 +5,7 @@ import { TfiClip } from "react-icons/tfi";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
-import { useEffect, useState, useRef, FormEvent } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { AxiosError } from "axios";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -17,7 +17,7 @@ import VisibilityMenu from "../components/VisibilityMenu";
 import BoardMenu from "../components/BoardMenu";
 import InviteUser from "../components/InviteUser";
 import Modal from "../components/Modal";
-import { addNewList, getCurrentLists, loadLists } from "../store/listSlice";
+import { getCurrentLists, loadLists } from "../store/listSlice";
 import NewListForm from "../components/NewListForm";
 
 
