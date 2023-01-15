@@ -3,6 +3,7 @@ import { RootState } from "./store"
 
 
 interface ListType {
+  _id: string
   boardId: string
   title: string
   createdAt: string
@@ -30,7 +31,7 @@ const listSlice = createSlice({
   },
 })
 
-export const getCurrentLists = (state: RootState) => state.list
+export const getCurrentLists = (state: RootState) => state.list.currentLists
 
 export const { addNewList, loadLists } = listSlice.actions
 
