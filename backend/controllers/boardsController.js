@@ -129,4 +129,17 @@ const createList = asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { createNewBoard, getAllBoards, getBoard, updateBoard, createList }
+// @desc get list(s) with a board id
+// @route GET /boards/lists/:id
+// @access Private
+const getLists = asyncHandler(async (req, res) => {
+  const boardId = req.params.boardId
+  const foundList = await List.find({ boardId })
+  if (!foundList) {
+    return res.status(401).json({ message: `List(s) with board ID ${id} not found.` })
+  }
+  res.status(200).json(foundList)
+})
+
+
+module.exports = { createNewBoard, getAllBoards, getBoard, updateBoard, createList, getLists }
