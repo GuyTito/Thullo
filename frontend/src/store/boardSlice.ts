@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "./store"
 
 
-interface BoardType{
+export interface BoardType{
   user: string
   title: string
   privacy: boolean
