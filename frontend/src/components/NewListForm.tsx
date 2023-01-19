@@ -71,7 +71,8 @@ const Form = styled.form`
   position: relative;
   .bottom{
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
+    gap: 12px;
     align-items: center;
     margin-top: 20px;
   }
