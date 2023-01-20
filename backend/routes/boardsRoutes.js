@@ -10,6 +10,7 @@ const fileSizeLimiter = require('./../middleware/fileSizeLimiter')
 router.use(verifyJWT)
 
 router.route('/')
+//board
   .get(boardsController.getAllBoards)
   .post(fileUpload({ createParentPath: true }),
     fileExtLimiter(['.png', '.jpg', '.jpeg']),
@@ -18,12 +19,20 @@ router.route('/')
   )
   .patch(boardsController.updateBoard)
   // .delete(boardsController.deleteBoard)
-
 router.route('/:id')
   .get(boardsController.getBoard)
 
+//list
 router.route('/lists')
   .post(boardsController.createList)
 router.route('/lists/:boardId')
   .get(boardsController.getLists)
+
+//card
+router.route('/lists/cards')
+  .post(fileUpload({ createParentPath: true }),
+    fileExtLimiter(['.png', '.jpg', '.jpeg']),
+    fileSizeLimiter(1), // 1MB
+    boardsController.createCard
+  )
 module.exports = router
