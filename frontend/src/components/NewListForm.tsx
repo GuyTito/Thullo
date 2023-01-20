@@ -14,7 +14,10 @@ interface NewListFormProps{
 
 export const NewListForm = forwardRef<HTMLFormElement, NewListFormProps>((props, ref) => {
   const { setShowListModal } = props
+
   const [listTitle, setListTitle] = useState('');
+  const [errMsg, setErrMsg] = useState('')
+
   const axiosPrivate = interceptedAxiosPrivate()
   const dispatch = useAppDispatch()
   const currentBoard = useAppSelector(getCurrentBoard)
@@ -37,9 +40,9 @@ export const NewListForm = forwardRef<HTMLFormElement, NewListFormProps>((props,
       }
     } catch (error: AxiosError | any) {
       if (!error?.response) { // if error is not sent thru axios
-        console.log(error.message)
+        setErrMsg(error.message)
       } else {
-        console.log(error.response.data.message)
+        setErrMsg(error.response.data.message)
       }
     }
 
@@ -53,6 +56,8 @@ export const NewListForm = forwardRef<HTMLFormElement, NewListFormProps>((props,
 
   return (
     <Form onSubmit={(e) => addList(e)} ref={ref}>
+      {errMsg && <p className="error">{errMsg}</p>}
+
       <div className="form-control">
         <input onChange={(e) => setListTitle(e.target.value)} value={listTitle} type="text" />
       </div>

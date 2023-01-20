@@ -48,9 +48,9 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
       }
     } catch (error: AxiosError | any) {
       if (!error?.response) { // if error is not sent thru axios
-        console.log(error.message)
+        setErrMsg('No Server Response');
       } else {
-        console.log(error.response.data.message)
+        setErrMsg(error.response.data.message)
       }
     }
 
