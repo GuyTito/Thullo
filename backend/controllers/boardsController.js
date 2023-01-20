@@ -2,6 +2,7 @@ const path = require('path');
 
 const Board = require('../models/Board')
 const List = require('../models/List')
+const Card = require('../models/Card')
 // const User = require('../models/User')
 const asyncHandler = require('express-async-handler')
 
@@ -52,7 +53,7 @@ const createNewBoard = asyncHandler(async (req, res) => {
   // Create and store the new board 
   const board = await Board.create({
     userId, title, privacy, 
-    coverImgUrl: imgName && `/uploads/boardCovers/${imgName}`
+    coverImgUrl: imgName && `http://localhost:3000/uploads/boardCovers/${imgName}`
   })
 
   board.coverImgUrl = board.coverImgUrl && `${process.env.APP_URL}${board.coverImgUrl}`
@@ -142,4 +143,51 @@ const getLists = asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { createNewBoard, getAllBoards, getBoard, updateBoard, createList, getLists }
+// @desc Create new card
+// @route POST /boards/lists/cards
+// @access Private
+const createCard = asyncHandler(async (req, res) => {
+  const { listId, title } = req.body
+  console.log('req.files', req.files)
+
+  // Confirm data
+  if (!listId || !title) {
+    return res.status(400).json({ message: 'A card ID and title are required' })
+  }
+
+  // Check for duplicate title
+  const duplicate = await Card.findOne({ title }).collation({ locale: 'en', strength: 2 }).lean().exec()
+
+  if (duplicate) {
+    return res.status(409).json({ message: 'Duplicate card title' })
+  }
+
+  // process image
+  let imgPath = ''
+  let imgName = ''
+  if (req.files) {
+    console.log('image present', req.files)
+    const userFile = req.files.userFile
+    imgName = `${title.replaceAll(' ', '_')}_${Date.now()}_cardCover${path.extname(userFile.name).toLowerCase()}`
+    imgPath = path.join(__dirname, '..', 'uploads', 'cardCovers', imgName)
+    userFile.mv(imgPath)
+  }
+
+  // Create and store the new card 
+  const card = await Card.create({
+    listId, title,
+    coverImgUrl: imgName && `http://localhost:3000/uploads/cardCovers/${imgName}`
+  })
+
+  card.coverImgUrl = card.coverImgUrl && `${process.env.APP_URL}${card.coverImgUrl}`
+
+  if (card) { // Created 
+    return res.status(201).json(card)
+  } else {
+    return res.status(400).json({ message: 'Invalid card data received' })
+  }
+
+})
+
+
+module.exports = { createNewBoard, getAllBoards, getBoard, updateBoard, createList, getLists, createCard }
