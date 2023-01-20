@@ -82,11 +82,9 @@ const login = asyncHandler(async (req, res) => {
 // @access Public
 const refresh = asyncHandler(async (req, res) => {
   const cookies = req.cookies
-  console.log('req.co', cookies)
   if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized. Missing refresh token.' })
 
   const refreshToken = cookies.jwt
-  console.log('rT', refreshToken)
 
   jwt.verify(
     refreshToken,
@@ -95,7 +93,6 @@ const refresh = asyncHandler(async (req, res) => {
       if (err) return res.status(403).json({ message: 'Forbidden. Login session expired.' })
 
       const foundUser = await User.findOne({ email: decoded.email }).exec()
-      console.log('email', decoded.email)
 
       if (!foundUser) return res.status(401).json({ message: 'Unauthorized. User not found.' })
 
