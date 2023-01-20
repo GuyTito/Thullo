@@ -1,22 +1,59 @@
+import { AxiosError } from "axios";
 import { Dispatch, forwardRef, useState, FormEvent } from "react";
 import { FaImage } from "react-icons/fa";
 import { MdOutlineClose } from "react-icons/md";
 import styled from "styled-components";
+import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
+import { useAppDispatch } from "../store/hooks";
 
 
 interface NewCardFormProps {
   setShowCardFormModal: Dispatch<React.SetStateAction<boolean>>
+  listId: string
 }
 
 
 export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props, ref) => {
-  const { setShowCardFormModal } = props
+  const { setShowCardFormModal, listId } = props
+
   const [title, setTitle] = useState('');
   const [coverImg, setCoverImg] = useState<File | undefined>(undefined);
   const [errMsg, setErrMsg] = useState('')
 
-  function submitCard(e: FormEvent<HTMLFormElement>){
+  const dispatch = useAppDispatch();
+  const axiosPrivate = interceptedAxiosPrivate()
+
+  async function submitCard(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    try {
+      setErrMsg('')
+      const formValues = {
+        listId, title,
+        userFile: coverImg || null
+      }
+      // const formData = new FormData()
+      // for (const [key, value] of Object.entries(formValues)) {
+      //   formData.append(key, value)
+      // }
+      console.log('formdata', formValues)
+      const response = await axiosPrivate.post('/boards/lists/cards', formValues, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      if (response) {
+        const data = response?.data
+        console.log('created card', response)
+        // dispatch(addNewCard(data));
+
+        clearData()
+      }
+    } catch (error: AxiosError | any) {
+      if (!error?.response) { // if error is not sent thru axios
+        console.log(error.message)
+      } else {
+        console.log(error.response.data.message)
+      }
+    }
+
   }
 
   function clearData() {
@@ -33,11 +70,11 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
       <button type="button" onClick={() => clearData()} className="btn-square btn-main close"><MdOutlineClose /></button>
 
       <div className="cover">
-        {coverImg && <img src={URL.createObjectURL(coverImg)} alt="board cover image" />}
+        {coverImg && <img src={URL.createObjectURL(coverImg)} alt="card cover image" />}
       </div>
 
       <div className="form-control input-title">
-        <input onChange={(e) => setTitle(e.target.value)} value={title} type="text" required placeholder="Add board title" />
+        <input onChange={(e) => setTitle(e.target.value)} value={title} type="text" required placeholder="Add card title" autoFocus/>
       </div>
 
       <div>
