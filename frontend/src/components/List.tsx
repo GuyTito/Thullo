@@ -39,7 +39,7 @@ export default function List(props: ListProps) {
       {showCardFormModal &&
         <Modal>
           <ClickAwayListener onClickAway={() => setShowCardFormModal(false)}>
-            <NewCardForm setShowCardFormModal={setShowCardFormModal} ref={cardFormRef} />
+            <NewCardForm listId={list._id} setShowCardFormModal={setShowCardFormModal} ref={cardFormRef} />
           </ClickAwayListener>
         </Modal>
       }
