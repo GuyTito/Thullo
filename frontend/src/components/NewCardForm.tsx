@@ -35,8 +35,8 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
       // for (const [key, value] of Object.entries(formValues)) {
       //   formData.append(key, value)
       // }
-      console.log('formdata', formValues)
-      const response = await axiosPrivate.post('/boards/lists/cards', formValues, {
+      console.log('formValues', formValues)
+      const response = await axiosPrivate.post('/cards', formValues, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       if (response) {
