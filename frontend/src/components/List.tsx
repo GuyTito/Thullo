@@ -25,7 +25,7 @@ export default function List(props: ListProps) {
 
   async function fetchCards(listId: string) {
     try {
-      const response = await axiosPrivate.get(`/boards/lists/cards/${listId}`)
+      const response = await axiosPrivate.get(`/cards/${listId}`)
       if (response) {
         setCards(response?.data)
         console.log('cards', cards)
