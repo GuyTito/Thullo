@@ -1,20 +1,25 @@
 import { MdComment } from "react-icons/md";
 import { TfiClip } from "react-icons/tfi";
 import styled from "styled-components";
+import { CardType } from "../store/cardSlice";
 import Avatar from "./Avatar";
 
 
-export default function Card() {
-  
+interface CardProps{
+  card: CardType
+}
+
+export default function Card(props: CardProps) {
+  const { card } = props
   
   return (
     <Div>
       <div className="cover">
-        {/* <img src="" alt="" /> */}
+        <img src={card.coverImgUrl} alt="" />
       </div>
-      <div className="card-title">✋🏿 Move anything 'ready' here</div>
+      <div className="card-title">{card?.title}</div>
       <div className="labels">
-        <label className="label">Technical</label>
+        {/* <label className="label">Technical</label> */}
       </div>
       <div className="bottom">
         <div className="left">
