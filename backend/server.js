@@ -29,8 +29,12 @@ app.use("/uploads", express.static("uploads"));
 //public routes
 app.use('/', require('./routes/rootRoute'));
 app.use('/auth', require('./routes/authRoutes'))
+
+//protected routes
 app.use('/users', require('./routes/usersRoutes'))
 app.use('/boards', require('./routes/boardsRoutes'))
+app.use('/lists', require('./routes/listsRoutes'))
+app.use('/cards', require('./routes/cardsRoutes'))
 
 
 
