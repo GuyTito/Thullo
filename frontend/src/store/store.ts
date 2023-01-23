@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authSlice";
 import boardReducer from "./boardSlice";
 import listReducer from "./listSlice";
+import cardReducer from "./cardSlice";
 
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     auth: authReducer,
     board: boardReducer,
     list: listReducer,
+    card: cardReducer,
   }
 })
 
