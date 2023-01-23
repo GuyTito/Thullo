@@ -35,4 +35,6 @@ router.route('/lists/cards')
     fileSizeLimiter(1), // 1MB
     boardsController.createCard
   )
+router.route('/lists/cards/:listId')
+  .get(boardsController.getCards)
 module.exports = router
