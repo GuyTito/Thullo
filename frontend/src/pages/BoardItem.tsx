@@ -62,7 +62,7 @@ export default function BoardItem() {
 
   async function fetchLists(boardId: string) {
     try {
-      const response = await axiosPrivate.get(`/boards/lists/${boardId}`)
+      const response = await axiosPrivate.get(`/lists/${boardId}`)
       if (response) {
         const lists = response?.data
         console.log('lists', lists)

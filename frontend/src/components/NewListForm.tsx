@@ -27,7 +27,7 @@ export const NewListForm = forwardRef<HTMLFormElement, NewListFormProps>((props,
     e.preventDefault()
     try {
       const response = await axiosPrivate.post(
-        '/boards/lists',
+        '/lists',
         { boardId: currentBoard?._id, title: listTitle },
         { headers: { 'Content-Type': 'application/json' } }
       )
