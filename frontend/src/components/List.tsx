@@ -1,7 +1,10 @@
-import { useState, useRef } from "react";
+import { AxiosError } from "axios";
+import { useState, useRef, useEffect } from "react";
 import ClickAwayListener from "react-click-away-listener";
 import { TbDots } from "react-icons/tb";
 import styled from "styled-components";
+import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
+import { CardType } from "../store/cardSlice";
 import { ListType } from "../store/listSlice";
 import Card from "./Card";
 import Modal from "./Modal";
@@ -12,10 +15,34 @@ interface ListProps{
   list: ListType
 }
 
+
 export default function List(props: ListProps) {
   const { list } = props
   const [showCardFormModal, setShowCardFormModal] = useState(false)
   const cardFormRef = useRef(null)
+  const axiosPrivate = interceptedAxiosPrivate()
+  const [cards, setCards] = useState<CardType[]>([])
+
+  async function fetchCards(listId: string) {
+    try {
+      const response = await axiosPrivate.get(`/boards/lists/cards/${listId}`)
+      if (response) {
+        setCards(response?.data)
+        console.log('cards', cards)
+      }
+    } catch (error: AxiosError | any) {
+      if (!error?.response) { // if error is not sent thru axios
+        console.log(error.message)
+      } else {
+        console.log(error.response.data.message)
+      }
+    }
+  }
+
+  useEffect(()=>{
+    fetchCards(list._id)
+    
+  }, [])
 
   
   return (
@@ -25,8 +52,8 @@ export default function List(props: ListProps) {
           <span>{list.title}</span>
           <TbDots />
         </div>
-        {[1].map(i => (
-          <Card key={i} />
+        {cards.length > 0 && cards.map(card => (
+          <Card key={card._id} card={card} />
         ))}
         <div className="add-another">
           <button onClick={() => setShowCardFormModal(true)}>
