@@ -190,4 +190,17 @@ const createCard = asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { createNewBoard, getAllBoards, getBoard, updateBoard, createList, getLists, createCard }
+// @desc get cards(s) with a list id
+// @route GET /boards/lists/cards/:listId
+// @access Private
+const getCards = asyncHandler(async (req, res) => {
+  const listId = req.params.listId
+  const foundCards = await Card.find({ listId })
+  if (!foundCards) {
+    return res.status(401).json({ message: `Card(s) with list ID ${listId} not found.` })
+  }
+  res.status(200).json(foundCards)
+})
+
+
+module.exports = { createNewBoard, getAllBoards, getBoard, updateBoard, createList, getLists, createCard, getCards }
