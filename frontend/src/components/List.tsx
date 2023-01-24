@@ -40,9 +40,12 @@ export default function List(props: ListProps) {
   }
 
   useEffect(()=>{
-    fetchCards(list._id)
-    
+    fetchCards(list._id) 
   }, [])
+
+  function addToCards(card: CardType){
+    setCards(prevState => [...prevState, card])
+  }
 
   
   return (
@@ -66,7 +69,9 @@ export default function List(props: ListProps) {
       {showCardFormModal &&
         <Modal>
           <ClickAwayListener onClickAway={() => setShowCardFormModal(false)}>
-            <NewCardForm listId={list._id} setShowCardFormModal={setShowCardFormModal} ref={cardFormRef} />
+            <NewCardForm listId={list._id} setShowCardFormModal={setShowCardFormModal} 
+              ref={cardFormRef} addToCards={addToCards}
+            />
           </ClickAwayListener>
         </Modal>
       }
