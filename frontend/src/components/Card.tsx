@@ -2,11 +2,12 @@ import ClickAwayListener from "react-click-away-listener";
 import { MdComment } from "react-icons/md";
 import { TfiClip } from "react-icons/tfi";
 import styled from "styled-components";
-import { CardType } from "../store/cardSlice";
+import { CardType, setCurrentCard } from "../store/cardSlice";
 import Avatar from "./Avatar";
 import CardItem from "./CardItem";
 import Modal from "./Modal";
 import { useRef, useState } from "react"
+import { useAppDispatch } from "../store/hooks";
 
 
 interface CardProps{
@@ -17,10 +18,17 @@ export default function Card(props: CardProps) {
   const { card } = props
   const [showCardItemModal, setShowCardItemModal] = useState(false)
   const cardItemRef = useRef(null)
+  const dispatch = useAppDispatch()
+
+  function openCard(){
+    dispatch(setCurrentCard(card))
+    
+    setShowCardItemModal(true)
+  }
   
   return (
     <>
-      <Div onClick={() => setShowCardItemModal(true)}>
+      <Div onClick={openCard}>
         <div className="cover">
           <img src={card.coverImgUrl} alt="" />
         </div>
