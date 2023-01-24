@@ -30,7 +30,7 @@ const cardSlice = createSlice({
   },
 })
 
-export const getCurrentCards = (state: RootState) => state.card.currentCard
+export const getCurrentCard = (state: RootState) => state.card.currentCard
 
 export const { setCurrentCard, } = cardSlice.actions
 
