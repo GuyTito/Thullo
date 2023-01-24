@@ -4,23 +4,23 @@ import { FaImage } from "react-icons/fa";
 import { MdOutlineClose } from "react-icons/md";
 import styled from "styled-components";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
-import { useAppDispatch } from "../store/hooks";
+import { CardType } from "../store/cardSlice";
 
 
 interface NewCardFormProps {
   setShowCardFormModal: Dispatch<React.SetStateAction<boolean>>
   listId: string
+  addToCards: (card: CardType) => void
 }
 
 
 export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props, ref) => {
-  const { setShowCardFormModal, listId } = props
+  const { setShowCardFormModal, listId, addToCards } = props
 
   const [title, setTitle] = useState('');
   const [coverImg, setCoverImg] = useState<File | undefined>(undefined);
   const [errMsg, setErrMsg] = useState('')
 
-  const dispatch = useAppDispatch();
   const axiosPrivate = interceptedAxiosPrivate()
 
   async function submitCard(e: FormEvent<HTMLFormElement>) {
@@ -31,18 +31,14 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
         listId, title,
         userFile: coverImg || null
       }
-      // const formData = new FormData()
-      // for (const [key, value] of Object.entries(formValues)) {
-      //   formData.append(key, value)
-      // }
-      console.log('formValues', formValues)
+      
       const response = await axiosPrivate.post('/cards', formValues, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       if (response) {
-        const data = response?.data
+        const data: CardType = response?.data
         console.log('created card', response)
-        // dispatch(addNewCard(data));
+        addToCards(data)
 
         clearData()
       }
