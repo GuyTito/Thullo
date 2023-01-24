@@ -1,8 +1,12 @@
+import ClickAwayListener from "react-click-away-listener";
 import { MdComment } from "react-icons/md";
 import { TfiClip } from "react-icons/tfi";
 import styled from "styled-components";
 import { CardType } from "../store/cardSlice";
 import Avatar from "./Avatar";
+import CardItem from "./CardItem";
+import Modal from "./Modal";
+import { useRef, useState } from "react"
 
 
 interface CardProps{
@@ -11,29 +15,45 @@ interface CardProps{
 
 export default function Card(props: CardProps) {
   const { card } = props
+  const [showCardItemModal, setShowCardItemModal] = useState(false)
+  const cardItemRef = useRef(null)
   
   return (
-    <Div>
-      <div className="cover">
-        <img src={card.coverImgUrl} alt="" />
-      </div>
-      <div className="card-title">{card?.title}</div>
-      <div className="labels">
-        {/* <label className="label">Technical</label> */}
-      </div>
-      <div className="bottom">
-        <div className="left">
-          {[1, 2,].map(i => (
-            <Avatar key={i} />
-          ))}
-          <button className="btn-main btn-square">+</button>
+    <>
+      <Div onClick={() => setShowCardItemModal(true)}>
+        <div className="cover">
+          <img src={card.coverImgUrl} alt="" />
         </div>
-        <div className="right">
-          <span><MdComment />1</span>
-          <span><TfiClip /> 2</span>
+        <div className="card-title">{card?.title}</div>
+        <div className="labels">
+          {/* <label className="label">Technical</label> */}
         </div>
-      </div>
-    </Div>
+        <div className="bottom">
+          <div className="left">
+            {[1, 2,].map(i => (
+              <Avatar key={i} />
+            ))}
+            <button className="btn-main btn-square">+</button>
+          </div>
+          <div className="right">
+            <span><MdComment />1</span>
+            <span><TfiClip /> 2</span>
+          </div>
+        </div>
+      </Div>
+
+
+      {/* modal */}
+      {showCardItemModal &&
+        <Modal>
+          <ClickAwayListener onClickAway={() => setShowCardItemModal(false)}>
+            <CardItem setShowCardItemModal={setShowCardItemModal}
+              ref={cardItemRef}
+            />
+          </ClickAwayListener>
+        </Modal>
+      }
+    </>
   )
 }
 
@@ -46,6 +66,7 @@ const Div = styled.div`
   display: flex;
   flex-direction: column;
   gap: 14px;
+  cursor: pointer;
   .cover{
     height: 130px;
     width: 100%;
