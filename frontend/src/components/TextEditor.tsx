@@ -51,10 +51,10 @@ export default function TextEditor(props: TextEditorProps) {
   return (
     <>
       <Editor ref={wrapperRef}></Editor>
-      <div className="submit">
+      <Div >
         <button onClick={() => returnContent()} className="btn-pad btn-main">Save</button>
         <button onClick={() => showEditor(false)}>Cancel</button>
-      </div>
+      </Div>
     </>
   )
 }
@@ -71,4 +71,11 @@ const Editor = styled.div`
     border: 0;
     width: 100%;
   }
+`
+
+const Div = styled.div`
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  margin-top:8px;
 `
