@@ -9,14 +9,13 @@ const fileSizeLimiter = require('./../middleware/fileSizeLimiter')
 
 router.use(verifyJWT)
 
-console.log('was here some', )
-
 router.route('/')
   .post(fileUpload({ createParentPath: true }),
     fileExtLimiter(['.png', '.jpg', '.jpeg']),
     fileSizeLimiter(1), // 1MB
     cardsController.createCard
   )
+  .patch(cardsController.updateCard)
 router.route('/:listId')
   .get(cardsController.getCards)
 
