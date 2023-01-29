@@ -7,8 +7,9 @@ import useUpdateBoard from "../hooks/useUpdateBoard";
 import { getCurrentBoard } from "../store/boardSlice";
 import { useAppSelector } from "../store/hooks";
 import Avatar from "./Avatar";
-import { useState, Dispatch } from 'react';
+import { useState, Dispatch, useRef, useEffect } from 'react';
 import { MdEdit, MdGroups } from "react-icons/md";
+import TextEditor from "./TextEditor";
 
 
 interface BoardMenuProps{
@@ -17,20 +18,31 @@ interface BoardMenuProps{
 
 
 export default function BoardMenu({ setShowBoardMenu }: BoardMenuProps) {
-  const { createdAt, _id, description: desc } = useAppSelector(getCurrentBoard) || {}
+  const { createdAt, _id, description } = useAppSelector(getCurrentBoard) || {}
   const updateBoard = useUpdateBoard()
-  const [description, setDescription] = useState('');
   const [editDesc, setEditDesc] = useState(false);
+  const descRef = useRef<HTMLDivElement>(null)
+
   
 
 
-
-  function handleDescription() {
-    const boardUpdate = { description }
+  function handleEditorContent(content: string) {
+    console.log('content', content)
+    const boardUpdate = { description: content }
     if (_id) updateBoard(_id, boardUpdate)
 
     setEditDesc(false)
   }
+
+  function showEditor(value: boolean){
+    setEditDesc(value)
+  }
+
+  useEffect(()=>{
+    if (descRef.current) descRef.current.innerHTML = description || ''
+
+  }, [description, editDesc])
+
   
   return (
     <Div>
@@ -49,23 +61,16 @@ export default function BoardMenu({ setShowBoardMenu }: BoardMenuProps) {
         </div>
         <div className="desc">
           <span><IoDocumentText /> Description</span>
-          {!editDesc && <button onClick={() => setEditDesc(true)}><MdEdit /> Edit</button>}
+        {!editDesc && <button onClick={() => setEditDesc(true)}><MdEdit /> Edit</button>}
         </div>
+
         {editDesc ?
-          <>
-            <textarea onChange={(e) => setDescription(e.target.value)} className="description" defaultValue={desc} >
-            </textarea>
-            <p className="resize">* You can resize the height of the text box on its bottom right corner.</p>
-            <div className="submit">
-              <button onClick={() => handleDescription()} className="btn-pad btn-main">Save</button>
-              <button onClick={() => setEditDesc(false)}>Cancel</button>
-            </div>
-          </>
-          :
-          <div className="description">
-            {desc}
-          </div>
+          <TextEditor text={description || ""} getEditorContent={handleEditorContent} 
+            showEditor={showEditor} />
+        :
+          <div className="description ql-editor" ref={descRef}></div>
         }
+
         <div className="team"><MdGroups /> Team</div>
         <div className="members">
           <div>
@@ -76,7 +81,7 @@ export default function BoardMenu({ setShowBoardMenu }: BoardMenuProps) {
             <span className="admin">Admin</span>
           </div>
           {[1, 2].map(i => (
-            <div>
+            <div key={i}>
               <div className="name-avatar">
                 <Avatar />
                 <span>Bianca Soulsa</span>
@@ -155,23 +160,6 @@ const Div = styled.div`
     max-height: 400px;
     overflow-y: overlay;
     padding-right: 10px;
-  }
-  textarea{
-    border: 1px solid var(--gray);
-    height: 200px;
-    padding: 10px;
-    border-radius: 8px;
-    outline-color: var(--mainColor);
-  }
-  .resize{
-    font-size: 10px;
-    color: var(--gray);
-    width: 300px;
-  }
-  .submit{
-    display: flex;
-    gap: 12px;
-    font-size: 12px;
   }
   .team{
     display: flex;
