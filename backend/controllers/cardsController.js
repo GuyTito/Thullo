@@ -63,5 +63,26 @@ const getCards = asyncHandler(async (req, res) => {
 })
 
 
+// @desc update a card
+// @route PATCH /cards
+// @access Private
+const updateCard = asyncHandler(async (req, res) => {
+  const { _id, cardUpdate } = req.body
 
-module.exports = { createCard, getCards }
+  // Confirm data
+  if (!_id || !cardUpdate) {
+    return res.status(400).json({ message: 'Provide id and data to update card' })
+  }
+
+  const updatedCard = await Card.findOneAndUpdate(
+    { _id },
+    { ...cardUpdate },
+    { new: true }
+  );
+
+  res.status(200).json({ updatedCard })
+})
+
+
+
+module.exports = { createCard, getCards, updateCard }
