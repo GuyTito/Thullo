@@ -71,6 +71,9 @@ const Editor = styled.div`
     border: 0;
     width: 100%;
   }
+  .ql-editor{
+    max-height: 400px;
+  }
 `
 
 const Div = styled.div`
