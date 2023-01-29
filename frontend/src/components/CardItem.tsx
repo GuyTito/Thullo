@@ -2,6 +2,7 @@ import { Dispatch, forwardRef, useState, useRef, useEffect } from "react";
 import { IoDocumentText } from "react-icons/io5";
 import { MdEdit, MdOutlineClose } from "react-icons/md";
 import styled from "styled-components";
+import useUpdateCard from "../hooks/useUpdateCard";
 import { getCurrentCard } from "../store/cardSlice";
 import { useAppSelector } from "../store/hooks";
 import TextEditor from "./TextEditor";
@@ -14,14 +15,14 @@ interface CardItemProps {
 
 export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) => {
   const { setShowCardItemModal } = props
-  const { title, coverImgUrl, description } = useAppSelector(getCurrentCard) || {}
+  const { title, coverImgUrl, description, _id } = useAppSelector(getCurrentCard) || {}
   const [editDesc, setEditDesc] = useState(false);
   const descRef = useRef<HTMLDivElement>(null)
+  const updateCard = useUpdateCard()
 
   function handleEditorContent(content: string) {
-    console.log('content', content)
-    // const boardUpdate = { description: content }
-    // if (_id) updateBoard(_id, boardUpdate)
+    const cardUpdate = { description: content }
+    if (_id) updateCard(_id, cardUpdate)
 
     setEditDesc(false)
   }
