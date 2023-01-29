@@ -68,7 +68,7 @@ export default function BoardMenu({ setShowBoardMenu }: BoardMenuProps) {
           <TextEditor text={description || ""} getEditorContent={handleEditorContent} 
             showEditor={showEditor} />
         :
-          <div className="description ql-editor" ref={descRef}></div>
+        <div className="ql-editor description" ref={descRef}></div>
         }
 
         <div className="team"><MdGroups /> Team</div>
@@ -96,6 +96,7 @@ export default function BoardMenu({ setShowBoardMenu }: BoardMenuProps) {
 
 
 const Div = styled.div`
+  width: 377px;
   .header{
     display: flex;
     align-items: center;
@@ -155,11 +156,12 @@ const Div = styled.div`
     }
   }
   .description{
-    width: 300px;
     font-size: 14px;
     max-height: 400px;
     overflow-y: overlay;
-    padding-right: 10px;
+    &.ql-editor{
+      padding: 0 10px 0 0;
+    }
   }
   .team{
     display: flex;
