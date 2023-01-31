@@ -8,12 +8,12 @@ const path = require('path');
 // @route POST /boards/lists/cards
 // @access Private
 const createCard = asyncHandler(async (req, res) => {
-  const { listId, title } = req.body
+  const { boardId, listId, title } = req.body
   console.log('req.files', req.files)
 
   // Confirm data
-  if (!listId || !title) {
-    return res.status(400).json({ message: 'A card ID and title are required' })
+  if (!listId || !title || !boardId) {
+    return res.status(400).json({ message: 'A list ID, board ID and title are required' })
   }
 
   // Check for duplicate title
@@ -36,7 +36,7 @@ const createCard = asyncHandler(async (req, res) => {
 
   // Create and store the new card 
   const card = await Card.create({
-    listId, title,
+    listId, title, boardId,
     coverImgUrl: imgName && `http://localhost:3000/uploads/cardCovers/${imgName}`
   })
 
@@ -51,13 +51,13 @@ const createCard = asyncHandler(async (req, res) => {
 
 
 // @desc get cards(s) with a list id
-// @route GET /boards/lists/cards/:listId
+// @route GET /cards/:boardId
 // @access Private
-const getCards = asyncHandler(async (req, res) => {
-  const listId = req.params.listId
-  const foundCards = await Card.find({ listId })
+const getCardsByBoardId = asyncHandler(async (req, res) => {
+  const boardId = req.params.boardId
+  const foundCards = await Card.find({ boardId })
   if (!foundCards) {
-    return res.status(401).json({ message: `Card(s) with list ID ${listId} not found.` })
+    return res.status(401).json({ message: `Card(s) with list ID ${boardId} not found.` })
   }
   res.status(200).json(foundCards)
 })
@@ -85,4 +85,4 @@ const updateCard = asyncHandler(async (req, res) => {
 
 
 
-module.exports = { createCard, getCards, updateCard }
+module.exports = { createCard, getCardsByBoardId, updateCard }
