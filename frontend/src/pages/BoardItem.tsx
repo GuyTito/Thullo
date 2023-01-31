@@ -18,6 +18,7 @@ import Modal from "../components/Modal";
 import { getCurrentLists, loadLists } from "../store/listSlice";
 import NewListForm from "../components/NewListForm";
 import List from "../components/List";
+import { loadCards } from "../store/cardSlice";
 
 
 export default function BoardItem() {
@@ -49,6 +50,7 @@ export default function BoardItem() {
         console.log('found board', response.data)
         dispatch(setCurrentBoard(response.data?.foundBoard))
         fetchLists(id)
+        fetchCards(id)
       }
     } catch (error: AxiosError | any) {
       if (!error?.response) { // if error is not sent thru axios
@@ -65,8 +67,22 @@ export default function BoardItem() {
       const response = await axiosPrivate.get(`/lists/${boardId}`)
       if (response) {
         const lists = response?.data
-        console.log('lists', lists)
         dispatch(loadLists(lists))
+      }
+    } catch (error: AxiosError | any) {
+      if (!error?.response) { // if error is not sent thru axios
+        console.log(error.message)
+      } else {
+        console.log(error.response.data.message)
+      }
+    }
+  }
+
+  async function fetchCards(boardId: string) {
+    try {
+      const response = await axiosPrivate.get(`/cards/${boardId}`)
+      if (response) {
+        dispatch(loadCards(response?.data))
       }
     } catch (error: AxiosError | any) {
       if (!error?.response) { // if error is not sent thru axios
