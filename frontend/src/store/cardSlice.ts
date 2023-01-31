@@ -13,25 +13,28 @@ export interface CardType {
 }
 
 interface cardState {
-  currentCard: CardType | null
+  cards: CardType[]
 }
 
 const initialState: cardState = {
-  currentCard: null
+  cards: []
 }
 
 const cardSlice = createSlice({
   name: "card",
   initialState,
   reducers: {
-    setCurrentCard: (state, action: PayloadAction<CardType | null>) => {
-      state.currentCard = action.payload
-    }
+    addToCards: (state, action: PayloadAction<CardType>) => {
+      state.cards.push(action.payload)
+    },
+    loadCards: (state, action: PayloadAction<CardType[]>) => {
+      state.cards = action.payload
+    },
   },
 })
 
-export const getCurrentCard = (state: RootState) => state.card.currentCard
+export const getCardsByListId = (state: RootState, listId: string) => state.card.cards.filter(card => card.listId === listId)
 
-export const { setCurrentCard, } = cardSlice.actions
+export const { loadCards, addToCards, } = cardSlice.actions
 
 export default cardSlice.reducer;
