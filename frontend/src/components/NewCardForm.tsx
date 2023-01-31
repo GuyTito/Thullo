@@ -4,24 +4,25 @@ import { FaImage } from "react-icons/fa";
 import { MdOutlineClose } from "react-icons/md";
 import styled from "styled-components";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
-import { CardType } from "../store/cardSlice";
+import { getCurrentBoard } from "../store/boardSlice";
+import { addToCards, CardType } from "../store/cardSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 
 interface NewCardFormProps {
   setShowCardFormModal: Dispatch<React.SetStateAction<boolean>>
   listId: string
-  addToCards: (card: CardType) => void
 }
 
 
 export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props, ref) => {
-  const { setShowCardFormModal, listId, addToCards } = props
-
+  const { setShowCardFormModal, listId, } = props
   const [title, setTitle] = useState('');
   const [coverImg, setCoverImg] = useState<File | undefined>(undefined);
   const [errMsg, setErrMsg] = useState('')
-
+  const currentBoard = useAppSelector(getCurrentBoard)
   const axiosPrivate = interceptedAxiosPrivate()
+  const dispatch = useAppDispatch()
 
   async function submitCard(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -29,7 +30,8 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
       setErrMsg('')
       const formValues = {
         listId, title,
-        userFile: coverImg || null
+        userFile: coverImg || null,
+        boardId: currentBoard?._id
       }
       
       const response = await axiosPrivate.post('/cards', formValues, {
@@ -37,8 +39,7 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
       })
       if (response) {
         const data: CardType = response?.data
-        console.log('created card', response)
-        addToCards(data)
+        dispatch(addToCards(data))
 
         clearData()
       }
