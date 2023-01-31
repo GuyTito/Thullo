@@ -16,8 +16,8 @@ router.route('/')
     cardsController.createCard
   )
   .patch(cardsController.updateCard)
-router.route('/:listId')
-  .get(cardsController.getCards)
+router.route('/:boardId')
+  .get(cardsController.getCardsByBoardId)
 
 
 
