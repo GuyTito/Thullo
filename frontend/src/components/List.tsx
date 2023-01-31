@@ -1,10 +1,9 @@
-import { AxiosError } from "axios";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, } from "react";
 import ClickAwayListener from "react-click-away-listener";
 import { TbDots } from "react-icons/tb";
 import styled from "styled-components";
-import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
-import { CardType } from "../store/cardSlice";
+import { getCardsByListId } from "../store/cardSlice";
+import { useAppSelector, } from "../store/hooks";
 import { ListType } from "../store/listSlice";
 import Card from "./Card";
 import Modal from "./Modal";
@@ -20,32 +19,7 @@ export default function List(props: ListProps) {
   const { list } = props
   const [showCardFormModal, setShowCardFormModal] = useState(false)
   const cardFormRef = useRef(null)
-  const axiosPrivate = interceptedAxiosPrivate()
-  const [cards, setCards] = useState<CardType[]>([])
-
-  async function fetchCards(listId: string) {
-    try {
-      const response = await axiosPrivate.get(`/cards/${listId}`)
-      if (response) {
-        setCards(response?.data)
-        console.log('cards', cards)
-      }
-    } catch (error: AxiosError | any) {
-      if (!error?.response) { // if error is not sent thru axios
-        console.log(error.message)
-      } else {
-        console.log(error.response.data.message)
-      }
-    }
-  }
-
-  useEffect(()=>{
-    fetchCards(list._id) 
-  }, [])
-
-  function addToCards(card: CardType){
-    setCards(prevState => [...prevState, card])
-  }
+  const cards = useAppSelector((state) => getCardsByListId(state, list._id))
 
   
   return (
@@ -55,7 +29,7 @@ export default function List(props: ListProps) {
           <span>{list.title}</span>
           <TbDots />
         </div>
-        {cards.length > 0 && cards.map(card => (
+        {cards?.length > 0 && cards.map(card => (
           <Card key={card._id} card={card} />
         ))}
         <div className="add-another">
@@ -70,8 +44,7 @@ export default function List(props: ListProps) {
         <Modal>
           <ClickAwayListener onClickAway={() => setShowCardFormModal(false)}>
             <NewCardForm listId={list._id} setShowCardFormModal={setShowCardFormModal} 
-              ref={cardFormRef} addToCards={addToCards}
-            />
+              ref={cardFormRef} />
           </ClickAwayListener>
         </Modal>
       }
