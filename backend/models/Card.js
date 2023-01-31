@@ -5,6 +5,11 @@ const Schema = mongoose.Schema;
 
 const cardSchema = new Schema(
   {
+    boardId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Board'
+    },
     listId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
