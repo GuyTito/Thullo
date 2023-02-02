@@ -33,6 +33,7 @@ const cardSlice = createSlice({
   },
 })
 
+export const getCardById = (state: RootState, id: string) => state.card.cards.find(card => card._id === id)
 export const getCardsByListId = (state: RootState, listId: string) => state.card.cards.filter(card => card.listId === listId)
 
 export const { loadCards, addToCards, } = cardSlice.actions
