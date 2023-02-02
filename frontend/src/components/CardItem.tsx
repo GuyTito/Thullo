@@ -16,7 +16,6 @@ interface CardItemProps {
 
 export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) => {
   const { setShowCardItemModal, cardId } = props
-  // const  = useAppSelector(getCurrentCard) || {}
   const { title, coverImgUrl, description, _id } = useAppSelector((state) => getCardById(state, cardId)) || {}
   const [editDesc, setEditDesc] = useState(false);
   const descRef = useRef<HTMLDivElement>(null)
