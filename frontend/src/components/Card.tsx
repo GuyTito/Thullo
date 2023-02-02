@@ -2,7 +2,7 @@ import ClickAwayListener from "react-click-away-listener";
 import { MdComment } from "react-icons/md";
 import { TfiClip } from "react-icons/tfi";
 import styled from "styled-components";
-import { CardType, setCurrentCard } from "../store/cardSlice";
+import { CardType, } from "../store/cardSlice";
 import Avatar from "./Avatar";
 import CardItem from "./CardItem";
 import Modal from "./Modal";
@@ -21,7 +21,7 @@ export default function Card(props: CardProps) {
   const dispatch = useAppDispatch()
 
   function openCard(){
-    dispatch(setCurrentCard(card))
+    // dispatch(setCurrentCard(card))
     
     setShowCardItemModal(true)
   }
@@ -56,7 +56,7 @@ export default function Card(props: CardProps) {
         <Modal>
           <ClickAwayListener onClickAway={() => setShowCardItemModal(false)}>
             <CardItem setShowCardItemModal={setShowCardItemModal}
-              ref={cardItemRef}
+              ref={cardItemRef} cardId={card._id}
             />
           </ClickAwayListener>
         </Modal>
