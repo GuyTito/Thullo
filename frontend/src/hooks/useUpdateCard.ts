@@ -1,5 +1,5 @@
 import { AxiosError } from "axios"
-import { CardType, setCurrentCard } from "../store/cardSlice"
+import { CardType, updateStoreCard } from "../store/cardSlice"
 import { useAppDispatch } from "../store/hooks"
 import interceptedAxiosPrivate from "./interceptedAxiosPrivate"
 
@@ -20,7 +20,7 @@ export default function useUpdateCard() {
         throw new Error(`Card with id ${_id} not found.`)
       } else {
         console.log('updated card', response.data)
-        dispatch(setCurrentCard(response.data?.updatedCard))
+        dispatch(updateStoreCard(response.data?.updatedCard))
       }
     } catch (error: AxiosError | any) {
       if (!error?.response) { // if error is not sent thru axios
