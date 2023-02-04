@@ -6,6 +6,8 @@ import useUpdateCard from "../hooks/useUpdateCard";
 import { getCardById } from "../store/cardSlice";
 import { useAppSelector } from "../store/hooks";
 import TextEditor from "./TextEditor";
+import { AiOutlinePlus } from "react-icons/ai";
+import { getListById } from "../store/listSlice";
 
 
 interface CardItemProps {
@@ -16,7 +18,8 @@ interface CardItemProps {
 
 export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) => {
   const { setShowCardItemModal, cardId } = props
-  const { title, coverImgUrl, description, _id } = useAppSelector((state) => getCardById(state, cardId)) || {}
+  const { title, coverImgUrl, description, _id, listId } = useAppSelector((state) => getCardById(state, cardId)) || {}
+  const { title:listTItle } = useAppSelector((state) => getListById(state, listId || '')) || {}
   const [editDesc, setEditDesc] = useState(false);
   const descRef = useRef<HTMLDivElement>(null)
   const updateCard = useUpdateCard()
@@ -54,6 +57,7 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
       <div className="container">
         <div className="left">
           <p>{title}</p>
+          <div>In list: <span>{listTItle}</span></div>
 
           <div className="desc">
             <span><IoDocumentText /> Description</span>
@@ -66,6 +70,11 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
           :
             <div className="ql-editor description" ref={descRef}></div>
           }
+
+          {/* <div className="desc">
+            <span><IoDocumentText /> Attachments</span>
+            <button><AiOutlinePlus /> Add</button>
+          </div> */}
         </div>
 
         <div className="right">
@@ -135,6 +144,7 @@ const Div = styled.div`
         overflow-y: overlay;
         &.ql-editor{
           padding: 0 10px 0 0;
+          height: min-content;
         }
       }
     }
