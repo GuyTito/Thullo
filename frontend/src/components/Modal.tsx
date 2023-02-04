@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 interface ModalProps{
   children: ReactNode
@@ -8,6 +8,14 @@ interface ModalProps{
 
 export default function Modal(props: ModalProps) {
   const { children } = props
+
+  useEffect(()=>{
+    document.body.style.overflowY = 'hidden'
+
+    return ()=>{
+      document.body.style.overflowY = ''
+    }
+  }, [])
   
   return (
     <Div >
