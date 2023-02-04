@@ -15,7 +15,7 @@ import VisibilityMenu from "../components/VisibilityMenu";
 import BoardMenu from "../components/BoardMenu";
 import InviteUser from "../components/InviteUser";
 import Modal from "../components/Modal";
-import { getCurrentLists, loadLists } from "../store/listSlice";
+import { getLists, loadLists } from "../store/listSlice";
 import NewListForm from "../components/NewListForm";
 import List from "../components/List";
 import { loadCards } from "../store/cardSlice";
@@ -35,7 +35,7 @@ export default function BoardItem() {
   const boardMenuRef = useRef(null)
   const inviteUserRef = useRef(null)
   const listFormRef = useRef(null)
-  const currentLists = useAppSelector(getCurrentLists)
+  const currentLists = useAppSelector(getLists)
 
 
   async function getBoard(id: string) {
