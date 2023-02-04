@@ -11,11 +11,11 @@ export interface ListType {
 }
 
 interface listState {
-  currentLists: ListType[]
+  lists: ListType[]
 }
 
 const initialState: listState = {
-  currentLists: []
+  lists: []
 }
 
 const listSlice = createSlice({
@@ -23,15 +23,16 @@ const listSlice = createSlice({
   initialState,
   reducers: {
     addNewList: (state, action: PayloadAction<ListType>) => {
-      state.currentLists.push(action.payload)
+      state.lists.push(action.payload)
     },
     loadLists: (state, action: PayloadAction<ListType[]>) => {
-      state.currentLists = action.payload
+      state.lists = action.payload
     },
   },
 })
 
-export const getCurrentLists = (state: RootState) => state.list.currentLists
+export const getLists = (state: RootState) => state.list.lists
+export const getListById = (state: RootState, id: string) => state.list.lists.find(list => list._id === id)
 
 export const { addNewList, loadLists } = listSlice.actions
 
