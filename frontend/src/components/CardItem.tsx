@@ -91,6 +91,8 @@ const Div = styled.div`
   background-color: var(--white);
   position: relative;
   width: 662px;
+  max-height: 100vh;
+  overflow-y: scroll;
   .close{
     position: absolute;
     right: 10px;
