@@ -3,13 +3,15 @@ import { IoDocumentText } from "react-icons/io5";
 import { MdEdit, MdOutlineClose } from "react-icons/md";
 import styled from "styled-components";
 import useUpdateCard from "../hooks/useUpdateCard";
-import { getCardById } from "../store/cardSlice";
-import { useAppSelector } from "../store/hooks";
+import { deleteStoreCard, getCardById } from "../store/cardSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import TextEditor from "./TextEditor";
 import { AiOutlinePlus } from "react-icons/ai";
 import { getListById } from "../store/listSlice";
 import { FaImage, FaTrash, FaUser } from "react-icons/fa";
 import { BsCheck2 } from "react-icons/bs";
+import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
+import { AxiosError } from "axios";
 
 
 interface CardItemProps {
@@ -26,6 +28,10 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
   const descRef = useRef<HTMLDivElement>(null)
   const updateCard = useUpdateCard()
   const [isDelete, setIsDelete] = useState(false)
+  const axiosPrivate = interceptedAxiosPrivate()
+  const [errMsg, setErrMsg] = useState('');
+  const dispatch = useAppDispatch()
+
 
   function handleEditorContent(content: string) {
     const cardUpdate = { description: content }
@@ -43,14 +49,31 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
 
   }, [description, editDesc])
 
-  function deleteCard(){
-    alert('deleted')
+  async function deleteCard(){
+    if (_id){
+      try{
+        setErrMsg('')
+        const response = await axiosPrivate.delete('/cards', { data: { _id} })
+        if (response.data?.deletedCard){
+          dispatch(deleteStoreCard(_id))
+          setShowCardItemModal(false)
+        }
+      } catch (error: AxiosError | any) {
+        if (!error?.response) { // if error is not sent thru axios
+          setErrMsg('No Server Response');
+        } else {
+          setErrMsg(error.response.data.message)
+        }
+      }
+    }
   }
 
 
   
   return (
     <Div ref={ref}>
+      {errMsg && <div className="error">{errMsg}</div>}
+
       <button type="button" onClick={() => setShowCardItemModal(false)} className="btn-square btn-main close">
         <MdOutlineClose />
       </button>
