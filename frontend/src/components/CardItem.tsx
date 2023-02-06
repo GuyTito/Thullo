@@ -8,6 +8,8 @@ import { useAppSelector } from "../store/hooks";
 import TextEditor from "./TextEditor";
 import { AiOutlinePlus } from "react-icons/ai";
 import { getListById } from "../store/listSlice";
+import { FaImage, FaTrash, FaUser } from "react-icons/fa";
+import { BsCheck2 } from "react-icons/bs";
 
 
 interface CardItemProps {
@@ -23,6 +25,7 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
   const [editDesc, setEditDesc] = useState(false);
   const descRef = useRef<HTMLDivElement>(null)
   const updateCard = useUpdateCard()
+  const [isDelete, setIsDelete] = useState(false)
 
   function handleEditorContent(content: string) {
     const cardUpdate = { description: content }
@@ -39,6 +42,10 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
     if (descRef.current) descRef.current.innerHTML = description || ''
 
   }, [description, editDesc])
+
+  function deleteCard(){
+    alert('deleted')
+  }
 
 
   
@@ -78,7 +85,20 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
         </div>
 
         <div className="right">
-          actions
+          <div className="desc"><span><FaUser /> Actions</span></div>
+          <div className="actions">
+            {isDelete ? 
+              <div className="confirm">
+                <button type="button" className="btn-square btn-gray" onClick={() => setIsDelete(false)}
+                >
+                  <MdOutlineClose />
+                </button>
+                <button className="btn-square btn-gray" onClick={deleteCard}><BsCheck2 /></button>
+              </div>
+            :
+              <button className="btn-pad btn-gray" onClick={()=>setIsDelete(true)}><FaTrash /> Delete</button>
+            }
+          </div>
         </div>
       </div>
     </Div>
@@ -116,9 +136,8 @@ const Div = styled.div`
     display: flex;
     gap: 24px;
     margin-top: 24px;
-    .left{
-      width: 70%;
-      .desc{
+    /* justify-content: space-between; */
+    .desc{
         margin-top: 24px;
         display: flex;
         align-items: center;
@@ -140,6 +159,9 @@ const Div = styled.div`
           padding: 2px 8px;
         }
       }
+    .left{
+      width: 75%;
+      
       .description{
         font-size: 14px;
         max-height: 400px;
@@ -152,6 +174,16 @@ const Div = styled.div`
     }
     .right{
       width: 22%;
+      .btn-pad{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .confirm{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
     }
   }
 `
