@@ -63,8 +63,8 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
 
       <div className="container">
         <div className="left">
-          <p>{title}</p>
-          <div>In list: <span>{listTItle}</span></div>
+          <p className="title">{title}</p>
+          <div className="list">In list: <span>{listTItle}</span></div>
 
           <div className="desc">
             <span><IoDocumentText /> Description</span>
@@ -89,6 +89,7 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
           <div className="actions">
             {isDelete ? 
               <div className="confirm">
+
                 <button type="button" className="btn-square btn-gray" onClick={() => setIsDelete(false)}
                 >
                   <MdOutlineClose />
@@ -161,7 +162,18 @@ const Div = styled.div`
       }
     .left{
       width: 75%;
-      
+      .title{
+        font-size: 18px;
+        font-weight: 500;
+      }
+      .list{
+        font-size: 10px;
+        color: var(--gray);
+        span{
+          font-weight: 500;
+          color: black;
+        }
+      }
       .description{
         font-size: 14px;
         max-height: 400px;
@@ -182,7 +194,7 @@ const Div = styled.div`
       .confirm{
         width: 100%;
         display: flex;
-        justify-content: space-between;
+        gap: 50px;
       }
     }
   }
