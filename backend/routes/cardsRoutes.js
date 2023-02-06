@@ -16,6 +16,7 @@ router.route('/')
     cardsController.createCard
   )
   .patch(cardsController.updateCard)
+  .delete(cardsController.deleteCard)
 router.route('/:boardId')
   .get(cardsController.getCardsByBoardId)
 
