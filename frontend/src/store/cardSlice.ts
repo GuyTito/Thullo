@@ -33,6 +33,10 @@ const cardSlice = createSlice({
 
       state.cards[index] = updatedCard
     },
+    deleteStoreCard: (state, action: PayloadAction<string>) => {
+      const id = action.payload
+      state.cards = state.cards.filter(card => card._id !== id)
+    },
     loadCards: (state, action: PayloadAction<CardType[]>) => {
       state.cards = action.payload
     },
@@ -42,6 +46,6 @@ const cardSlice = createSlice({
 export const getCardById = (state: RootState, id: string) => state.card.cards.find(card => card._id === id)
 export const getCardsByListId = (state: RootState, listId: string) => state.card.cards.filter(card => card.listId === listId)
 
-export const { loadCards, addToCards, updateStoreCard, } = cardSlice.actions
+export const { loadCards, addToCards, updateStoreCard, deleteStoreCard } = cardSlice.actions
 
 export default cardSlice.reducer;
