@@ -84,5 +84,31 @@ const updateCard = asyncHandler(async (req, res) => {
 })
 
 
+// @desc deletes a card
+// @route   DELETE /cards
+// @access Private
+const deleteCard = asyncHandler(async (req, res) => {
+  const { _id } = req.body
 
-module.exports = { createCard, getCardsByBoardId, updateCard }
+  // Confirm data
+  if (!_id) {
+    return res.status(400).json({ message: 'Card ID required' })
+  }
+
+  // Confirm card exists to delete 
+  const card = await Card.findById(_id).exec()
+
+  if (!card) {
+    return res.status(400).json({ message: 'Card not found' })
+  }
+
+  const deletedCard = await card.deleteOne()
+
+  const reply = `Card '${deletedCard.title}' with ID ${deletedCard._id} deleted`
+
+  res.status(200).json({ deletedCard, reply })
+})
+
+
+
+module.exports = { createCard, getCardsByBoardId, updateCard, deleteCard }
