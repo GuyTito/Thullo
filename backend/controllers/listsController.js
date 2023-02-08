@@ -45,5 +45,31 @@ const getLists = asyncHandler(async (req, res) => {
 })
 
 
+// @desc deletes a list
+// @route   DELETE /lists
+// @access Private
+const deleteList = asyncHandler(async (req, res) => {
+  const { _id } = req.body
 
-module.exports = { createList, getLists }
+  // Confirm data
+  if (!_id) {
+    return res.status(400).json({ message: 'List ID required' })
+  }
+
+  // Confirm list exists to delete 
+  const list = await List.findById(_id).exec()
+
+  if (!list) {
+    return res.status(400).json({ message: 'List not found' })
+  }
+
+  const deletedList = await list.deleteOne()
+
+  const reply = `List '${deletedList.title}' with ID ${deletedList._id} deleted`
+
+  res.status(200).json({ deletedList, reply })
+})
+
+
+
+module.exports = { createList, getLists, deleteList }
