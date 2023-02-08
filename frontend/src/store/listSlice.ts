@@ -28,12 +28,16 @@ const listSlice = createSlice({
     loadLists: (state, action: PayloadAction<ListType[]>) => {
       state.lists = action.payload
     },
+    deleteStoreList: (state, action: PayloadAction<string>) => {
+      const id = action.payload
+      state.lists = state.lists.filter(list => list._id !== id)
+    },
   },
 })
 
 export const getLists = (state: RootState) => state.list.lists
 export const getListById = (state: RootState, id: string) => state.list.lists.find(list => list._id === id)
 
-export const { addNewList, loadLists } = listSlice.actions
+export const { addNewList, loadLists, deleteStoreList } = listSlice.actions
 
 export default listSlice.reducer;
