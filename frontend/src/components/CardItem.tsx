@@ -109,19 +109,13 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
 
         <div className="right">
           <div className="desc"><span><FaUser /> Actions</span></div>
-          <div className="actions">
-            {isDelete ? 
-              <div className="confirm">
+          <div className="confirm">
+            {isDelete && <button type="button" className="btn-square btn-gray" onClick={() => setIsDelete(false)}
+            > <MdOutlineClose /> </button>}
 
-                <button type="button" className="btn-square btn-gray" onClick={() => setIsDelete(false)}
-                >
-                  <MdOutlineClose />
-                </button>
-                <button className="btn-square btn-gray" onClick={deleteCard}><BsCheck2 /></button>
-              </div>
-            :
-              <button className="btn-pad btn-gray" onClick={()=>setIsDelete(true)}><FaTrash /> Delete</button>
-            }
+            <button className="btn-pad btn-gray" onClick={()=>setIsDelete(!isDelete)}>Delete</button>
+
+            {isDelete && <button className="btn-square btn-gray" onClick={deleteCard}><BsCheck2 /></button>}
           </div>
         </div>
       </div>
@@ -215,9 +209,9 @@ const Div = styled.div`
         gap: 10px;
       }
       .confirm{
-        width: 100%;
         display: flex;
-        gap: 50px;
+        align-items: center;
+        justify-content: space-between;
       }
     }
   }
