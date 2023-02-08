@@ -1,12 +1,14 @@
+import { AxiosError } from "axios";
 import { useState, useRef, } from "react";
 import ClickAwayListener from "react-click-away-listener";
 import { BsCheck2 } from "react-icons/bs";
 import { MdOutlineClose } from "react-icons/md";
 import { TbDots } from "react-icons/tb";
 import styled from "styled-components";
+import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { getCardsByListId } from "../store/cardSlice";
-import { useAppSelector, } from "../store/hooks";
-import { ListType } from "../store/listSlice";
+import { useAppDispatch, useAppSelector, } from "../store/hooks";
+import { deleteStoreList, ListType } from "../store/listSlice";
 import Card from "./Card";
 import Dropdown from "./Dropdown";
 import Modal from "./Modal";
@@ -26,9 +28,26 @@ export default function List(props: ListProps) {
   const [showListMenu, setShowListMenu] = useState(false)
   const listRef = useRef(null)
   const [isDelete, setIsDelete] = useState(false)
+  const axiosPrivate = interceptedAxiosPrivate()
+  const dispatch = useAppDispatch()
+
 
   async function deleteList(){
-    alert('deleted')
+    if (list._id){
+      try{
+        const response = await axiosPrivate.delete('/lists', { data: { _id: list._id} })
+        if (response.data?.deletedList){
+          dispatch(deleteStoreList(list._id))
+          setShowListMenu(false)
+        }
+      } catch (error: AxiosError | any) {
+        if (!error?.response) { // if error is not sent thru axios
+          console.log('No Server Response');
+        } else {
+          console.log(error.response.data.message)
+        }
+      }
+    }
   }
 
   
