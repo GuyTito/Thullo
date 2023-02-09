@@ -71,5 +71,26 @@ const deleteList = asyncHandler(async (req, res) => {
 })
 
 
+// @desc update a list
+// @route PATCH /lists
+// @access Private
+const updateList = asyncHandler(async (req, res) => {
+  const { _id, listUpdate } = req.body
 
-module.exports = { createList, getLists, deleteList }
+  // Confirm data
+  if (!_id || !listUpdate) {
+    return res.status(400).json({ message: 'Provide id and data to update list' })
+  }
+
+  const updatedList = await List.findOneAndUpdate(
+    { _id },
+    { ...listUpdate },
+    { new: true }
+  );
+
+  res.status(200).json({ updatedList })
+})
+
+
+
+module.exports = { createList, getLists, deleteList, updateList }
