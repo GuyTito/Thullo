@@ -36,6 +36,7 @@ export default function BoardItem() {
   const inviteUserRef = useRef(null)
   const listFormRef = useRef(null)
   const currentLists = useAppSelector(getLists)
+  const [boardCreator, setBoardCreator] = useState('')
 
 
   async function getBoard(id: string) {
@@ -47,10 +48,11 @@ export default function BoardItem() {
         navigate('*')
         throw new Error(`Board with id ${id} not found.`)
       } else {
-        console.log('found board', response.data)
-        dispatch(setCurrentBoard(response.data?.foundBoard))
+        const foundBoard = response.data?.foundBoard
+        dispatch(setCurrentBoard(foundBoard))
         fetchLists(id)
         fetchCards(id)
+        getBoardCreator(foundBoard.userId)
       }
     } catch (error: AxiosError | any) {
       if (!error?.response) { // if error is not sent thru axios
@@ -83,6 +85,26 @@ export default function BoardItem() {
       const response = await axiosPrivate.get(`/cards/${boardId}`)
       if (response) {
         dispatch(loadCards(response?.data))
+      }
+    } catch (error: AxiosError | any) {
+      if (!error?.response) { // if error is not sent thru axios
+        console.log(error.message)
+      } else {
+        console.log(error.response.data.message)
+      }
+    }
+  }
+
+  async function getBoardCreator(id: string) {
+    try {
+      const response = await axiosPrivate.get(`users/${id}`)
+
+      // handle specific error not handled by axios
+      if (!response.data?.foundUser) {
+        throw new Error(`User with id ${id} not found.`)
+      } else {
+
+        setBoardCreator(response.data?.foundUser?.fullname)
       }
     } catch (error: AxiosError | any) {
       if (!error?.response) { // if error is not sent thru axios
@@ -142,7 +164,7 @@ export default function BoardItem() {
                 button = {
                   <button onClick={() => setShowBoardMenu(!showBoardMenu)} className="btn-pad btn-gray"><TbDots /> Show Menu</button>
                 }
-                content={<BoardMenu setShowBoardMenu={setShowBoardMenu} />}
+                content={<BoardMenu setShowBoardMenu={setShowBoardMenu} boardCreator={boardCreator} />}
               />
             </ClickAwayListener>
           </div>
