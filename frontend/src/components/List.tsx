@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { useState, useRef, } from "react";
+import { useState, useRef, FormEvent } from "react";
 import ClickAwayListener from "react-click-away-listener";
 import { BsCheck2 } from "react-icons/bs";
 import { MdOutlineClose } from "react-icons/md";
@@ -8,7 +8,7 @@ import styled from "styled-components";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { getCardsByListId } from "../store/cardSlice";
 import { useAppDispatch, useAppSelector, } from "../store/hooks";
-import { deleteStoreList, ListType } from "../store/listSlice";
+import { deleteStoreList, ListType, updateList } from "../store/listSlice";
 import Card from "./Card";
 import Dropdown from "./Dropdown";
 import Modal from "./Modal";
@@ -53,9 +53,26 @@ export default function List(props: ListProps) {
     }
   }
 
-  async function updateListTitle(){
-    alert('updated')
-    setRenameTitle(false)
+  const updateListTitle = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      const listUpdate = { title: listTitle}
+      const response = await axiosPrivate.patch('/lists', { _id: list._id, listUpdate }, {
+        headers: { 'Content-Type': 'application/json' }
+      })
+      if (!response.data?.updatedList) {
+        throw new Error(`List with id ${list._id} not found.`)
+      } else {
+        dispatch(updateList(response.data?.updatedList))
+        setRenameTitle(false)
+      }
+    } catch (error: AxiosError | any) {
+      if (!error?.response) { // if error is not sent thru axios
+        console.log(error.message)
+      } else {
+        console.log(error.response.data.message)
+      }
+    }
   }
 
   
@@ -64,7 +81,7 @@ export default function List(props: ListProps) {
       <Div >
         <div className="list-header">
           {renameTitle ? 
-            <form onSubmit={updateListTitle}>
+            <form onSubmit={(e)=>updateListTitle(e)}>
               <input onChange={(e) => setListTitle(e.target.value)} value={listTitle} type="text" autoFocus /> 
               <button type="button" onClick={() => setRenameTitle(false) }><MdOutlineClose /></button>
               <button type="submit"><BsCheck2 /></button>
