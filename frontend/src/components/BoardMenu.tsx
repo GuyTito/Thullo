@@ -14,16 +14,15 @@ import TextEditor from "./TextEditor";
 
 interface BoardMenuProps{
   setShowBoardMenu: Dispatch<React.SetStateAction<boolean>>
+  boardCreator: string
 }
 
 
-export default function BoardMenu({ setShowBoardMenu }: BoardMenuProps) {
+export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuProps) {
   const { createdAt, _id, description } = useAppSelector(getCurrentBoard) || {}
   const updateBoard = useUpdateBoard()
   const [editDesc, setEditDesc] = useState(false);
   const descRef = useRef<HTMLDivElement>(null)
-
-  
 
 
   function handleEditorContent(content: string) {
@@ -55,7 +54,7 @@ export default function BoardMenu({ setShowBoardMenu }: BoardMenuProps) {
         <div className="creator">
           <Avatar />
           <div>
-            <span>Daniel Akrofi</span>
+          <span>{boardCreator}</span>
             {createdAt && <span>on {formatDate(createdAt)}</span>}
           </div>
         </div>
