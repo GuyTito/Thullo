@@ -8,8 +8,9 @@ import { getCurrentBoard } from "../store/boardSlice";
 import { useAppSelector } from "../store/hooks";
 import Avatar from "./Avatar";
 import { useState, Dispatch, useRef, useEffect } from 'react';
-import { MdEdit, MdGroups } from "react-icons/md";
+import { MdEdit, MdGroups, MdOutlineClose } from "react-icons/md";
 import TextEditor from "./TextEditor";
+import { BsCheck2 } from "react-icons/bs";
 
 
 interface BoardMenuProps{
@@ -19,10 +20,13 @@ interface BoardMenuProps{
 
 
 export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuProps) {
-  const { createdAt, _id, description } = useAppSelector(getCurrentBoard) || {}
+  const { title, createdAt, _id, description } = useAppSelector(getCurrentBoard) || {}
   const updateBoard = useUpdateBoard()
   const [editDesc, setEditDesc] = useState(false);
   const descRef = useRef<HTMLDivElement>(null)
+  const [renameTitle, setRenameTitle] = useState(false)
+  const [boardTitle, setBoardTitle] = useState(title);
+
 
 
   function handleEditorContent(content: string) {
@@ -42,11 +46,28 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
 
   }, [description, editDesc])
 
+  function updateBoardTitle(){
+    const boardUpdate = { title: boardTitle }
+    if (_id) updateBoard(_id, boardUpdate)
+    setRenameTitle(false)
+  }
+
   
   return (
     <Div>
-        <div className="header">
-          <h3>Menu</h3>
+        <div className="board-header">
+          {renameTitle ?
+            <form onSubmit={updateBoardTitle} className="board-title">
+              <input onChange={(e) => setBoardTitle(e.target.value)} value={boardTitle} type="text" autoFocus />
+              <button type="button" onClick={() => setRenameTitle(false)}><MdOutlineClose /></button>
+              <button type="submit"><BsCheck2 /></button>
+            </form>
+            :
+            <div className="board-title">
+              <h3>{title}</h3>
+              <button onClick={() => setRenameTitle(true)}><MdEdit /></button>
+            </div>
+          }
           <button onClick={() => setShowBoardMenu(false)}><GrClose /></button>
         </div>
         <hr />
@@ -75,7 +96,7 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
           <div>
             <div className="name-avatar">
               <Avatar />
-              <span>Daniel Akrofi</span>
+            <span>{boardCreator}</span>
             </div>
             <span className="admin">Admin</span>
           </div>
@@ -83,7 +104,7 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
             <div key={i}>
               <div className="name-avatar">
                 <Avatar />
-                <span>Bianca Soulsa</span>
+                <span>Bianca Fianyo</span>
               </div>
               <button className="btn-error">Remove</button>
             </div>
@@ -96,12 +117,25 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
 
 const Div = styled.div`
   width: 377px;
-  .header{
+  .board-header{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    h3{
-      font-weight: 600;
+    .board-title{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      h3{
+        font-weight: 600;
+      }
+      button{
+        color: var(--gray);
+      }
+      input{
+        background-color: transparent;
+        outline-color: var(--gray);
+        padding-left: 5px;
+      }
     }
   }
   hr{
