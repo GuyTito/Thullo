@@ -32,12 +32,18 @@ const listSlice = createSlice({
       const id = action.payload
       state.lists = state.lists.filter(list => list._id !== id)
     },
+    updateList: (state, action: PayloadAction<ListType>) => {
+      const updatedList = action.payload
+      const index = state.lists.findIndex(list => list._id === updatedList._id)
+
+      state.lists[index] = updatedList
+    },
   },
 })
 
 export const getLists = (state: RootState) => state.list.lists
 export const getListById = (state: RootState, id: string) => state.list.lists.find(list => list._id === id)
 
-export const { addNewList, loadLists, deleteStoreList } = listSlice.actions
+export const { addNewList, loadLists, deleteStoreList, updateList } = listSlice.actions
 
 export default listSlice.reducer;
