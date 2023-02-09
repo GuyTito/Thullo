@@ -3,7 +3,7 @@ import { RootState } from "./store"
 
 
 export interface BoardType{
-  user: string
+  userId: string
   title: string
   privacy: boolean
   coverImgUrl: string
