@@ -9,6 +9,7 @@ router.use(verifyJWT)
 
 router.route('/')
   .post(listsController.createList)
+  .patch(listsController.updateList)
   .delete(listsController.deleteList)
 router.route('/:boardId')
   .get(listsController.getLists)
