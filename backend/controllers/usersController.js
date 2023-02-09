@@ -19,4 +19,17 @@ const getAllUsers = asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { getAllUsers }
+// @desc get a user with id
+// @route GET /users/:id
+// @access Private
+const getUser = asyncHandler(async (req, res) => {
+  const id = req.params.id
+  const foundUser = await User.findById(id).exec()
+  if (!foundUser) {
+    return res.status(401).json({ message: `User with id ${id} not found.` })
+  }
+  res.status(200).json({ foundUser })
+})
+
+
+module.exports = { getAllUsers, getUser }
