@@ -75,7 +75,7 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
         <div className="creator">
           <Avatar />
           <div>
-          <span>{boardCreator}</span>
+          <span>{boardCreator || '[deleted]'}</span>
             {createdAt && <span>on {formatDate(createdAt)}</span>}
           </div>
         </div>
@@ -96,7 +96,7 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
           <div>
             <div className="name-avatar">
               <Avatar />
-            <span>{boardCreator}</span>
+            <span>{boardCreator || '[deleted]'}</span>
             </div>
             <span className="admin">Admin</span>
           </div>
