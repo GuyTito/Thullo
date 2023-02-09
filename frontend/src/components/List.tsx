@@ -28,8 +28,11 @@ export default function List(props: ListProps) {
   const [showListMenu, setShowListMenu] = useState(false)
   const listRef = useRef(null)
   const [isDelete, setIsDelete] = useState(false)
+  const [renameTitle, setRenameTitle] = useState(false)
   const axiosPrivate = interceptedAxiosPrivate()
   const dispatch = useAppDispatch()
+  const [listTitle, setListTitle] = useState(list.title);
+
 
 
   async function deleteList(){
@@ -50,12 +53,25 @@ export default function List(props: ListProps) {
     }
   }
 
+  async function updateListTitle(){
+    alert('updated')
+    setRenameTitle(false)
+  }
+
   
   return (
     <>
       <Div >
         <div className="list-header">
-          <span>{list.title}</span>
+          {renameTitle ? 
+            <form onSubmit={updateListTitle}>
+              <input onChange={(e) => setListTitle(e.target.value)} value={listTitle} type="text" autoFocus /> 
+              <button type="button" onClick={() => setRenameTitle(false) }><MdOutlineClose /></button>
+              <button type="submit"><BsCheck2 /></button>
+            </form>
+          :
+            <span>{list.title}</span>
+          }
           
           <ClickAwayListener onClickAway={() => { setShowListMenu(false); setIsDelete(false) }}>
             <Dropdown open={showListMenu} ref={listRef}
@@ -66,7 +82,7 @@ export default function List(props: ListProps) {
               }
               content={ 
                 <div className="list-menu">
-                  <button>Rename</button>
+                  <button onClick={() => { setRenameTitle(true); setShowListMenu(false) }}>Rename</button>
                   <hr />
                   <div className="delete-list">
                     {isDelete && <button type="button" className="btn-square btn-gray" onClick={() => { setShowListMenu(false); setIsDelete(false) }}
@@ -116,13 +132,21 @@ const Div = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    span{
-      font-size: 14px;
+    font-size: 14px;
+    form{
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      input{
+        background-color: transparent;
+        outline-color: var(--gray);
+        padding-left: 5px;
+      }
+
     }
     .list-menu{
       width: max-content;
       color: hsla(0, 0%, 51%, 1);
-      font-size: 13px;
       hr{
         margin: 10px 0;
         border-top: 1px solid var(--gray);
