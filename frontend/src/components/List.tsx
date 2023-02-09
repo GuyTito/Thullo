@@ -66,14 +66,18 @@ export default function List(props: ListProps) {
               }
               content={ 
                 <div className="list-menu">
-                  {isDelete && <button type="button" className="btn-square btn-gray" onClick={() => { setShowListMenu(false); setIsDelete(false) }}
-                  >
-                    <MdOutlineClose />
-                  </button>}
-
-                  <button onClick={()=>setIsDelete(!isDelete)} className="btn-pad btn-gray">Delete</button>
-
-                  {isDelete && <button className="btn-square btn-gray" onClick={deleteList}><BsCheck2 /></button>}
+                  <button>Rename</button>
+                  <hr />
+                  <div className="delete-list">
+                    {isDelete && <button type="button" className="btn-square btn-gray" onClick={() => { setShowListMenu(false); setIsDelete(false) }}
+                    >
+                      <MdOutlineClose />
+                    </button>}
+  
+                    <button onClick={()=>setIsDelete(!isDelete)} className="">Delete this list</button>
+  
+                    {isDelete && <button className="btn-square btn-gray" onClick={deleteList}><BsCheck2 /></button>}
+                  </div>
                 </div>
               }
             />
@@ -116,9 +120,18 @@ const Div = styled.div`
       font-size: 14px;
     }
     .list-menu{
-      display: flex;
-      align-items: center;
-      gap: 15px;
+      width: max-content;
+      color: hsla(0, 0%, 51%, 1);
+      font-size: 13px;
+      hr{
+        margin: 10px 0;
+        border-top: 1px solid var(--gray);
+      }
+      .delete-list{
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
     }
   }
 `
