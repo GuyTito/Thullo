@@ -68,7 +68,7 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
             :
             <div className="board-title">
               <h3>{title}</h3>
-              <button onClick={() => setRenameTitle(true)}><MdEdit /></button>
+              {isAuthorized && <button onClick={() => setRenameTitle(true)}><MdEdit /></button>}
             </div>
           }
           <button onClick={() => setShowBoardMenu(false)}><GrClose /></button>
