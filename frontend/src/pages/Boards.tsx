@@ -22,15 +22,12 @@ export default function Home() {
   const boardFormRef = useRef(null)
 
 
-
-
   useEffect(()=>{
     async function fetchBoards(){
       try {
         const response = await axiosPrivate.get('/boards')
         if (response) {
           const boards = response?.data
-          console.log('boards', boards)
           dispatch(loadBoards(boards))
         }
       } catch (error: AxiosError | any) {
@@ -44,6 +41,7 @@ export default function Home() {
     }
     fetchBoards()
   }, [])
+  
   
   return (
     <>
