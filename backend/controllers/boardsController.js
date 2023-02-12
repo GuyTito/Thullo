@@ -7,16 +7,39 @@ const asyncHandler = require('express-async-handler')
 // @desc Get all boards 
 // @route GET /boards
 // @access Private
-const getAllBoards = asyncHandler(async (req, res) => {
-  // Get all boards from MongoDB
-  const boards = await Board.find().lean()
+// const getAllBoards = asyncHandler(async (req, res) => {
+//   // Get all boards from MongoDB
+//   console.log('req.user', req.UserInfo)
+//   const boards = await Board.find().lean()
+
+//   // If no boards 
+//   if (!boards?.length) {
+//     return res.status(400).json({ message: 'No boards found' })
+//   }
+
+//   res.json(boards)
+// })
+const getBoards = asyncHandler(async (req, res) => {
+  const {userId} = req.UserInfo
+  
+  // Get boards with privacy set to false
+  const publicBoards = await Board.find({ privacy: false }).lean();
+
+  // Get boards with privacy set to true that match the given userId
+  const privateBoards = await Board.find({ privacy: true, userId }).lean();
+
+  // Merge the two arrays of boards
+  const boards = publicBoards.concat(privateBoards);
+
+  // Sort the boards by createdAt in ascending order
+  const sortedBoards = boards.sort((a, b) => a.createdAt - b.createdAt);
 
   // If no boards 
-  if (!boards?.length) {
+  if (!sortedBoards?.length) {
     return res.status(400).json({ message: 'No boards found' })
   }
 
-  res.json(boards)
+  res.json(sortedBoards)
 })
 
 // @desc Create new board
@@ -98,4 +121,4 @@ const updateBoard = asyncHandler(async (req, res) => {
 
 
 
-module.exports = { createNewBoard, getAllBoards, getBoard, updateBoard, }
+module.exports = { createNewBoard, getBoards, getBoard, updateBoard, }
