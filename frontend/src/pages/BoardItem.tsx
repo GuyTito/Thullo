@@ -19,6 +19,7 @@ import { getLists, loadLists } from "../store/listSlice";
 import NewListForm from "../components/NewListForm";
 import List from "../components/List";
 import { loadCards } from "../store/cardSlice";
+import useAuthority from "../hooks/useAuthority";
 
 
 export default function BoardItem() {
@@ -37,6 +38,7 @@ export default function BoardItem() {
   const listFormRef = useRef(null)
   const currentLists = useAppSelector(getLists)
   const [boardCreator, setBoardCreator] = useState('')
+  const isAuthorized = useAuthority();
 
 
   async function getBoard(id: string) {
@@ -174,9 +176,9 @@ export default function BoardItem() {
           {currentLists.map(list => (
             <List key={list._id} list={list} />
           ))}
-          <div className="add-another">
+          {isAuthorized && <div className="add-another">
             <button onClick={() => setShowListModal(true)}><span>Add list</span> <span>+</span></button>
-          </div>
+          </div>}
         </div>
       </Div>
 

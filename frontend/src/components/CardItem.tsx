@@ -12,6 +12,7 @@ import { FaImage, FaTrash, FaUser } from "react-icons/fa";
 import { BsCheck2 } from "react-icons/bs";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { AxiosError } from "axios";
+import useAuthority from "../hooks/useAuthority";
 
 
 interface CardItemProps {
@@ -31,6 +32,7 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
   const axiosPrivate = interceptedAxiosPrivate()
   const [errMsg, setErrMsg] = useState('');
   const dispatch = useAppDispatch()
+  const isAuthorized = useAuthority()
 
 
   function handleEditorContent(content: string) {
@@ -91,7 +93,9 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
 
           <div className="desc">
             <span><IoDocumentText /> Description</span>
-            {!editDesc && <button onClick={() => setEditDesc(true)}><MdEdit /> Edit</button>}
+            {!editDesc &&
+              isAuthorized && <button onClick={() => setEditDesc(true)}><MdEdit /> Edit</button>
+            }
           </div>
 
           {editDesc ?
@@ -113,7 +117,9 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
             {isDelete && <button type="button" className="btn-square btn-gray" onClick={() => setIsDelete(false)}
             > <MdOutlineClose /> </button>}
 
-            <button className="btn-pad btn-gray" onClick={()=>setIsDelete(!isDelete)}>Delete</button>
+            {isAuthorized && 
+              <button className="btn-pad btn-gray" onClick={()=>setIsDelete(!isDelete)}>Delete</button>
+            }
 
             {isDelete && <button className="btn-square btn-gray" onClick={deleteCard}><BsCheck2 /></button>}
           </div>

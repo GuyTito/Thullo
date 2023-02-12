@@ -11,6 +11,7 @@ import { useState, Dispatch, useRef, useEffect } from 'react';
 import { MdEdit, MdGroups, MdOutlineClose } from "react-icons/md";
 import TextEditor from "./TextEditor";
 import { BsCheck2 } from "react-icons/bs";
+import useAuthority from "../hooks/useAuthority";
 
 
 interface BoardMenuProps{
@@ -26,6 +27,8 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
   const descRef = useRef<HTMLDivElement>(null)
   const [renameTitle, setRenameTitle] = useState(false)
   const [boardTitle, setBoardTitle] = useState(title);
+  const isAuthorized = useAuthority();
+
 
 
 
@@ -81,7 +84,9 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
         </div>
         <div className="desc">
           <span><IoDocumentText /> Description</span>
-        {!editDesc && <button onClick={() => setEditDesc(true)}><MdEdit /> Edit</button>}
+        {!editDesc && 
+          isAuthorized && <button onClick={() => setEditDesc(true)}><MdEdit /> Edit</button>
+        }
         </div>
 
         {editDesc ?

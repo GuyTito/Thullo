@@ -6,6 +6,7 @@ import { MdOutlineClose } from "react-icons/md";
 import { TbDots } from "react-icons/tb";
 import styled from "styled-components";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
+import useAuthority from "../hooks/useAuthority";
 import { getCardsByListId } from "../store/cardSlice";
 import { useAppDispatch, useAppSelector, } from "../store/hooks";
 import { deleteStoreList, ListType, updateList } from "../store/listSlice";
@@ -32,6 +33,8 @@ export default function List(props: ListProps) {
   const axiosPrivate = interceptedAxiosPrivate()
   const dispatch = useAppDispatch()
   const [listTitle, setListTitle] = useState(list.title);
+  const isAuthorized = useAuthority();
+
 
 
 
@@ -119,11 +122,11 @@ export default function List(props: ListProps) {
         {cards?.length > 0 && cards.map(card => (
           <Card key={card._id} card={card} />
         ))}
-        <div className="add-another">
+        {isAuthorized && <div className="add-another">
           <button onClick={() => setShowCardFormModal(true)}>
             <span>Add card</span> <span>+</span>
           </button>
-        </div>
+        </div>}
       </Div>
 
       {/* modal */}
