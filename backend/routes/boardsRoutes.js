@@ -10,7 +10,7 @@ const fileSizeLimiter = require('./../middleware/fileSizeLimiter')
 router.use(verifyJWT)
 
 router.route('/')
-  .get(boardsController.getAllBoards)
+  .get(boardsController.getBoards)
   .post(fileUpload({ createParentPath: true }),
     fileExtLimiter(['.png', '.jpg', '.jpeg']),
     fileSizeLimiter(1), // 1MB
