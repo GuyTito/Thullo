@@ -96,7 +96,7 @@ export default function List(props: ListProps) {
           <ClickAwayListener onClickAway={() => { setShowListMenu(false); setIsDelete(false) }}>
             <Dropdown open={showListMenu} ref={listRef}
               button={
-                <button onClick={() => setShowListMenu(!showListMenu)} className=''>
+                isAuthorized && <button onClick={() => setShowListMenu(!showListMenu)} className=''>
                   <TbDots />
                 </button>
               }
