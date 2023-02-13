@@ -30,7 +30,7 @@ export default function Card(props: CardProps) {
     <>
       <Div onClick={openCard}>
         <div className="cover">
-          <img src={card.coverImgUrl} alt="" />
+          <img draggable="false" src={card.coverImgUrl} alt="" />
         </div>
         <div className="card-title">{card?.title}</div>
         <div className="labels">
