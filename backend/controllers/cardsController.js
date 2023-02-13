@@ -9,7 +9,6 @@ const path = require('path');
 // @access Private
 const createCard = asyncHandler(async (req, res) => {
   const { boardId, listId, title } = req.body
-  console.log('req.files', req.files)
 
   // Confirm data
   if (!listId || !title || !boardId) {
@@ -27,7 +26,6 @@ const createCard = asyncHandler(async (req, res) => {
   let imgPath = ''
   let imgName = ''
   if (req.files) {
-    console.log('image present', req.files)
     const userFile = req.files.userFile
     imgName = `${title.replaceAll(' ', '_')}_${Date.now()}_cardCover${path.extname(userFile.name).toLowerCase()}`
     imgPath = path.join(__dirname, '..', 'uploads', 'cardCovers', imgName)
