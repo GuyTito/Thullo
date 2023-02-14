@@ -59,7 +59,7 @@ export const NewListForm = forwardRef<HTMLFormElement, NewListFormProps>((props,
       {errMsg && <p className="error">{errMsg}</p>}
 
       <div className="form-control">
-        <input onChange={(e) => setListTitle(e.target.value)} value={listTitle} type="text" required />
+        <input onChange={(e) => setListTitle(e.target.value)} value={listTitle} type="text" required autoFocus />
       </div>
       <div className="bottom">
         <button onClick={cancelList} type="button">Cancel</button>
