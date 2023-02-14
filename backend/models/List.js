@@ -22,12 +22,9 @@ const listSchema = new Schema(
   }
 );
 
-// delete card with this listId
-listSchema.pre('remove', async (next) => {
-  console.log('before delete');
-  console.log('listId', this._id);
-  // await Card.deleteMany({ listId: this._id })
-  next()
-});
+
+listSchema.methods.cascadeDelete = async function() {
+  await Card.deleteMany({ listId: this._id })
+};
 
 module.exports = mongoose.model('List', listSchema);
