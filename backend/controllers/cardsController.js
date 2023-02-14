@@ -16,7 +16,7 @@ const createCard = asyncHandler(async (req, res) => {
   }
 
   // Check for duplicate title
-  const duplicate = await Card.findOne({ title }).collation({ locale: 'en', strength: 2 }).lean().exec()
+  const duplicate = await Card.findOne({ title, boardId }).collation({ locale: 'en', strength: 2 }).lean().exec()
 
   if (duplicate) {
     return res.status(409).json({ message: 'Duplicate card title' })
