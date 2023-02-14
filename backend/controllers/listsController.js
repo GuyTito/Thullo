@@ -64,7 +64,7 @@ const deleteList = asyncHandler(async (req, res) => {
   }
 
   const deletedList = await list.deleteOne()
-
+  list.cascadeDelete()
   const reply = `List '${deletedList.title}' with ID ${deletedList._id} deleted`
 
   res.status(200).json({ deletedList, reply })
