@@ -136,11 +136,11 @@ export default function BoardItem() {
             <ClickAwayListener onClickAway={()=>setShowVisiblityMenu(false)}>
               <Dropdown open={showVisiblityMenu} ref={visibilityRef}
                 button = {
-                  <button onClick={() => setShowVisiblityMenu(!showVisiblityMenu)} className={`btn-pad ${currentBoard?.privacy ? 'btn-selected' : 'btn-gray'}`}>
+                  <button onClick={() => isAuthorized && setShowVisiblityMenu(!showVisiblityMenu)} className={`btn-pad ${currentBoard?.privacy ? 'btn-selected' : 'btn-gray'}`}>
                     {currentBoard?.privacy ? <><FaLock /> Private</> : <><BiWorld /> Public</>}
                   </button>
                 }
-                content={<VisibilityMenu setOpen={setShowVisiblityMenu} />}
+                content={isAuthorized && <VisibilityMenu setOpen={setShowVisiblityMenu} />}
               />
             </ClickAwayListener>
             <div className="avatars">
