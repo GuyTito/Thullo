@@ -42,29 +42,31 @@ export default function Topbar() {
           </div>
         }
 
-        <div className='search'>
+        {/* <div className='search'>
           <input type="text" placeholder='keyword...' />
           <button className='btn-main btn-pad'>Search</button>
-        </div>
+        </div> */}
 
-        <ClickAwayListener onClickAway={() => setOpen(false)}>
-          <Dropdown open={open} ref={ref}
-            button = {
-              <button onClick={() => setOpen(!open)} className='profile'>
-                <Avatar />
-                <span>{fullname}</span>
-                <span>&#9662;</span>
-              </button>
-            }
-            content={
-              <div className='dropdown-menu'>
-                <Link to='/current-user' className='my-profile'><FaUser /> My Profile</Link>
-                <hr />
-                <Link onClick={() => dispatch(logout())} to='/login' className='logout'><BiLogOut /> Logout</Link>
-              </div>
-            }
-          />
-        </ClickAwayListener>
+        <div className='profile-div'>
+          <ClickAwayListener onClickAway={() => setOpen(false)}>
+            <Dropdown open={open} ref={ref}
+              button = {
+                <button onClick={() => setOpen(!open)} className='profile'>
+                  {/* <Avatar /> */}
+                  <span>{fullname}</span>
+                  <span>&#9662;</span>
+                </button>
+              }
+              content={
+                <div className='dropdown-menu'>
+                  <Link to='/current-user' className='my-profile'><FaUser /> My Profile</Link>
+                  <hr />
+                  <Link onClick={() => dispatch(logout())} to='/login' className='logout'><BiLogOut /> Logout</Link>
+                </div>
+              }
+            />
+          </ClickAwayListener>
+        </div>
       </Header>
     </>
   )
@@ -130,13 +132,17 @@ const Header = styled.header`
     }
   }
     
-  .profile{
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  .profile-div{
+    margin-left: auto;
+    .profile{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: auto;
 
-    span{
-      font-weight: 700;
+      span{
+        font-weight: 700;
+      }
     }
   }
   .dropdown-content{

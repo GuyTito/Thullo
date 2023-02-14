@@ -100,12 +100,12 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
         <div className="members">
           <div>
             <div className="name-avatar">
-              <Avatar />
+              {/* <Avatar /> */}
             <span>{boardCreator || '[deleted]'}</span>
             </div>
             <span className="admin">Admin</span>
           </div>
-          {[1, 2].map(i => (
+          {/* {[1, 2].map(i => (
             <div key={i}>
               <div className="name-avatar">
                 <Avatar />
@@ -113,7 +113,7 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
               </div>
               <button className="btn-error">Remove</button>
             </div>
-          ))}
+          ))} */}
         </div>
     </Div>
   )

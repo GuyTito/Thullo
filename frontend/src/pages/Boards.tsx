@@ -60,12 +60,12 @@ export default function Home() {
                 </div>
               }
               <span>{board.title}</span>
-              <div className="avatars">
+              {/* <div className="avatars">
                 {[1,2,3].map(i => (
                   <Avatar key={i} />
                 ))}
                 <span>+5 others</span>
-              </div>
+              </div> */}
             </Link>
           ))}
         </div>

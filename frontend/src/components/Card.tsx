@@ -29,14 +29,14 @@ export default function Card(props: CardProps) {
   return (
     <>
       <Div onClick={openCard}>
-        <div className="cover">
+        {card.coverImgUrl && <div className="cover">
           <img draggable="false" src={card.coverImgUrl} alt="" />
-        </div>
+        </div>}
         <div className="card-title">{card?.title}</div>
         <div className="labels">
           {/* <label className="label">Technical</label> */}
         </div>
-        <div className="bottom">
+        {/* <div className="bottom">
           <div className="left">
             {[1, 2,].map(i => (
               <Avatar key={i} />
@@ -47,7 +47,7 @@ export default function Card(props: CardProps) {
             <span><MdComment />1</span>
             <span><TfiClip /> 2</span>
           </div>
-        </div>
+        </div> */}
       </Div>
 
 
@@ -78,8 +78,12 @@ const Div = styled.div`
   .cover{
     height: 130px;
     width: 100%;
-    background-color: var(--gray);
+    /* background-color: var(--gray); */
     border-radius: 12px;
+    img{
+      object-fit: cover;
+      object-position: center;
+    }
   }
   .labels{
     display: flex;

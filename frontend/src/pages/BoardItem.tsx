@@ -143,7 +143,8 @@ export default function BoardItem() {
                 content={isAuthorized && <VisibilityMenu setOpen={setShowVisiblityMenu} />}
               />
             </ClickAwayListener>
-            <div className="avatars">
+            
+            {/* <div className="avatars">
               {[1, 2, 3].map(i => (
                 <Avatar key={i} />
               ))}
@@ -157,7 +158,7 @@ export default function BoardItem() {
                   }
                 />
               </ClickAwayListener>
-            </div>
+            </div> */}
           </div>
           
           <div className="right">
