@@ -10,6 +10,7 @@ import { getBoards, loadBoards } from "../store/boardSlice";
 import { lg, sm } from "../hooks/devices";
 import { Link } from "react-router-dom";
 import ClickAwayListener from "react-click-away-listener";
+import { FaLock } from "react-icons/fa";
 
 
 
@@ -59,7 +60,10 @@ export default function Home() {
                   <img src={board.coverImgUrl} alt={board.title} />
                 </div>
               }
-              <span>{board.title}</span>
+              <div className="card-title">
+                <span>{board.title}</span>
+                {board.privacy && <FaLock title="Private"/>}
+              </div>
               {/* <div className="avatars">
                 {[1,2,3].map(i => (
                   <Avatar key={i} />
@@ -132,10 +136,15 @@ const Main = styled.main`
         margin-bottom: 12px;
       }
 
-      span{
+      .card-title{
         font-weight: 500;
         font-size: 16px;
-        line-height: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        svg{
+          color: var(--gray);
+        }
       }
 
       .avatars{
