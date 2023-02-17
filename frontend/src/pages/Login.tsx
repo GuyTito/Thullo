@@ -13,6 +13,8 @@ import { AxiosError } from "axios";
 export default function Login() {
   const { persist } = useAppSelector(getAuth);
   const [errMsg, setErrMsg] = useState('');
+  const [email, setEmail] = useState('atsu@damoni.com');
+  const [password, setPassword] = useState('123');
   
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -22,15 +24,6 @@ export default function Login() {
   
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-
-    const formValues = e.target as any as Record<
-      "email" | "password",
-      {
-        value: string;
-      }
-    >;
-    const email = formValues.email.value;
-    const password = formValues.password.value;
 
     try {
       const response = await axios.post('/auth/login',
@@ -69,11 +62,11 @@ export default function Login() {
 
         <label className="form-control">
           <FaEnvelope />
-          <input type="email" name="email" autoComplete="off" placeholder="Email" autoFocus />
+          <input type="email" onChange={(e)=>setEmail(e.target.value)} value={email} autoComplete="off" placeholder="Email" autoFocus />
         </label>
         <label className="form-control">
           <FaLock />
-          <input type="password" name="password" placeholder="Password" />
+          <input type="password" onChange={(e) => setPassword(e.target.value)} value={password} placeholder="Password" />
         </label>
         
         <div>
