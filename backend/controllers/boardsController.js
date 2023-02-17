@@ -54,7 +54,7 @@ const createNewBoard = asyncHandler(async (req, res) => {
   }
 
   // Check for duplicate title
-  const duplicate = await Board.findOne({ title }).collation({ locale: 'en', strength: 2 }).lean().exec()
+  const duplicate = await Board.findOne({ title, userId }).collation({ locale: 'en', strength: 2 }).lean().exec()
 
   if (duplicate) {
     return res.status(409).json({ message: 'Duplicate board title' })
