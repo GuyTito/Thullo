@@ -13,7 +13,6 @@ const boardSchema = new Schema(
     title: {
       type: String,
       required: true,
-      unique: true
     },
     privacy: {
       type: Boolean,
@@ -33,3 +32,4 @@ const boardSchema = new Schema(
 );
 
 module.exports = mongoose.model('Board', boardSchema);
+// module.exports = mongoose.model('Board', boardSchema).collection.dropIndexes();
