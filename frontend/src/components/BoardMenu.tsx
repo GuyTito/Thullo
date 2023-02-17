@@ -76,7 +76,7 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
         <hr />
         <span className="made-by"><FaUserCircle /> Made by</span>
         <div className="creator">
-          <Avatar />
+          {/* <Avatar /> */}
           <div>
           <span>{boardCreator || '[deleted]'}</span>
             {createdAt && <span>on {formatDate(createdAt)}</span>}
