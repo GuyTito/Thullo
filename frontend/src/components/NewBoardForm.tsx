@@ -76,12 +76,14 @@ export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((prop
 
       <button type="button" onClick={() => clearData()} className="btn-square btn-main close"><MdOutlineClose /></button>
 
-      <div className="cover">
-        {coverImg && <img src={URL.createObjectURL(coverImg)} alt="board cover image" />}
+      <div>
+        {coverImg && <div className="cover">
+          <img src={URL.createObjectURL(coverImg)} alt="board cover image" />
+        </div> }
       </div>
 
       <div className="form-control input-title">
-        <input onChange={(e) => setTitle(e.target.value)} value={title} type="text" required placeholder="Add board title" />
+        <input onChange={(e) => setTitle(e.target.value)} value={title} type="text" required placeholder="Add board title" autoFocus />
       </div>
       <div>
         <label className={`btn-pad ${coverImg ? 'btn-selected' : 'btn-gray'}`}>
@@ -109,6 +111,7 @@ const Form = styled.form`
   padding: 24px;
   background-color: var(--white);
   position: relative;
+  width: 348px;
 
   div:not(:last-child){
     margin-bottom: 20px;
@@ -122,7 +125,7 @@ const Form = styled.form`
 
   .cover{
     height: 85px;
-    width: 300px;
+    width: 100%;
     border-radius: 8px;
     overflow: hidden;
     background-color: var(--gray);
