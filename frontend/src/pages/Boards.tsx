@@ -11,6 +11,8 @@ import { lg, sm } from "../hooks/devices";
 import { Link } from "react-router-dom";
 import ClickAwayListener from "react-click-away-listener";
 import { FaLock } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
+import useCurrentUser from "../hooks/useCurrentUser";
 
 
 
@@ -21,6 +23,7 @@ export default function Home() {
   const dispatch = useAppDispatch();
   const boards = useAppSelector(getBoards)
   const boardFormRef = useRef(null)
+  const { userId } = useCurrentUser();
 
 
   useEffect(()=>{
@@ -62,7 +65,10 @@ export default function Home() {
               }
               <div className="card-title">
                 <span>{board.title}</span>
-                {board.privacy && <FaLock title="Private"/>}
+                <div>
+                  {board.privacy && <FaLock title="Private"/>}
+                  {(userId === board.userId) && <MdEdit title="Editable"/>}
+                </div>
               </div>
               {/* <div className="avatars">
                 {[1,2,3].map(i => (
@@ -142,8 +148,12 @@ const Main = styled.main`
         display: flex;
         align-items: center;
         justify-content: space-between;
-        svg{
-          color: var(--gray);
+        div{
+          display: flex;
+          gap: 5px;
+          svg{
+            color: var(--gray);
+          }
         }
       }
 
