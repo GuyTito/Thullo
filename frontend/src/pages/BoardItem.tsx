@@ -39,9 +39,13 @@ export default function BoardItem() {
   const currentLists = useAppSelector(getLists)
   const [boardCreator, setBoardCreator] = useState('')
   const isAuthorized = useAuthority();
+  
 
 
   async function getBoard(id: string) {
+    dispatch(loadLists([]))
+    dispatch(loadCards([]))
+    
     try {
       const response = await axiosPrivate.get(`boards/${id}`)
 
@@ -52,6 +56,7 @@ export default function BoardItem() {
       } else {
         const foundBoard = response.data?.foundBoard
         dispatch(setCurrentBoard(foundBoard))
+        
         fetchLists(id)
         fetchCards(id)
         getBoardCreator(foundBoard.userId)
@@ -67,6 +72,7 @@ export default function BoardItem() {
   }
 
   async function fetchLists(boardId: string) {
+    
     try {
       const response = await axiosPrivate.get(`/lists/${boardId}`)
       if (response) {
@@ -83,6 +89,7 @@ export default function BoardItem() {
   }
 
   async function fetchCards(boardId: string) {
+    
     try {
       const response = await axiosPrivate.get(`/cards/${boardId}`)
       if (response) {
