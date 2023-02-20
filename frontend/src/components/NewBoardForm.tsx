@@ -1,12 +1,12 @@
 import styled from "styled-components";
-import { useState, Dispatch } from 'react';
+import { useState, Dispatch, useEffect } from 'react';
 import { FaImage, FaLock } from "react-icons/fa";
 import { MdOutlineClose } from 'react-icons/md';
 import { FormEvent, forwardRef } from 'react';
 import useCurrentUser from "../hooks/useCurrentUser";
 import { useAppDispatch } from "../store/hooks";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { addNewBoard } from "../store/boardSlice";
 import { BiWorld } from "react-icons/bi";
 
@@ -21,6 +21,7 @@ export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((prop
   const [privacy, setPrivacy] = useState(false);
   const [title, setTitle] = useState('');
   const [coverImg, setCoverImg] = useState<File | undefined>(undefined);
+  const [coverImgUrl, setCoverImgUrl] = useState('');
   const [errMsg, setErrMsg] = useState('')
 
   const { userId } = useCurrentUser();
@@ -28,33 +29,33 @@ export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((prop
   const axiosPrivate = interceptedAxiosPrivate()
 
 
-  async function submitBoard(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+  async function submitBoard (){
     try {
       setErrMsg('')
-      const formValues = {
-        userId, title, privacy,
-        userFile: coverImg || null
-      }
+
+      console.log('coverImgUrl', coverImgUrl)
+      const formValues = { userId, title, privacy, coverImgUrl }
       const response = await axiosPrivate.post('/boards', formValues, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       if (response){
         const data = response?.data
-        console.log('created board', response)
         dispatch(addNewBoard(data));
-        
+
         clearData()
       }
     } catch (error: AxiosError | any) {
-      console.log('board error', error.message, error.response.data.message)
       if (!error?.response) {
         setErrMsg('No Server Response');
       } else {
         setErrMsg(error.response.data.message);
       }
     }
+  }
 
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    uploadImage()
   }
 
   function clearData() {
@@ -64,10 +65,49 @@ export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((prop
 
     setShowModal(false)
   }
+
+  async function uploadImage(){
+    try {
+      if (coverImg) {
+        if (coverImg.size > (1 * 1024 * 1024)) {
+          setErrMsg('Upload failed. Image file is over the file size limit of 1MB.')
+          return
+        }
+        const formValues = {
+          media: coverImg,
+          key: import.meta.env.VITE_THUMBSNAP_API_KEY
+        }
+        const response = await axios.post('https://thumbsnap.com/api/upload', formValues, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        })
+        if (response.data.success) {
+          setCoverImgUrl(response.data.data.media)
+        }
+      } else{
+        submitBoard()
+      }
+    } catch (error: AxiosError | any) {
+      if (!error?.response) {
+        setErrMsg('No Server Response');
+      } else {
+        setErrMsg(error.response.data.message);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (coverImgUrl !== '') {
+      submitBoard();
+    }
+  }, [coverImgUrl]);
+
+  useEffect(() => {
+    setErrMsg('')
+  }, [coverImg, title]);
   
   
   return (
-    <Form onSubmit={(e) => submitBoard(e)} ref={ref}>
+    <Form onSubmit={(e) => handleSubmit(e)} ref={ref}>
       {errMsg && <p className="error">{errMsg}</p>}
 
       <button type="button" onClick={() => clearData()} className="btn-square btn-main close"><MdOutlineClose /></button>
