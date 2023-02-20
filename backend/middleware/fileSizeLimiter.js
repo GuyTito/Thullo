@@ -8,7 +8,7 @@ const fileSizeLimiter = (MB) => {
     if (req.files) {
       const userFile = req.files.userFile
       if (userFile.size > FILE_SIZE_LIMIT) {
-        const message = `Upload failed. ${userFile} is over the file size limit of ${MB}MB.`
+        const message = `Upload failed. ${userFile.name} is over the file size limit of ${MB}MB.`
 
         return res.status(413).json({ status: "error", message }); // file too big
       }
