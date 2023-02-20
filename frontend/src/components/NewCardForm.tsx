@@ -1,5 +1,5 @@
-import { AxiosError } from "axios";
-import { Dispatch, forwardRef, useState, FormEvent } from "react";
+import axios, { AxiosError } from "axios";
+import { Dispatch, forwardRef, useState, FormEvent, useEffect } from "react";
 import { FaImage } from "react-icons/fa";
 import { MdOutlineClose } from "react-icons/md";
 import styled from "styled-components";
@@ -23,17 +23,17 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
   const currentBoard = useAppSelector(getCurrentBoard)
   const axiosPrivate = interceptedAxiosPrivate()
   const dispatch = useAppDispatch()
+  const [coverImgUrl, setCoverImgUrl] = useState('');
 
-  async function submitCard(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+
+  async function submitCard(){
     try {
       setErrMsg('')
       const formValues = {
-        listId, title,
-        userFile: coverImg || null,
+        listId, title, coverImgUrl,
         boardId: currentBoard?._id
       }
-      
+
       const response = await axiosPrivate.post('/cards', formValues, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
@@ -50,7 +50,11 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
         setErrMsg(error.response.data.message)
       }
     }
+  }
 
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    uploadImage()
   }
 
   function clearData() {
@@ -59,15 +63,57 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
 
     setShowCardFormModal(false)
   }
+
+  async function uploadImage() {
+    try {
+      if (coverImg) {
+        if (coverImg.size > (1 * 1024 * 1024)) {
+          setErrMsg('Upload failed. Image file is over the file size limit of 1MB.')
+          return
+        }
+        const formValues = {
+          media: coverImg,
+          key: import.meta.env.VITE_THUMBSNAP_API_KEY
+        }
+        const response = await axios.post('https://thumbsnap.com/api/upload', formValues, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        })
+        if (response.data.success) {
+          setCoverImgUrl(response.data.data.media)
+        }
+      } else {
+        submitCard()
+      }
+    } catch (error: AxiosError | any) {
+      if (!error?.response) {
+        setErrMsg('No Server Response');
+      } else {
+        setErrMsg(error.response.data.message);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (coverImgUrl !== '') {
+      submitCard();
+    }
+  }, [coverImgUrl]);
+
+  useEffect(() => {
+    setErrMsg('')
+  }, [coverImg, title]);
+  
   
   return (
-    <Form onSubmit={(e) => submitCard(e)} ref={ref}>
+    <Form onSubmit={(e) => handleSubmit(e)} ref={ref}>
       {errMsg && <p className="error">{errMsg}</p>}
 
       <button type="button" onClick={() => clearData()} className="btn-square btn-main close"><MdOutlineClose /></button>
 
-      <div className="cover">
-        {coverImg && <img src={URL.createObjectURL(coverImg)} alt="card cover image" />}
+      <div>
+        {coverImg && <div className="cover">
+          <img src={URL.createObjectURL(coverImg)} alt="card cover image" />
+        </div> }
       </div>
 
       <div className="form-control input-title">
@@ -94,6 +140,7 @@ const Form = styled.form`
   padding: 24px;
   background-color: var(--white);
   position: relative;
+  width: 348px;
 
   div:not(:last-child){
     margin-bottom: 20px;
@@ -107,7 +154,7 @@ const Form = styled.form`
 
   .cover{
     height: 85px;
-    width: 300px;
+    width: 100%;
     border-radius: 8px;
     overflow: hidden;
     background-color: var(--gray);
