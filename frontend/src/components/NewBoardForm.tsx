@@ -33,7 +33,6 @@ export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((prop
     try {
       setErrMsg('')
 
-      console.log('coverImgUrl', coverImgUrl)
       const formValues = { userId, title, privacy, coverImgUrl }
       const response = await axiosPrivate.post('/boards', formValues, {
         headers: { 'Content-Type': 'multipart/form-data' }
