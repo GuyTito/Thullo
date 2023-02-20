@@ -8,7 +8,7 @@ const path = require('path');
 // @route POST /boards/lists/cards
 // @access Private
 const createCard = asyncHandler(async (req, res) => {
-  const { boardId, listId, title } = req.body
+  const { boardId, listId, title, coverImgUrl } = req.body
 
   // Confirm data
   if (!listId || !title || !boardId) {
@@ -22,20 +22,9 @@ const createCard = asyncHandler(async (req, res) => {
     return res.status(409).json({ message: 'Duplicate card title' })
   }
 
-  // process image
-  let imgPath = ''
-  let imgName = ''
-  if (req.files) {
-    const userFile = req.files.userFile
-    imgName = `${title.replaceAll(' ', '_')}_${Date.now()}_cardCover${path.extname(userFile.name).toLowerCase()}`
-    imgPath = path.join(__dirname, '..', 'uploads', 'cardCovers', imgName)
-    userFile.mv(imgPath)
-  }
-
   // Create and store the new card 
   const card = await Card.create({
-    listId, title, boardId,
-    coverImgUrl: imgName && `http://localhost:3000/uploads/cardCovers/${imgName}`
+    listId, title, boardId, coverImgUrl
   })
 
 
