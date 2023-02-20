@@ -46,7 +46,7 @@ const getBoards = asyncHandler(async (req, res) => {
 // @route POST /boards
 // @access Private
 const createNewBoard = asyncHandler(async (req, res) => {
-  const { userId, title, privacy } = req.body
+  const { userId, title, privacy, coverImgUrl } = req.body
 
   // Confirm data
   if (!userId || !title ) {
@@ -60,20 +60,9 @@ const createNewBoard = asyncHandler(async (req, res) => {
     return res.status(409).json({ message: 'Duplicate board title' })
   }
 
-  // process image
-  let imgPath = ''
-  let imgName = ''
-  if (req.files) {
-    const userFile = req.files.userFile
-    imgName = `${title.replaceAll(' ', '_')}_${Date.now()}_boardCover${path.extname(userFile.name).toLowerCase()}`
-    imgPath = path.join(__dirname, '..', 'uploads', 'boardCovers', imgName)
-    userFile.mv(imgPath)
-  }
-
   // Create and store the new board 
   const board = await Board.create({
-    userId, title, privacy, 
-    coverImgUrl: imgName && `http://localhost:3000/uploads/boardCovers/${imgName}`
+    userId, title, privacy, coverImgUrl
   })
 
 
