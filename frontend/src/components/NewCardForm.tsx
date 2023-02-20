@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { Dispatch, forwardRef, useState, FormEvent, useEffect } from "react";
 import { FaImage } from "react-icons/fa";
 import { MdOutlineClose } from "react-icons/md";
@@ -26,11 +26,12 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
   const [coverImgUrl, setCoverImgUrl] = useState('');
 
 
-  async function submitCard(){
+  async function submitCard(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
     try {
       setErrMsg('')
       const formValues = {
-        listId, title, coverImgUrl,
+        listId, title, userFile: coverImg || null,
         boardId: currentBoard?._id
       }
 
@@ -52,11 +53,6 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
     }
   }
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    uploadImage()
-  }
-
   function clearData() {
     setTitle('')
     setCoverImg(undefined)
@@ -64,48 +60,13 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
     setShowCardFormModal(false)
   }
 
-  async function uploadImage() {
-    try {
-      if (coverImg) {
-        if (coverImg.size > (1 * 1024 * 1024)) {
-          setErrMsg('Upload failed. Image file is over the file size limit of 1MB.')
-          return
-        }
-        const formValues = {
-          media: coverImg,
-          key: import.meta.env.VITE_THUMBSNAP_API_KEY
-        }
-        const response = await axios.post('https://thumbsnap.com/api/upload', formValues, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        })
-        if (response.data.success) {
-          setCoverImgUrl(response.data.data.media)
-        }
-      } else {
-        submitCard()
-      }
-    } catch (error: AxiosError | any) {
-      if (!error?.response) {
-        setErrMsg('No Server Response');
-      } else {
-        setErrMsg(error.response.data.message);
-      }
-    }
-  }
-
-  useEffect(() => {
-    if (coverImgUrl !== '') {
-      submitCard();
-    }
-  }, [coverImgUrl]);
-
   useEffect(() => {
     setErrMsg('')
   }, [coverImg, title]);
   
   
   return (
-    <Form onSubmit={(e) => handleSubmit(e)} ref={ref}>
+    <Form onSubmit={(e) => submitCard(e)} ref={ref}>
       {errMsg && <p className="error">{errMsg}</p>}
 
       <button type="button" onClick={() => clearData()} className="btn-square btn-main close"><MdOutlineClose /></button>
