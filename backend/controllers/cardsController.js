@@ -1,14 +1,14 @@
 const Card = require('../models/Card')
 const asyncHandler = require('express-async-handler')
-const path = require('path');
-
+const axios = require('axios'); 
+const FormData = require('form-data');
 
 
 // @desc Create new card
 // @route POST /boards/lists/cards
 // @access Private
 const createCard = asyncHandler(async (req, res) => {
-  const { boardId, listId, title, coverImgUrl } = req.body
+  const { boardId, listId, title } = req.body
 
   // Confirm data
   if (!listId || !title || !boardId) {
@@ -20,6 +20,29 @@ const createCard = asyncHandler(async (req, res) => {
 
   if (duplicate) {
     return res.status(409).json({ message: 'Duplicate card title' })
+  }
+
+  // upload image to hosting service
+  let coverImgUrl = ''
+  if (req.files) {
+    const userFile = req.files.userFile
+    try {
+      const formData = new FormData();
+      formData.append('media', userFile.data, userFile.name);
+      formData.append('key', process.env.THUMBSNAP_API_KEY);
+
+      const response = await axios.post('https://thumbsnap.com/api/upload', formData, {
+        headers: formData.getHeaders()
+      })
+      if (response.data.success){
+        coverImgUrl = response?.data.data.media
+      }else{
+        throw new Error(response.data.error.message)
+      }
+    } catch (error) {
+      console.log(error.message)
+      return res.status(400).json({ message: error.message })
+    }
   }
 
   // Create and store the new card 
