@@ -4,14 +4,17 @@ import { IoDocumentText } from "react-icons/io5";
 import styled from "styled-components";
 import formatDate from "../hooks/formatDate";
 import useUpdateBoard from "../hooks/useUpdateBoard";
-import { getCurrentBoard } from "../store/boardSlice";
-import { useAppSelector } from "../store/hooks";
+import { deleteStoreBoard, getCurrentBoard } from "../store/boardSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import Avatar from "./Avatar";
 import { useState, Dispatch, useRef, useEffect } from 'react';
 import { MdEdit, MdGroups, MdOutlineClose } from "react-icons/md";
 import TextEditor from "./TextEditor";
 import { BsCheck2 } from "react-icons/bs";
 import useAuthority from "../hooks/useAuthority";
+import { AxiosError } from "axios";
+import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
+import { useNavigate } from "react-router-dom";
 
 
 interface BoardMenuProps{
@@ -29,7 +32,9 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
   const [renameTitle, setRenameTitle] = useState(false)
   const [boardTitle, setBoardTitle] = useState(title);
   const isAuthorized = useAuthority();
-
+  const axiosPrivate = interceptedAxiosPrivate()
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
 
 
@@ -54,6 +59,25 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
     const boardUpdate = { title: boardTitle }
     if (_id) updateBoard(_id, boardUpdate)
     setRenameTitle(false)
+  }
+
+  async function deleteBoard() {
+    if (_id) {
+      try {
+        const response = await axiosPrivate.delete('/boards', { data: { _id } })
+        if (response.data?.deletedBoard) {
+          dispatch(deleteStoreBoard(_id))
+          setShowBoardMenu(false)
+          navigate('/boards');
+        }
+      } catch (error: AxiosError | any) {
+        if (!error?.response) { // if error is not sent thru axios
+          console.log('No Server Response');
+        } else {
+          console.log(error.response.data.message)
+        }
+      }
+    }
   }
 
   
@@ -128,7 +152,7 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
           <button className="btn-pad btn-gray" onClick={() => setIsDelete(!isDelete)}>Delete</button>
         }
 
-        {isDelete && <button className="btn-square btn-gray" ><BsCheck2 /></button>}
+        {isDelete && <button className="btn-square btn-gray" onClick={deleteBoard} ><BsCheck2 /></button>}
       </div>
     </Div>
   )
