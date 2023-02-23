@@ -35,13 +35,17 @@ const boardSlice = createSlice({
     },
     setCurrentBoard: (state, action: PayloadAction<BoardType | null>) => {
       state.currentBoard = action.payload
-    }
+    },
+    deleteStoreBoard: (state, action: PayloadAction<string>) => {
+      const id = action.payload
+      state.boards = state.boards.filter(board => board._id !== id)
+    },
   },
 })
 
 export const getBoards = (state: RootState) => state.board.boards
 export const getCurrentBoard = (state: RootState) => state.board.currentBoard
 
-export const { addNewBoard, loadBoards, setCurrentBoard } = boardSlice.actions
+export const { addNewBoard, loadBoards, setCurrentBoard, deleteStoreBoard } = boardSlice.actions
 
 export default boardSlice.reducer;
