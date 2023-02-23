@@ -79,7 +79,6 @@ const Div = styled.div`
     overflow: hidden;
     height: 130px;
     width: 100%;
-    /* background-color: var(--gray); */
     border-radius: 12px;
     img{
       object-fit: cover;
