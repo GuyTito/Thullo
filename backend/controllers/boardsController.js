@@ -109,5 +109,32 @@ const updateBoard = asyncHandler(async (req, res) => {
 })
 
 
+// @desc deletes a board
+// @route   DELETE /boards
+// @access Private
+const deleteBoard = asyncHandler(async (req, res) => {
+  const { _id } = req.body
 
-module.exports = { createNewBoard, getBoards, getBoard, updateBoard, }
+  // Confirm data
+  if (!_id) {
+    return res.status(400).json({ message: 'Board ID required' })
+  }
+
+  // Confirm board exists to delete 
+  const board = await Board.findById(_id).exec()
+
+  if (!board) {
+    return res.status(400).json({ message: 'Board not found' })
+  }
+
+  const deletedBoard = await board.deleteOne()
+  board.cascadeDelete()
+
+  const reply = `Board '${deletedBoard.title}' with ID ${deletedBoard._id} deleted`
+
+  res.status(200).json({ deletedBoard, reply })
+})
+
+
+
+module.exports = { createNewBoard, getBoards, getBoard, updateBoard, deleteBoard }
