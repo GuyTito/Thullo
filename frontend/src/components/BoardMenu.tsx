@@ -1,4 +1,4 @@
-import { FaUserCircle } from "react-icons/fa";
+import { FaUser, FaUserCircle } from "react-icons/fa";
 import { GrClose } from "react-icons/gr";
 import { IoDocumentText } from "react-icons/io5";
 import styled from "styled-components";
@@ -24,6 +24,7 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
   const { title, createdAt, _id, description } = useAppSelector(getCurrentBoard) || {}
   const updateBoard = useUpdateBoard()
   const [editDesc, setEditDesc] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
   const descRef = useRef<HTMLDivElement>(null)
   const [renameTitle, setRenameTitle] = useState(false)
   const [boardTitle, setBoardTitle] = useState(title);
@@ -98,16 +99,16 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
         <div className="ql-editor description" ref={descRef}></div>
         }
 
-        <div className="team"><MdGroups /> Team</div>
+        {/* <div className="team"><MdGroups /> Team</div>
         <div className="members">
           <div>
             <div className="name-avatar">
-              {/* <Avatar /> */}
+              <Avatar />
             <span>{boardCreator || '[deleted]'}</span>
             </div>
             <span className="admin">Admin</span>
           </div>
-          {/* {[1, 2].map(i => (
+          {[1, 2].map(i => (
             <div key={i}>
               <div className="name-avatar">
                 <Avatar />
@@ -115,8 +116,20 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
               </div>
               <button className="btn-error">Remove</button>
             </div>
-          ))} */}
-        </div>
+          ))}
+        </div> */}
+      
+      <div className="desc"><span><FaUser /> Actions</span></div>
+      <div className="confirm-delete">
+        {isDelete && <button type="button" className="btn-square btn-gray" onClick={() => setIsDelete(false)}
+        > <MdOutlineClose /> </button>}
+
+        {isAuthorized &&
+          <button className="btn-pad btn-gray" onClick={() => setIsDelete(!isDelete)}>Delete</button>
+        }
+
+        {isDelete && <button className="btn-square btn-gray" ><BsCheck2 /></button>}
+      </div>
     </Div>
   )
 }
@@ -237,5 +250,10 @@ const Div = styled.div`
     div:not(:last-of-type){
       margin-bottom: 10px;
     }
+  }
+  .confirm-delete{
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 `
