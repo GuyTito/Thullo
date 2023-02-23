@@ -17,7 +17,7 @@ router.route('/')
     boardsController.createNewBoard
   )
   .patch(boardsController.updateBoard)
-  // .delete(boardsController.deleteBoard)
+  .delete(boardsController.deleteBoard)
 router.route('/:id')
   .get(boardsController.getBoard)
 
