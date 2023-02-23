@@ -85,7 +85,9 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
         <div className="desc">
           <span><IoDocumentText /> Description</span>
         {!editDesc && 
-          isAuthorized && <button onClick={() => setEditDesc(true)}><MdEdit /> Edit</button>
+          isAuthorized && <button onClick={() => setEditDesc(true)}>
+            <MdEdit /> {description ? 'Edit' : 'Add'}
+          </button>
         }
         </div>
 
