@@ -33,9 +33,9 @@ export default function Card(props: CardProps) {
           <img draggable="false" src={card.coverImgUrl} alt="" />
         </div>}
         <div className="card-title">{card?.title}</div>
-        <div className="labels">
-          {/* <label className="label">Technical</label> */}
-        </div>
+        {/* <div className="labels">
+          <label className="label">Technical</label>
+        </div> */}
         {/* <div className="bottom">
           <div className="left">
             {[1, 2,].map(i => (
@@ -76,13 +76,13 @@ const Div = styled.div`
   gap: 14px;
   cursor: pointer;
   .cover{
+    overflow: hidden;
     height: 130px;
     width: 100%;
     /* background-color: var(--gray); */
     border-radius: 12px;
     img{
       object-fit: cover;
-      object-position: center;
     }
   }
   .labels{
