@@ -9,6 +9,7 @@ import { setCredentials } from "../store/authSlice";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { TbEye, TbEyeOff, } from "react-icons/tb";
+import { lg } from "../hooks/devices";
 
 
 export default function Register() {
@@ -110,6 +111,8 @@ export default function Register() {
 
 const Div = styled.div`
   .mt-150{
-    margin-top: 150px;
+    @media ${lg} {
+      margin-top: 150px;
+    }
   }
 `

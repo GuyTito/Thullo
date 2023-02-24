@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
+import { lg, sm } from "../hooks/devices";
 
 
 export default function Layout() {
@@ -27,13 +28,20 @@ const Div = styled.div`
   
 
     .auth-form{
-      padding: 0 58px;
+      padding: 0 20px;
       border-radius: 24px;
-      border: 1px solid var(--gray);
-      width: 473px;
       display: flex;
       flex-direction: column;
       gap: 14px;
+      width: 100%;
+      /* padding-bottom: 20px; */
+      
+      @media ${lg} {
+        border: 1px solid var(--gray);
+        width: 473px;
+        padding: 0 58px;
+        padding-bottom: 25px;
+      }
 
       h1{
         font-size: 18px;
@@ -71,7 +79,7 @@ const Div = styled.div`
       p {
         font-size: 14px;
         line-height: 19px;
-        margin-bottom: 43px;
+        /* margin-bottom: 43px; */
         text-align: center;
         color: var(--gray);
 
@@ -84,7 +92,7 @@ const Div = styled.div`
 
   .form-control{
     border-radius: 8px;
-    width: 356px;
+    /* width: 356px; */
     display: flex;
     padding: 12px;
     align-items: center;
