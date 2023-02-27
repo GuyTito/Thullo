@@ -7,7 +7,7 @@ import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { AxiosError } from "axios";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getBoards, loadBoards } from "../store/boardSlice";
-import { lg, sm } from "../hooks/devices";
+import { lg, lsm, sm } from "../hooks/devices";
 import { Link } from "react-router-dom";
 import ClickAwayListener from "react-click-away-listener";
 import { FaLock } from "react-icons/fa";
@@ -102,6 +102,11 @@ const Main = styled.main`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 24px;
+    
+    @media ${lg} {
+      padding: 0;
+    }
 
     h1{
       font-weight: 500;
@@ -112,17 +117,19 @@ const Main = styled.main`
   }
 
   .boards{
-    margin-top: 40px;
+    margin: 40px 0;
     display: grid;
     gap: 36px;
     justify-content: center;
     
     @media ${sm} {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 40px 25px;
     }
     
     @media ${lg} {
       grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin: 40px 0;
     }
 
     .card{
@@ -140,6 +147,13 @@ const Main = styled.main`
         background-color: var(--white);
         border-radius: 12px;
         margin-bottom: 12px;
+
+        img{
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          object-position: center;
+        }
       }
 
       .card-title{
