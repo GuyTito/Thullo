@@ -12,6 +12,7 @@ import { getCurrentBoard } from '../store/boardSlice';
 import Dropdown from './Dropdown';
 import { useState, useRef } from 'react';
 import ClickAwayListener from 'react-click-away-listener';
+import { lsm } from '../hooks/devices';
 
 
 export default function Topbar() {
@@ -90,6 +91,10 @@ const Header = styled.header`
       font-size: 18px;
       font-weight: 600;
       line-height: 27px;
+
+      @media ${lsm}{
+        display: none;
+      }
     }
   }
 
