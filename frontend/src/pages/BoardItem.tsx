@@ -1,4 +1,3 @@
-import { FaLock, } from "react-icons/fa";
 import { TbDots } from "react-icons/tb";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -10,8 +9,6 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getCurrentBoard, setCurrentBoard } from "../store/boardSlice";
 import Dropdown from "../components/Dropdown";
 import ClickAwayListener from 'react-click-away-listener';
-import { BiWorld } from "react-icons/bi";
-import VisibilityMenu from "../components/VisibilityMenu";
 import BoardMenu from "../components/BoardMenu";
 import InviteUser from "../components/InviteUser";
 import Modal from "../components/Modal";
@@ -20,6 +17,9 @@ import NewListForm from "../components/NewListForm";
 import List from "../components/List";
 import { loadCards } from "../store/cardSlice";
 import useAuthority from "../hooks/useAuthority";
+import useUpdateBoard from "../hooks/useUpdateBoard";
+import { MdEdit, MdOutlineClose } from "react-icons/md";
+import { BsCheck2 } from "react-icons/bs";
 
 
 export default function BoardItem() {
@@ -28,17 +28,18 @@ export default function BoardItem() {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const currentBoard = useAppSelector(getCurrentBoard)
-  const [showVisiblityMenu, setShowVisiblityMenu] = useState(false);
   const [showBoardMenu, setShowBoardMenu] = useState(false);
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
-  const visibilityRef = useRef(null)
   const boardMenuRef = useRef(null)
   const inviteUserRef = useRef(null)
   const listFormRef = useRef(null)
   const currentLists = useAppSelector(getLists)
   const [boardCreator, setBoardCreator] = useState('')
   const isAuthorized = useAuthority();
+  const [renameTitle, setRenameTitle] = useState(false)
+  const [boardTitle, setBoardTitle] = useState(currentBoard?.title);
+  const updateBoard = useUpdateBoard()
   
 
 
@@ -132,7 +133,11 @@ export default function BoardItem() {
     }
   }, [])
 
-
+  function updateBoardTitle() {
+    const boardUpdate = { title: boardTitle }
+    if (id) updateBoard(id, boardUpdate)
+    setRenameTitle(false)
+  }
 
   
   return (
@@ -140,16 +145,18 @@ export default function BoardItem() {
       <Div>
         <div className="topbar">
           <div className="left">
-            <ClickAwayListener onClickAway={()=>setShowVisiblityMenu(false)}>
-              <Dropdown open={showVisiblityMenu} ref={visibilityRef}
-                button = {
-                  <button onClick={() => isAuthorized && setShowVisiblityMenu(!showVisiblityMenu)} className={`btn-pad ${currentBoard?.privacy ? 'btn-selected' : 'btn-gray'}`}>
-                    {currentBoard?.privacy ? <><FaLock /> Private</> : <><BiWorld /> Public</>}
-                  </button>
-                }
-                content={isAuthorized && <VisibilityMenu setOpen={setShowVisiblityMenu} />}
-              />
-            </ClickAwayListener>
+            {renameTitle ?
+              <form onSubmit={updateBoardTitle} className="board-title">
+                <input onChange={(e) => setBoardTitle(e.target.value)} value={boardTitle} type="text" autoFocus />
+                <button type="button" onClick={() => setRenameTitle(false)}><MdOutlineClose /></button>
+                <button type="submit"><BsCheck2 /></button>
+              </form>
+              :
+              <div className="board-title">
+                <h3>{currentBoard?.title}</h3>
+                {isAuthorized && <button onClick={() => setRenameTitle(true)}><MdEdit /></button>}
+              </div>
+            }
             
             {/* <div className="avatars">
               {[1, 2, 3].map(i => (
@@ -224,6 +231,22 @@ const Div = styled.div`
         display: flex;
         gap: 12px;
         align-items: center;
+      }
+      .board-title{
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        h3{
+          font-weight: 600;
+        }
+        button{
+          color: var(--gray);
+        }
+        input{
+          background-color: transparent;
+          outline-color: var(--gray);
+          padding-left: 5px;
+        }
       }
       
     }
