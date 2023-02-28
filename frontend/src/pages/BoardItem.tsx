@@ -172,7 +172,7 @@ export default function BoardItem() {
             <ClickAwayListener onClickAway={() => setShowBoardMenu(false)}>
               <Dropdown open={showBoardMenu} ref={boardMenuRef}
                 button = {
-                  <button onClick={() => setShowBoardMenu(!showBoardMenu)} className="btn-pad btn-gray"><TbDots /> Show Menu</button>
+                  <button onClick={() => setShowBoardMenu(!showBoardMenu)} className="btn-pad btn-gray"><TbDots /> Menu</button>
                 }
                 content={<BoardMenu setShowBoardMenu={setShowBoardMenu} boardCreator={boardCreator} />}
               />
@@ -244,6 +244,7 @@ const Div = styled.div`
     padding: 24px;
     display: flex;
     gap: 32px;
+    overflow-y: scroll;
     
     .add-another{
       width: 240px;
