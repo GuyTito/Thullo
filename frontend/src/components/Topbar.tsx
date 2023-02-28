@@ -5,10 +5,9 @@ import Logo from './Logo';
 import { FaUser } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
 import { CgMenuGridR } from "react-icons/cg";
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useAppDispatch, } from '../store/hooks';
 import { logout } from '../store/authSlice';
 import useCurrentUser from '../hooks/useCurrentUser';
-import { getCurrentBoard } from '../store/boardSlice';
 import Dropdown from './Dropdown';
 import { useState, useRef } from 'react';
 import ClickAwayListener from 'react-click-away-listener';
@@ -18,7 +17,6 @@ import { lsm } from '../hooks/devices';
 export default function Topbar() {
   const dispatch = useAppDispatch();
   const {fullname} = useCurrentUser();
-  const currentBoard = useAppSelector(getCurrentBoard)
   const [open, setOpen] = useState(false);
   const ref = useRef(null)
 
@@ -33,15 +31,10 @@ export default function Topbar() {
           <span>Thullo</span>
         </Link>
 
-        {currentBoard && 
-          <div className='board-title'>
-            <h1>{currentBoard.title}</h1>
-            <span>|</span>
-            <Link to='/boards' className='btn-pad btn-gray'>
-              <CgMenuGridR />All Boards
-            </Link>
-          </div>
-        }
+        
+        <Link to='/boards' className='btn-pad btn-gray'>
+          <CgMenuGridR /> <span>All Boards</span>
+        </Link>
 
         {/* <div className='search'>
           <input type="text" placeholder='keyword...' />
@@ -81,6 +74,7 @@ const Header = styled.header`
   align-items: center;
   position: relative;
   z-index: 10;
+  justify-content: space-between;
 
   .brand{
     display: flex;
@@ -98,24 +92,16 @@ const Header = styled.header`
     }
   }
 
-  .board-title{
-    margin-left: 95px;
+  .btn-pad{
     display: flex;
     align-items: center;
-    gap: 24px;
-    h1{
-      font-size: 18px;
-      font-weight: 500;
-      line-height: 27px;
-    }
+    gap: 5px;
     span{
-      color: var(--gray);
+      @media ${lsm}{
+        display: none;
+      }
     }
-    a{
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
+    
   }
 
   .search{
@@ -138,7 +124,7 @@ const Header = styled.header`
   }
     
   .profile-div{
-    margin-left: auto;
+    /* margin-left: auto; */
     .profile{
       display: flex;
       align-items: center;
