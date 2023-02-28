@@ -118,12 +118,12 @@ const Form = styled.form`
     width: 100%;
     border-radius: 8px;
     overflow: hidden;
-    background-color: var(--gray);
+    /* background-color: var(--gray); */
 
     img{
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       object-position: center;
     }
   }
