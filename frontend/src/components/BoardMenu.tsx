@@ -15,6 +15,7 @@ import useAuthority from "../hooks/useAuthority";
 import { AxiosError } from "axios";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { useNavigate } from "react-router-dom";
+import { lsm } from "../hooks/devices";
 
 
 interface BoardMenuProps{
@@ -161,6 +162,10 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
 
 const Div = styled.div`
   width: 377px;
+
+  @media ${lsm}{
+    width: 76vw;
+  }
   .board-header{
     display: flex;
     align-items: center;
