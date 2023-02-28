@@ -28,7 +28,7 @@ export default function BoardItem() {
   const axiosPrivate = interceptedAxiosPrivate()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const currentBoard = useAppSelector(getCurrentBoard)
+  const {title} = useAppSelector(getCurrentBoard) || {}
   const [showBoardMenu, setShowBoardMenu] = useState(false);
   const [showInviteUser, setShowInviteUser] = useState(false);
   const [showListModal, setShowListModal] = useState(false);
@@ -39,7 +39,7 @@ export default function BoardItem() {
   const [boardCreator, setBoardCreator] = useState('')
   const isAuthorized = useAuthority();
   const [renameTitle, setRenameTitle] = useState(false)
-  const [boardTitle, setBoardTitle] = useState(currentBoard?.title);
+  const [boardTitle, setBoardTitle] = useState(title);
   const updateBoard = useUpdateBoard()
   
 
@@ -140,6 +140,10 @@ export default function BoardItem() {
     setRenameTitle(false)
   }
 
+  useEffect(() => {
+    setBoardTitle(title)
+  }, [renameTitle])
+
   
   return (
     <>
@@ -154,7 +158,7 @@ export default function BoardItem() {
               </form>
               :
               <div className="board-title">
-                <h3>{currentBoard?.title}</h3>
+                <h3>{title}</h3>
                 {isAuthorized && <button onClick={() => setRenameTitle(true)}><MdEdit /></button>}
               </div>
             }
