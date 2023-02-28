@@ -142,13 +142,13 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
           ))}
         </div> */}
       
-      <div className="desc"><span><FaUser /> Actions</span></div>
+      {isAuthorized && <div className="desc"><span><FaUser /> Actions</span></div>}
       <div className="confirm-delete">
         {isDelete && <button type="button" className="btn-square btn-gray" onClick={() => setIsDelete(false)}
         > <MdOutlineClose /> </button>}
 
         {isAuthorized &&
-          <button className="btn-pad btn-gray" onClick={() => setIsDelete(!isDelete)}>Delete</button>
+          <button className="btn-pad btn-gray error" onClick={() => setIsDelete(!isDelete)}>Delete board</button>
         }
 
         {isDelete && <button className="btn-square btn-gray" onClick={deleteBoard} ><BsCheck2 /></button>}
@@ -195,7 +195,6 @@ const Div = styled.div`
     div{
       display: flex;
       flex-direction: column;
-      margin-bottom: 20px;
       span:first-of-type{
         font-weight: 600;
       }
@@ -212,6 +211,7 @@ const Div = styled.div`
     font-size: 12px;
     color: var(--gray);
     margin-bottom: 10px;
+    margin-top: 20px;
     span{
       display: flex;
       align-items: center;
