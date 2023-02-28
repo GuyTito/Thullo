@@ -178,4 +178,7 @@ const Div = styled.div`
       }
     }
   }
+  .dropdown-content{
+    right: 0;
+  }
 `
