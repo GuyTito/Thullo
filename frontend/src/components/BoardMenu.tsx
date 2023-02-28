@@ -1,4 +1,4 @@
-import { FaUser, FaUserCircle } from "react-icons/fa";
+import { FaLock, FaUser, FaUserCircle } from "react-icons/fa";
 import { GrClose } from "react-icons/gr";
 import { IoDocumentText } from "react-icons/io5";
 import styled from "styled-components";
@@ -16,6 +16,10 @@ import { AxiosError } from "axios";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { useNavigate } from "react-router-dom";
 import { lsm } from "../hooks/devices";
+import ClickAwayListener from "react-click-away-listener";
+import { BiWorld } from "react-icons/bi";
+import VisibilityMenu from "./VisibilityMenu";
+import Dropdown from "./Dropdown";
 
 
 interface BoardMenuProps{
@@ -25,18 +29,17 @@ interface BoardMenuProps{
 
 
 export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuProps) {
-  const { title, createdAt, _id, description } = useAppSelector(getCurrentBoard) || {}
+  const { createdAt, _id, description, privacy } = useAppSelector(getCurrentBoard) || {}
   const updateBoard = useUpdateBoard()
   const [editDesc, setEditDesc] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const descRef = useRef<HTMLDivElement>(null)
-  const [renameTitle, setRenameTitle] = useState(false)
-  const [boardTitle, setBoardTitle] = useState(title);
   const isAuthorized = useAuthority();
   const axiosPrivate = interceptedAxiosPrivate()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-
+  const [showVisiblityMenu, setShowVisiblityMenu] = useState(false);
+  const visibilityRef = useRef(null)
 
 
   function handleEditorContent(content: string) {
@@ -55,12 +58,6 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
     if (descRef.current) descRef.current.innerHTML = description || ''
 
   }, [description, editDesc])
-
-  function updateBoardTitle(){
-    const boardUpdate = { title: boardTitle }
-    if (_id) updateBoard(_id, boardUpdate)
-    setRenameTitle(false)
-  }
 
   async function deleteBoard() {
     if (_id) {
@@ -85,18 +82,19 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
   return (
     <Div>
         <div className="board-header">
-          {renameTitle ?
-            <form onSubmit={updateBoardTitle} className="board-title">
-              <input onChange={(e) => setBoardTitle(e.target.value)} value={boardTitle} type="text" autoFocus />
-              <button type="button" onClick={() => setRenameTitle(false)}><MdOutlineClose /></button>
-              <button type="submit"><BsCheck2 /></button>
-            </form>
-            :
-            <div className="board-title">
-              <h3>{title}</h3>
-              {isAuthorized && <button onClick={() => setRenameTitle(true)}><MdEdit /></button>}
-            </div>
-          }
+          <div className="left">
+            <ClickAwayListener onClickAway={() => setShowVisiblityMenu(false)}>
+              <Dropdown open={showVisiblityMenu} ref={visibilityRef}
+                button={
+                  <button onClick={() => isAuthorized && setShowVisiblityMenu(!showVisiblityMenu)} className={`btn-pad ${privacy ? 'btn-selected' : 'btn-gray'}`}>
+                    {privacy ? <><FaLock /> Private</> : <><BiWorld /> Public</>}
+                  </button>
+                }
+                content={isAuthorized && <VisibilityMenu setOpen={setShowVisiblityMenu} />}
+              />
+            </ClickAwayListener>
+          </div>
+
           <button onClick={() => setShowBoardMenu(false)}><GrClose /></button>
         </div>
         <hr />
@@ -170,20 +168,11 @@ const Div = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .board-title{
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      h3{
-        font-weight: 600;
-      }
-      button{
-        color: var(--gray);
-      }
-      input{
-        background-color: transparent;
-        outline-color: var(--gray);
-        padding-left: 5px;
+    
+    .left{
+      .dropdown-content{
+        left: 0;
+        top: 45px;
       }
     }
   }
