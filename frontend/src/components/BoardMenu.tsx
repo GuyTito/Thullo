@@ -82,7 +82,7 @@ export default function BoardMenu({ setShowBoardMenu, boardCreator }: BoardMenuP
   return (
     <Div>
         <div className="board-header">
-          <div className="left">
+        <div id="visibility-dropdown">
             <ClickAwayListener onClickAway={() => setShowVisiblityMenu(false)}>
               <Dropdown open={showVisiblityMenu} ref={visibilityRef}
                 button={
@@ -169,7 +169,7 @@ const Div = styled.div`
     align-items: center;
     justify-content: space-between;
     
-    .left{
+    #visibility-dropdown{
       .dropdown-content{
         left: 0;
         top: 45px;
