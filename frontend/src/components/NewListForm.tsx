@@ -33,7 +33,6 @@ export const NewListForm = forwardRef<HTMLFormElement, NewListFormProps>((props,
       )
       if (response) {
         const data = response?.data
-        console.log('created list', response)
         dispatch(addNewList(data));
 
         cancelList()
@@ -74,6 +73,7 @@ const Form = styled.form`
   padding: 24px;
   background-color: var(--white);
   position: relative;
+  width: 348px;
   .bottom{
     display: flex;
     justify-content: end;
