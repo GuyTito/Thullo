@@ -20,6 +20,7 @@ import useAuthority from "../hooks/useAuthority";
 import useUpdateBoard from "../hooks/useUpdateBoard";
 import { MdEdit, MdOutlineClose } from "react-icons/md";
 import { BsCheck2 } from "react-icons/bs";
+import { lsm } from "../hooks/devices";
 
 
 export default function BoardItem() {
@@ -179,7 +180,7 @@ export default function BoardItem() {
             <ClickAwayListener onClickAway={() => setShowBoardMenu(false)}>
               <Dropdown open={showBoardMenu} ref={boardMenuRef}
                 button = {
-                  <button onClick={() => setShowBoardMenu(!showBoardMenu)} className="btn-pad btn-gray"><TbDots /> Menu</button>
+                  <button onClick={() => setShowBoardMenu(!showBoardMenu)} className="btn-pad btn-gray"><TbDots /> <span>Menu</span></button>
                 }
                 content={<BoardMenu setShowBoardMenu={setShowBoardMenu} boardCreator={boardCreator} />}
               />
@@ -251,6 +252,13 @@ const Div = styled.div`
       
     }
     .right{
+      .btn-pad{
+        span{
+          @media ${lsm}{
+            display: none;
+          }
+        }
+      }
       .dropdown-content{
         right: 0;
         top: 0;
