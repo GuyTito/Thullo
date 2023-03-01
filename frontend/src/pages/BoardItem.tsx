@@ -282,7 +282,7 @@ const Div = styled.div`
     overflow-y: scroll;
     
     .add-another{
-      width: 240px;
+      min-width: 240px;
       button{
         padding: 8px 13px;
         color: var(--mainColor);
