@@ -5,6 +5,7 @@ import { BsCheck2 } from "react-icons/bs";
 import { MdOutlineClose } from "react-icons/md";
 import { TbDots } from "react-icons/tb";
 import styled from "styled-components";
+import { lg, lsm } from "../hooks/devices";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import useAuthority from "../hooks/useAuthority";
 import { getCardsByListId } from "../store/cardSlice";
@@ -144,7 +145,8 @@ export default function List(props: ListProps) {
 
 
 const Div = styled.div`
-  width: 240px;
+  min-width: 240px;
+  max-width: 240px;
   display: flex;
   flex-direction: column;
   gap: 20px;
