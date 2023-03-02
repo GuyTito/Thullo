@@ -6,13 +6,13 @@ import useUpdateCard from "../hooks/useUpdateCard";
 import { deleteStoreCard, getCardById } from "../store/cardSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import TextEditor from "./TextEditor";
-import { AiOutlinePlus } from "react-icons/ai";
 import { getListById } from "../store/listSlice";
-import { FaImage, FaTrash, FaUser } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 import { BsCheck2 } from "react-icons/bs";
 import interceptedAxiosPrivate from "../hooks/interceptedAxiosPrivate";
 import { AxiosError } from "axios";
 import useAuthority from "../hooks/useAuthority";
+import { lg } from "../hooks/devices";
 
 
 interface CardItemProps {
@@ -86,46 +86,42 @@ export const CardItem = forwardRef<HTMLDivElement, CardItemProps>((props, ref) =
         </div>
       }
 
-      <div className="container">
-        <div className="left">
-          <p className="title">{title}</p>
-          <div className="list">In list: <span>{listTItle}</span></div>
+      <p className="title">{title}</p>
+      <div className="list">In list: <span>{listTItle}</span></div>
 
-          <div className="desc">
-            <span><IoDocumentText /> Description</span>
-            {!editDesc &&
-              isAuthorized && <button onClick={() => setEditDesc(true)}>
-                <MdEdit /> {description ? 'Edit' : 'Add'}
-              </button>
-            }
-          </div>
+      <div className="desc">
+        <span><IoDocumentText /> Description</span>
+        {!editDesc &&
+          isAuthorized && <button onClick={() => setEditDesc(true)}>
+            <MdEdit /> {description ? 'Edit' : 'Add'}
+          </button>
+        }
+      </div>
 
-          {editDesc ?
-            <TextEditor text={description || ""} getEditorContent={handleEditorContent}
-              showEditor={showEditor} />
-          :
-            <div className="ql-editor description" ref={descRef}></div>
-          }
+      {editDesc ?
+        <TextEditor text={description || ""} getEditorContent={handleEditorContent}
+          showEditor={showEditor} />
+      :
+        <div className="ql-editor description" ref={descRef}></div>
+      }
 
-          {/* <div className="desc">
-            <span><IoDocumentText /> Attachments</span>
-            <button><AiOutlinePlus /> Add</button>
-          </div> */}
-        </div>
+      {/* <div className="desc">
+        <span><IoDocumentText /> Attachments</span>
+        <button><AiOutlinePlus /> Add</button>
+      </div> */}
 
-        <div className="right">
-          <div className="desc"><span><FaUser /> Actions</span></div>
-          <div className="confirm">
-            {isDelete && <button type="button" className="btn-square btn-gray" onClick={() => setIsDelete(false)}
-            > <MdOutlineClose /> </button>}
+      {isAuthorized && 
+        <div className="desc"><span><FaUser /> Actions</span></div>
+      }
+      <div className="confirm">
+        {isDelete && <button type="button" className="btn-square btn-gray" onClick={() => setIsDelete(false)}
+        > <MdOutlineClose /> </button>}
 
-            {isAuthorized && 
-              <button className="btn-pad btn-gray" onClick={()=>setIsDelete(!isDelete)}>Delete</button>
-            }
+        {isAuthorized && 
+          <button className="btn-pad btn-gray error" onClick={()=>setIsDelete(!isDelete)}>Delete card</button>
+        }
 
-            {isDelete && <button className="btn-square btn-gray" onClick={deleteCard}><BsCheck2 /></button>}
-          </div>
-        </div>
+        {isDelete && <button className="btn-square btn-gray" onClick={deleteCard}><BsCheck2 /></button>}
       </div>
     </Div>
   )
@@ -136,9 +132,12 @@ const Div = styled.div`
   padding: 24px;
   background-color: var(--white);
   position: relative;
-  width: 662px;
-  max-height: 100vh;
+  width: 85vw;
+  max-height: 95vh;
   overflow-y: scroll;
+  @media ${lg}{
+    width: 662px;
+  }
   .close{
     position: absolute;
     right: 10px;
@@ -158,70 +157,58 @@ const Div = styled.div`
       object-position: center;
     }
   }
-  .container{
+  .desc{
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 12px;
+      color: var(--gray);
+      margin-bottom: 10px;
+      span{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      button{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        border: 1px solid var(--gray);
+        border-radius: 8px;
+        padding: 2px 8px;
+      }
+    }
+  .title{
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .list{
+    font-size: 10px;
+    color: var(--gray);
+    span{
+      font-weight: 500;
+      color: black;
+    }
+  }
+  .description{
+    font-size: 14px;
+    max-height: 400px;
+    overflow-y: overlay;
+    &.ql-editor{
+      padding: 0 10px 0 0;
+      height: min-content;
+    }
+  }
+  .btn-pad{
     display: flex;
-    gap: 24px;
-    margin-top: 24px;
-    /* justify-content: space-between; */
-    .desc{
-        margin-top: 24px;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        font-size: 12px;
-        color: var(--gray);
-        margin-bottom: 10px;
-        span{
-          display: flex;
-          align-items: center;
-          gap: 5px;
-        }
-        button{
-          display: flex;
-          align-items: center;
-          gap: 5px;
-          border: 1px solid var(--gray);
-          border-radius: 8px;
-          padding: 2px 8px;
-        }
-      }
-    .left{
-      width: 75%;
-      .title{
-        font-size: 18px;
-        font-weight: 500;
-      }
-      .list{
-        font-size: 10px;
-        color: var(--gray);
-        span{
-          font-weight: 500;
-          color: black;
-        }
-      }
-      .description{
-        font-size: 14px;
-        max-height: 400px;
-        overflow-y: overlay;
-        &.ql-editor{
-          padding: 0 10px 0 0;
-          height: min-content;
-        }
-      }
-    }
-    .right{
-      width: 22%;
-      .btn-pad{
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      .confirm{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-    }
+    align-items: center;
+    gap: 10px;
+  }
+  .confirm{
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 `
 
