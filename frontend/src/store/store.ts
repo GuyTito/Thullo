@@ -11,7 +11,8 @@ export const store = configureStore({
     board: boardReducer,
     list: listReducer,
     card: cardReducer,
-  }
+  },
+  devTools: false
 })
 
 export type RootState = ReturnType<typeof store.getState>;
