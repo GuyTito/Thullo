@@ -10,7 +10,9 @@ export default function interceptedAxiosPrivate() {
   useEffect(() => {
     // attach accessToken to this instance before sending request
     const requestIntercept = axiosPrivate.interceptors.request.use((config) => {
+      // @ts-expect-error
       if (!config.headers?.Authorization) {
+        // @ts-expect-error
         config.headers!.Authorization = `Bearer ${accessToken}`;
       }
       return config;
