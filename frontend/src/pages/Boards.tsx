@@ -24,18 +24,21 @@ export default function Home() {
   const boards = useAppSelector(getBoards)
   const boardFormRef = useRef(null)
   const { userId } = useCurrentUser();
+  const [isLoading, setIsLoading] = useState(false);
 
 
   useEffect(()=>{
     async function fetchBoards(){
+      setIsLoading(true)
       try {
         const response = await axiosPrivate.get('/boards')
         if (response) {
           const boards = response?.data
           dispatch(loadBoards(boards))
+          setIsLoading(false)
         }
       } catch (error: AxiosError | any) {
-        console.log('board error', error.message, error.response.data.message)
+        setIsLoading(false)
         if (!error?.response) {
           setErrMsg('No Server Response');
         } else {
@@ -56,6 +59,9 @@ export default function Home() {
         </div>
 
         <div className="boards">
+          {isLoading && 'Loading...'}
+          {errMsg && <div className="error">{errMsg}</div>}
+          
           {boards.map(board => (
             <Link to={board._id} key={board._id} className="card">
               {board.coverImgUrl && 

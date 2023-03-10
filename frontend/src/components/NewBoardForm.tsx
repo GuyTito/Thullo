@@ -23,6 +23,7 @@ export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((prop
   const [coverImg, setCoverImg] = useState<File | undefined>(undefined);
   const [coverImgUrl, setCoverImgUrl] = useState('');
   const [errMsg, setErrMsg] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
 
   const { userId } = useCurrentUser();
   const dispatch = useAppDispatch();
@@ -30,6 +31,7 @@ export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((prop
 
 
   async function submitBoard (){
+    setIsLoading(true)
     try {
       setErrMsg('')
 
@@ -40,10 +42,12 @@ export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((prop
       if (response){
         const data = response?.data
         dispatch(addNewBoard(data));
+        setIsLoading(false)
 
         clearData()
       }
     } catch (error: AxiosError | any) {
+      setIsLoading(false)
       if (!error?.response) {
         setErrMsg('No Server Response');
       } else {
@@ -135,7 +139,9 @@ export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((prop
       </div>
       <div>
         <button type="button" onClick={() => clearData()}>Cancel</button>
-        <button type="submit" className="btn-pad btn-main">+ &nbsp; Create</button>
+        <button type="submit" className="btn-pad btn-main">
+          {isLoading ? 'Loading...' : <span>+ &nbsp; Create</span>}
+        </button>
       </div>
     </Form>
   )

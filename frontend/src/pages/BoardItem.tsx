@@ -41,10 +41,14 @@ export default function BoardItem() {
   const [renameTitle, setRenameTitle] = useState(false)
   const [boardTitle, setBoardTitle] = useState(title);
   const updateBoard = useUpdateBoard()
+  const [boardLoad, setBoardLoad] = useState(false)
+  const [listLoad, setListLoad] = useState(false)
+  const [cardLoad, setCardLoad] = useState(false)
   
 
 
   async function getBoard(id: string) {
+    setBoardLoad(true)
     dispatch(loadLists([]))
     dispatch(loadCards([]))
     
@@ -58,12 +62,14 @@ export default function BoardItem() {
       } else {
         const foundBoard = response.data?.foundBoard
         dispatch(setCurrentBoard(foundBoard))
+        setBoardLoad(false)
         
         fetchLists(id)
         fetchCards(id)
         getBoardCreator(foundBoard.userId)
       }
     } catch (error: AxiosError | any) {
+      setBoardLoad(false)
       if (!error?.response) { // if error is not sent thru axios
         console.log(error.message)
       } else {
@@ -74,14 +80,16 @@ export default function BoardItem() {
   }
 
   async function fetchLists(boardId: string) {
-    
+    setListLoad(true)
     try {
       const response = await axiosPrivate.get(`/lists/${boardId}`)
       if (response) {
         const lists = response?.data
         dispatch(loadLists(lists))
+        setListLoad(false)
       }
     } catch (error: AxiosError | any) {
+      setListLoad(false)
       if (!error?.response) { // if error is not sent thru axios
         console.log(error.message)
       } else {
@@ -91,13 +99,15 @@ export default function BoardItem() {
   }
 
   async function fetchCards(boardId: string) {
-    
+    setCardLoad(true)
     try {
       const response = await axiosPrivate.get(`/cards/${boardId}`)
       if (response) {
         dispatch(loadCards(response?.data))
+        setCardLoad(false)
       }
     } catch (error: AxiosError | any) {
+      setCardLoad(false)
       if (!error?.response) { // if error is not sent thru axios
         console.log(error.message)
       } else {
@@ -158,6 +168,7 @@ export default function BoardItem() {
               </form>
               :
               <div className="board-title">
+                {boardLoad && 'Loading...'}
                 <h3>{title}</h3>
                 {isAuthorized && <button onClick={() => setRenameTitle(true)}><MdEdit /></button>}
               </div>
@@ -193,6 +204,7 @@ export default function BoardItem() {
         </div>
 
         <div className="lists">
+          {listLoad && 'Loading...'}
           {currentLists.map(list => (
             <List key={list._id} list={list} />
           ))}

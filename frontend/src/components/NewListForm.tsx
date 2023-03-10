@@ -17,6 +17,8 @@ export const NewListForm = forwardRef<HTMLFormElement, NewListFormProps>((props,
 
   const [listTitle, setListTitle] = useState('');
   const [errMsg, setErrMsg] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const axiosPrivate = interceptedAxiosPrivate()
   const dispatch = useAppDispatch()
@@ -24,6 +26,7 @@ export const NewListForm = forwardRef<HTMLFormElement, NewListFormProps>((props,
 
   
   async function addList(e: FormEvent<HTMLFormElement>) {
+    setIsLoading(true)
     e.preventDefault()
     try {
       const response = await axiosPrivate.post(
@@ -34,10 +37,12 @@ export const NewListForm = forwardRef<HTMLFormElement, NewListFormProps>((props,
       if (response) {
         const data = response?.data
         dispatch(addNewList(data));
+        setIsLoading(false)
 
         cancelList()
       }
     } catch (error: AxiosError | any) {
+      setIsLoading(false)
       if (!error?.response) { // if error is not sent thru axios
         setErrMsg(error.message)
       } else {
@@ -62,7 +67,9 @@ export const NewListForm = forwardRef<HTMLFormElement, NewListFormProps>((props,
       </div>
       <div className="bottom">
         <button onClick={cancelList} type="button">Cancel</button>
-        <button type="submit" className="btn-pad btn-main">Add list</button>
+        <button type="submit" className="btn-pad btn-main">
+          {isLoading ? 'Loading...' : 'Add list'}
+        </button>
       </div>
     </Form>
   )

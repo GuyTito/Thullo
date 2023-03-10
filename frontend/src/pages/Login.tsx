@@ -15,6 +15,7 @@ export default function Login() {
   const [errMsg, setErrMsg] = useState('');
   const [email, setEmail] = useState('atsu@damoni.com');
   const [password, setPassword] = useState('123');
+  const [isLoading, setIsLoading] = useState(false);
   
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function Login() {
 
   
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    setIsLoading(true)
     e.preventDefault()
 
     try {
@@ -32,7 +34,7 @@ export default function Login() {
       dispatch(setCredentials(accessToken));
       navigate(from, { replace: true });
     } catch (err: AxiosError | any) {
-      console.log('error', err)
+      setIsLoading(false)
       if (!err?.response) {
         setErrMsg('No Server Response');
       } else if (err.response?.status === 400) {
@@ -70,7 +72,9 @@ export default function Login() {
         </label>
         
         <div>
-          <button type="submit" className="btn-pad btn-main">Login</button>
+          <button type="submit" className="btn-pad btn-main">
+            {isLoading ? 'Loading...' : 'Login'}
+          </button>
         </div>
 
         <label className="trust">

@@ -19,8 +19,11 @@ export default function Register() {
   const [errMsg, setErrMsg] = useState('');
   const [matchErr, setMatchErr] = useState('');
   const [showpwd, setShowpwd] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    setIsLoading(true)
     e.preventDefault()
 
     const formValues = e.target as any as Record<
@@ -47,7 +50,7 @@ export default function Register() {
       dispatch(setCredentials(accessToken));
       navigate('/boards');
     } catch (err: AxiosError | any) {
-      console.log('error', err)
+      setIsLoading(false)
       if (!err?.response) {
         setErrMsg('No Server Response');
       } else if (err.response?.status === 400) {
@@ -99,7 +102,9 @@ export default function Register() {
         <div className="error">{matchErr}</div>
 
         <div>
-          <button type="submit" className="btn-pad btn-main">Register</button>
+          <button type="submit" className="btn-pad btn-main">
+            {isLoading ? 'Loading...' : 'Login'}
+          </button>
         </div>
 
         <p>Already have an account? <Link to='/login'>Login</Link></p>

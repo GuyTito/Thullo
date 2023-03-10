@@ -24,9 +24,11 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
   const axiosPrivate = interceptedAxiosPrivate()
   const dispatch = useAppDispatch()
   const [coverImgUrl, setCoverImgUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
 
   async function submitCard(e: FormEvent<HTMLFormElement>) {
+    setIsLoading(true)
     e.preventDefault()
     try {
       setErrMsg('')
@@ -41,10 +43,12 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
       if (response) {
         const data: CardType = response?.data
         dispatch(addToCards(data))
+        setIsLoading(false)
 
         clearData()
       }
     } catch (error: AxiosError | any) {
+      setIsLoading(false)
       if (!error?.response) { // if error is not sent thru axios
         setErrMsg('No Server Response');
       } else {
@@ -90,7 +94,9 @@ export const NewCardForm = forwardRef<HTMLFormElement, NewCardFormProps>((props,
 
       <div>
         <button type="button" onClick={() => clearData()}>Cancel</button>
-        <button type="submit" className="btn-pad btn-main">Add card</button>
+        <button type="submit" className="btn-pad btn-main">
+          {isLoading ? 'Loading...' : 'Add card'}
+        </button>
       </div>
     </Form>
   )
