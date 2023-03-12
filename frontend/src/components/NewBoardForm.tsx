@@ -21,7 +21,6 @@ export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((prop
   const [privacy, setPrivacy] = useState(false);
   const [title, setTitle] = useState('');
   const [coverImg, setCoverImg] = useState<File | undefined>(undefined);
-  const [coverImgUrl, setCoverImgUrl] = useState('');
   const [errMsg, setErrMsg] = useState('')
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,12 +29,16 @@ export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((prop
   const axiosPrivate = interceptedAxiosPrivate()
 
 
-  async function submitBoard (){
+  async function submitBoard(e: FormEvent<HTMLFormElement>){
+    e.preventDefault()
     setIsLoading(true)
     try {
       setErrMsg('')
 
-      const formValues = { userId, title, privacy, coverImgUrl }
+      const formValues = {
+        userId, title, privacy,
+        userFile: coverImg || null
+      }
       const response = await axiosPrivate.post('/boards', formValues, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
@@ -56,11 +59,6 @@ export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((prop
     }
   }
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    uploadImage()
-  }
-
   function clearData() {
     setTitle('')
     setPrivacy(false)
@@ -69,48 +67,13 @@ export const NewBoardForm = forwardRef<HTMLFormElement, NewBoardFormProps>((prop
     setShowModal(false)
   }
 
-  async function uploadImage(){
-    try {
-      if (coverImg) {
-        if (coverImg.size > (1 * 1024 * 1024)) {
-          setErrMsg('Upload failed. Image file is over the file size limit of 1MB.')
-          return
-        }
-        const formValues = {
-          media: coverImg,
-          key: import.meta.env.VITE_THUMBSNAP_API_KEY
-        }
-        const response = await axios.post('https://thumbsnap.com/api/upload', formValues, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        })
-        if (response.data.success) {
-          setCoverImgUrl(response.data.data.media)
-        }
-      } else{
-        submitBoard()
-      }
-    } catch (error: AxiosError | any) {
-      if (!error?.response) {
-        setErrMsg('No Server Response');
-      } else {
-        setErrMsg(error.response.data.message);
-      }
-    }
-  }
-
-  useEffect(() => {
-    if (coverImgUrl !== '') {
-      submitBoard();
-    }
-  }, [coverImgUrl]);
-
   useEffect(() => {
     setErrMsg('')
   }, [coverImg, title]);
   
   
   return (
-    <Form onSubmit={(e) => handleSubmit(e)} ref={ref}>
+    <Form onSubmit={(e) => submitBoard(e)} ref={ref}>
       {errMsg && <p className="error">{errMsg}</p>}
 
       <button type="button" onClick={() => clearData()} className="btn-square btn-main close"><MdOutlineClose /></button>
