@@ -263,6 +263,9 @@ const Div = styled.div`
           background-color: transparent;
           outline-color: var(--gray);
           padding-left: 5px;
+          @media ${lsm}{
+            width: 70%;
+          }
         }
       }
       
