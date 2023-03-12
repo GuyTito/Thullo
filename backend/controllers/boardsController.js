@@ -1,7 +1,7 @@
-const path = require('path');
 const Board = require('../models/Board')
-const List = require('../models/List')
 const asyncHandler = require('express-async-handler')
+const axios = require('axios');
+const FormData = require('form-data');
 
 
 // @desc Get all boards 
@@ -46,7 +46,7 @@ const getBoards = asyncHandler(async (req, res) => {
 // @route POST /boards
 // @access Private
 const createNewBoard = asyncHandler(async (req, res) => {
-  const { userId, title, privacy, coverImgUrl } = req.body
+  const { userId, title, privacy } = req.body
 
   // Confirm data
   if (!userId || !title ) {
@@ -58,6 +58,29 @@ const createNewBoard = asyncHandler(async (req, res) => {
 
   if (duplicate) {
     return res.status(409).json({ message: 'Duplicate board title' })
+  }
+
+  // upload image to hosting service
+  let coverImgUrl = ''
+  if (req.files) {
+    const userFile = req.files.userFile
+    try {
+      const formData = new FormData();
+      formData.append('media', userFile.data, userFile.name);
+      formData.append('key', process.env.THUMBSNAP_API_KEY);
+
+      const response = await axios.post('https://thumbsnap.com/api/upload', formData, {
+        headers: formData.getHeaders()
+      })
+      if (response.data.success) {
+        coverImgUrl = response?.data.data.media
+      } else {
+        throw new Error(response.data.error.message)
+      }
+    } catch (error) {
+      console.log(error.message)
+      return res.status(400).json({ message: error.message })
+    }
   }
 
   // Create and store the new board 
