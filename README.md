@@ -1,4 +1,4 @@
-# musica
+# Thullo
 A simple project management web app that is used to create, read, update and delete boards, lists, and cards. Inspired by Trello.
 
 
