@@ -103,7 +103,7 @@ export default function Register() {
 
         <div>
           <button type="submit" className="btn-pad btn-main">
-            {isLoading ? 'Loading...' : 'Login'}
+            {isLoading ? 'Loading...' : 'Register'}
           </button>
         </div>
 

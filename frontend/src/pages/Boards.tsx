@@ -48,6 +48,11 @@ export default function Home() {
     }
     fetchBoards()
   }, [])
+
+  useEffect(()=>{
+    setErrMsg('')
+  }, [boards])
+
   
   
   return (
