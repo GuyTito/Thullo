@@ -13,7 +13,7 @@ import { AxiosError } from "axios";
 export default function Login() {
   const { persist } = useAppSelector(getAuth);
   const [errMsg, setErrMsg] = useState('');
-  const [email, setEmail] = useState('atsu@damoni.com');
+  const [email, setEmail] = useState('johndoe@example.com');
   const [password, setPassword] = useState('123');
   const [isLoading, setIsLoading] = useState(false);
   
