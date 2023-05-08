@@ -1,6 +1,6 @@
 # Thullo
-A simple project management web app that is used to create, read, update and delete boards, lists, and cards with authentication and authorization. Inspired by Trello.
 
+A simple project management web app that is used to create, read, update and delete boards, lists, and cards with authentication and authorization. Inspired by Trello.
 
 ### Screenshot
 
@@ -11,8 +11,6 @@ A simple project management web app that is used to create, read, update and del
 
 </details>
 
-
-
 ### Built with
 
 - React
@@ -21,8 +19,7 @@ A simple project management web app that is used to create, read, update and del
 - Styled Components
 - Redux Toolkit for state management
 - Node.js for backend
-
-
+- Figma design from [devchallenges.io](https://devchallenges.io/challenges/wP0LbGgEeKhpFHUpPpDh)
 
 ## Project Setup
 
